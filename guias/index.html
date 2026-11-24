@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hub de Estudio · Infraestructura Tecnológica (Exactas UBA)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2EFE9; --surface:#FFFFFF; --ink:#171B22; --muted:#575F6E; --rule:#D3CEC4;
+  --p1:#1B5E8A; --p2:#3B4CCA; --p3:#9A6012; --p4:#2A7250;
+  --p1s:#E0EEF6; --p2s:#E2E5F9; --p3s:#F6EAD6; --p4s:#DFF0E7;
+  --good:#2A7250; --bad:#B23A48;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"Space Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111318; --surface:#1A1D25; --ink:#EAECEF; --muted:#9BA3B4; --rule:#2C313F;
+    --p1:#6FB8E6; --p2:#8D9BF5; --p3:#E5B15D; --p4:#76C89F;
+    --p1s:#172A38; --p2s:#1E2442; --p3s:#332714; --p4s:#182E23;
+    --good:#76C89F; --bad:#EC8995;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#1A1D25; --ink:#EAECEF; --muted:#9BA3B4; --rule:#2C313F;
+  --p1:#6FB8E6; --p2:#8D9BF5; --p3:#E5B15D; --p4:#76C89F;
+  --p1s:#172A38; --p2s:#1E2442; --p3s:#332714; --p4s:#182E23;
+  --good:#76C89F; --bad:#EC8995;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:1.08rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+a{color:var(--p1);text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--p1);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--sans);line-height:1.14;margin:0}
+p{margin:0 0 1em}
+
+/* suite nav */
+.suite-nav{background:var(--surface);border-bottom:1px solid var(--rule);font-family:var(--sans);font-size:.84rem}
+.suite-inner{max-width:74rem;margin:0 auto;padding:.55rem clamp(1.1rem,4vw,3rem);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1rem}
+.suite-home{font-weight:700;text-decoration:none;color:var(--ink);white-space:nowrap}
+.suite-links{display:flex;flex-wrap:wrap;gap:.3rem .45rem;align-items:center}
+.suite-links a{text-decoration:none;color:var(--muted);padding:.22rem .55rem;border-radius:99px;border:1px solid transparent;white-space:nowrap}
+.suite-links a:hover{color:var(--ink);background:var(--bg)}
+.suite-links a[aria-current="page"]{color:var(--p1);background:var(--p1s);border-color:var(--p1);font-weight:600}
+.btn{font-family:var(--sans);font-weight:600;font-size:.82rem;border:1.5px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:99px;padding:.32rem .8rem;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--ink)}
+
+/* hero & global progress */
+.wrap{max-width:74rem;margin:0 auto;padding:0 clamp(1.1rem,4vw,3rem)}
+.hero{padding:clamp(2.2rem,5.5vw,4rem) 0 1.8rem}
+.eyebrow{font-family:var(--sans);font-size:.82rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--p1);margin-bottom:.65rem}
+.hero h1{font-size:clamp(2.2rem,6vw,4.1rem);font-weight:700;letter-spacing:-.035em;line-height:.98;max-width:16ch}
+.hero .lede{font-size:clamp(1.1rem,2vw,1.3rem);max-width:56ch;margin:1rem 0 0;color:var(--ink)}
+.hero .meta{font-family:var(--sans);font-size:.88rem;color:var(--muted);margin-top:.8rem;max-width:66ch}
+
+.global-bar{margin:1.6rem 0 1.4rem;background:var(--surface);border:1.5px solid var(--rule);border-radius:12px;padding:1rem 1.2rem;display:grid;gap:.65rem}
+.gb-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.5rem 1rem;font-family:var(--sans)}
+.gb-top h2{font-size:1.05rem}
+.gb-stats{font-size:.94rem;color:var(--muted)}
+.gb-stats b{color:var(--ink)}
+.track{height:.65rem;border-radius:99px;background:var(--bg);border:1px solid var(--rule);overflow:hidden}
+.fill{height:100%;width:0%;background:var(--good);transition:width .25s ease}
+@media (prefers-reduced-motion: reduce){.fill{transition:none}}
+
+.viz{margin:1.2rem 0 2rem;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:1rem}
+.viz svg{display:block;width:100%;height:auto}
+.viz svg text{font-family:var(--sans);fill:var(--ink)}
+.viz .h{font-size:14px;font-weight:700}
+.viz .t{font-size:13px}
+.viz .s{font-size:11.5px;fill:var(--muted)}
+.viz figcaption{font-family:var(--sans);font-size:.83rem;color:var(--muted);margin-top:.65rem}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* cards */
+.sec-title{border-top:2px solid var(--ink);padding-top:1rem;margin:2rem 0 1rem;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.5rem}
+.sec-title h2{font-size:1.45rem}
+.sec-title span{font-family:var(--sans);font-size:.88rem;color:var(--muted)}
+
+.pareto-card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:2px solid var(--p1);border-radius:14px;padding:1.3rem 1.4rem;margin-bottom:1.2rem;transition:transform .15s, box-shadow .15s}
+.pareto-card:hover{background:var(--p1s)}
+.badge{display:inline-block;font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.18rem .58rem;border-radius:99px;background:var(--p1);color:var(--surface);margin-bottom:.6rem}
+.pareto-card h3{font-size:1.45rem;margin-bottom:.45rem}
+.pareto-card p{max-width:68ch;margin:0 0 .9rem;color:var(--ink)}
+.card-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem 1.2rem;font-family:var(--sans);font-size:.86rem;color:var(--muted)}
+.mini-track{flex:1 1 11rem;max-width:16rem;height:.48rem;background:var(--bg);border:1px solid var(--rule);border-radius:99px;overflow:hidden}
+.mini-fill{height:100%;width:0%;background:var(--good)}
+
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:1rem;margin-bottom:2rem}
+.gcard{display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit;background:var(--surface);border:1.5px solid var(--rule);border-radius:12px;padding:1.15rem 1.2rem;transition:border-color .15s, background .15s}
+.gcard[data-c="p1"]:hover{border-color:var(--p1);background:var(--p1s)}
+.gcard[data-c="p2"]:hover{border-color:var(--p2);background:var(--p2s)}
+.gcard[data-c="p3"]:hover{border-color:var(--p3);background:var(--p3s)}
+.gcard[data-c="p4"]:hover{border-color:var(--p4);background:var(--p4s)}
+.gcard .k{display:block;width:2.2rem;height:.38rem;border-radius:4px;margin-bottom:.75rem}
+.gcard[data-c="p1"] .k{background:var(--p1)}
+.gcard[data-c="p2"] .k{background:var(--p2)}
+.gcard[data-c="p3"] .k{background:var(--p3)}
+.gcard[data-c="p4"] .k{background:var(--p4)}
+.gcard .tag-cl{font-family:var(--sans);font-size:.76rem;font-weight:600;color:var(--muted);margin-bottom:.25rem}
+.gcard h3{font-size:1.18rem;margin-bottom:.45rem}
+.gcard p{font-size:.95rem;color:var(--muted);margin:0 0 .9rem}
+.gcard .meta-row{font-family:var(--sans);font-size:.82rem;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.45rem}
+
+/* case box */
+.case-box{background:var(--surface);border-left:4px solid var(--p4);border-radius:0 12px 12px 0;padding:1.1rem 1.3rem;margin:1.6rem 0 2rem}
+.case-box h2{font-size:1.12rem;margin-bottom:.4rem;color:var(--p4)}
+.case-box p{margin:0}
+
+/* translator table */
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.45;background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+th,td{text-align:left;vertical-align:top;padding:.65rem .75rem;border-bottom:1px solid var(--rule)}
+th{font-family:var(--sans);font-weight:700;font-size:.85rem;background:var(--bg)}
+thead th{border-bottom:2px solid var(--ink)}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.84em;background:var(--bg);padding:.08rem .32rem;border-radius:4px}
+
+footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,3rem) 2.5rem;font-family:var(--sans);font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem 1rem}
+</style>
+</head>
+<body>
+
+<nav class="suite-nav" aria-label="Navegación de la materia">
+  <div class="suite-inner">
+    <a class="suite-home" href="index.html" aria-current="page">Hub · Infraestructura</a>
+    <div class="suite-links">
+      <a href="00-pareto-20-80.html">Pareto 20/80</a>
+      <a href="01-fundamentos-y-redes.html">1. Redes e Infra</a>
+      <a href="02-kvm-y-preseed.html">2. KVM y Preseed</a>
+      <a href="03-bridges-y-pfsense.html">3. Bridges y pfSense</a>
+      <a href="04-seguridad.html">4. Seguridad</a>
+    </div>
+    <button type="button" class="btn theme-btn" id="themeToggle" aria-label="Cambiar tema claro u oscuro">Tema</button>
+  </div>
+</nav>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">FCEN · UBA · Materia completa en 5 guías interactivas</div>
+  <h1>Infraestructura Tecnológica: del rack a la automatización</h1>
+  <p class="lede">Un recorrido diseñado con la regla de Pareto: primero dominás el <strong>20% de los conceptos que explican el 80%</strong> de toda la materia, y después bajás al detalle operativo de cada bloque desarmando los comandos del laboratorio.</p>
+  <p class="meta">Basado en las Clases 1 a 4 (Fundamentos de Datacenter y Redes, Virtualización KVM/QEMU/libvirt y Preseed, Bridges Linux + pfSense en 4 zonas, y Seguridad de la Información) junto con RFCs y papers primarios. Todo funciona offline en tu navegador y guarda el progreso localmente.</p>
+
+  <section class="global-bar" aria-labelledby="prog-title">
+    <div class="gb-top">
+      <h2 id="prog-title">Tu progreso global en la materia</h2>
+      <div class="gb-stats" id="globalStats"><b>0</b> de 60 conceptos estudiados (0%)</div>
+    </div>
+    <div class="track" aria-hidden="true"><div class="fill" id="globalFill"></div></div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;font-family:var(--sans);font-size:.82rem;color:var(--muted)">
+      <span>El progreso se sincroniza automáticamente al marcar conceptos como estudiados en cualquiera de las 5 guías.</span>
+      <button type="button" class="btn" id="resetProgress">Reiniciar progreso</button>
+    </div>
+  </section>
+
+  <figure class="viz">
+    <div class="scroll"><div style="min-width:540px"><svg viewBox="0 0 680 252" role="img" aria-label="Mapa de ruta de estudio: primero el núcleo Pareto 20/80 y luego las cuatro guías de profundización"><defs><marker id="hub_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="hub_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="hub_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="hub_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="hub_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="hub_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker></defs><rect x="12" y="14" width="656" height="224" rx="12" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/>
+<rect x="28" y="38" width="170" height="176" rx="10" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.8"/>
+<text x="113.0" y="64.0" class="s" text-anchor="middle" style="fill:var(--p1);font-weight:700;letter-spacing:.04em">PASO 1 · PARETO 20/80</text>
+<text x="113.0" y="88.0" class="h" text-anchor="middle" style="fill:var(--ink)">Núcleo esencial</text>
+<text x="113.0" y="110.0" class="s" text-anchor="middle"><tspan x="113.0" dy="0">12 conceptos clave</tspan><tspan x="113.0" dy="17">4 widgets · Capas 1 a 4</tspan><tspan x="113.0" dy="17">El 80% de la lógica real</tspan></text>
+<rect x="52" y="172" width="122" height="24" rx="99" style="fill:var(--p1)"/>
+<text x="113.0" y="188.0" class="s" text-anchor="middle" style="fill:var(--surface);font-weight:700">Empezá por acá</text>
+<rect x="360" y="26" width="290" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/>
+<text x="374.0" y="44.0" class="t" text-anchor="start" style="fill:var(--p1);font-weight:700">1. Redes e Infraestructura</text>
+<text x="374.0" y="60.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 1 · Rack, energía, L2/L3, NAT, DNS, CLI</text>
+<path d="M 194 125 C 268 125, 282 47, 352 47" fill="none" style="stroke:var(--p1)" stroke-width="1.8" marker-end="url(#hub_p1)"/>
+<rect x="360" y="78" width="290" height="42" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/>
+<text x="374.0" y="96.0" class="t" text-anchor="start" style="fill:var(--p2);font-weight:700">2. Virtualización KVM y Preseed</text>
+<text x="374.0" y="112.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 2 · Hipervisor, libvirt, qcow2, Preseed</text>
+<path d="M 194 125 C 268 125, 282 99, 352 99" fill="none" style="stroke:var(--p2)" stroke-width="1.8" marker-end="url(#hub_p2)"/>
+<rect x="360" y="130" width="290" height="42" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/>
+<text x="374.0" y="148.0" class="t" text-anchor="start" style="fill:var(--p3);font-weight:700">3. Bridges Linux y pfSense</text>
+<text x="374.0" y="164.0" class="s" text-anchor="start" style="fill:var(--ink)">Clases 2–3 · nmcli, 4 zonas, reglas, NAT/DNAT</text>
+<path d="M 194 125 C 268 125, 282 151, 352 151" fill="none" style="stroke:var(--p3)" stroke-width="1.8" marker-end="url(#hub_p3)"/>
+<rect x="360" y="182" width="290" height="42" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/>
+<text x="374.0" y="200.0" class="t" text-anchor="start" style="fill:var(--p4);font-weight:700">4. Seguridad de la Información</text>
+<text x="374.0" y="216.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 4 · CIA, TCP/IP, Stateful/WAF, TLS, SIEM</text>
+<path d="M 194 125 C 268 125, 282 203, 352 203" fill="none" style="stroke:var(--p4)" stroke-width="1.8" marker-end="url(#hub_p4)"/>
+<rect x="220" y="111" width="114" height="24" rx="12" style="fill:var(--bg);stroke:var(--rule)" stroke-width="1"/>
+<text x="277.0" y="127.0" class="s" text-anchor="middle" style="fill:var(--ink);font-weight:600">Profundizá por eje</text></svg></div></div>
+    <figcaption>Ruta recomendada: arrancá por la Guía 0 (Pareto 20/80) para armar el mapa mental completo y luego entrá a cada guía de profundización según el taller que estés practicando. Esquema conceptual.</figcaption>
+  </figure>
+</header>
+
+<section aria-labelledby="route-title">
+  <div class="sec-title">
+    <h2 id="route-title">1. Empezá por el núcleo Pareto (20/80)</h2>
+    <span>12 conceptos transversales · 4 widgets interactivos</span>
+  </div>
+
+  <a class="pareto-card" href="00-pareto-20-80.html" data-key="infra-pareto-progreso-v1">
+    <span class="badge">Paso recomendado · Empezá acá</span>
+    <h3>Guía 0 · Núcleo Pareto 20/80: El 20% que explica el 80% de la infraestructura</h3>
+    <p>Condensa los modelos mentales esenciales de las cuatro clases sin copiar ni pegar a ciegas: pila de diagnóstico Linux, frontera L2 vs L3, NAT vs Port Forward, arquitectura KVM/libvirt/<code>qcow2</code>, redes <code>virbr0</code> vs <code>br-wan</code>, Preseed, el triángulo Routing ≠ Firewall ≠ NAT en pfSense, Default Deny, Stateful/WAF y criptografía/SIEM. Cada concepto enlaza directo a su profundización.</p>
+    <div class="card-foot">
+      <span class="gprog"><b>0</b> de 12 estudiados</span>
+      <div class="mini-track"><div class="mini-fill"></div></div>
+      <span>Abrir Guía 0 →</span>
+    </div>
+  </a>
+
+  <div class="sec-title">
+    <h2 id="deep-title">2. Profundización por módulo y taller</h2>
+    <span>48 conceptos profundos · 13 simuladores y selectores en vivo</span>
+  </div>
+
+  <div class="grid4">
+    <a class="gcard" data-c="p1" href="01-fundamentos-y-redes.html" data-key="infra-redes-progreso-v1">
+      <div>
+        <span class="k"></span>
+        <div class="tag-cl">Clase 1 · 12 conceptos · 3 widgets</div>
+        <h3>1. Datacenter, Servidores y Redes Linux</h3>
+        <p>Cadena de energía (UPS, grupo, PDU), pasillos fríos/calientes, racks 42U/patcheras, Bare Metal vs VMs/contenedores, soberanía, MAC/ARP/VLAN 802.1Q, CIDR e <code>ip r</code>, DHCP, RFC 1918/NAT, DNS y árbol de diagnóstico (<code>ip a</code>, <code>ss</code>, <code>nc</code>).</p>
+      </div>
+      <div>
+        <div class="meta-row"><span class="gprog"><b>0</b> de 12 estudiados</span><span>Abrir →</span></div>
+        <div class="mini-track" style="max-width:none"><div class="mini-fill"></div></div>
+      </div>
+    </a>
+
+    <a class="gcard" data-c="p2" href="02-kvm-y-preseed.html" data-key="infra-kvm-progreso-v1">
+      <div>
+        <span class="k"></span>
+        <div class="tag-cl">Clase 2 · 12 conceptos · 3 widgets</div>
+        <h3>2. Virtualización KVM/QEMU/libvirt y Preseed</h3>
+        <p>Hipervisores Tipo 1/2, VT-x/AMD-V, arquitectura en 6 capas, validación del host, <code>qemu:///system</code> vs <code>session</code>, <code>virbr0</code>/<code>vnetX</code>, anatomía de <code>virt-install</code>, <code>qcow2</code> vs <code>raw</code>, snapshot ≠ backup, <code>virt-clone</code>/<code>machine-id</code>, XML declarativo y Debian Preseed.</p>
+      </div>
+      <div>
+        <div class="meta-row"><span class="gprog"><b>0</b> de 12 estudiados</span><span>Abrir →</span></div>
+        <div class="mini-track" style="max-width:none"><div class="mini-fill"></div></div>
+      </div>
+    </a>
+
+    <a class="gcard" data-c="p3" href="03-bridges-y-pfsense.html" data-key="infra-pfsense-progreso-v1">
+      <div>
+        <span class="k"></span>
+        <div class="tag-cl">Clases 2–3 · 12 conceptos · 4 widgets</div>
+        <h3>3. Bridges Linux, NetworkManager y pfSense</h3>
+        <p>Device vs Perfil en <code>nmcli</code>, migración parametrizada a <code>br-wan</code> y rollback, bridges internos sin IP, pfSense de 4 zonas, Kea DHCP, reglas ingress top-down, aislamiento <code>BLOCK → LAN</code>, Outbound NAT Manual, DMZ Port Forward vs DMZ Ruteada y diagnóstico en 6 capas.</p>
+      </div>
+      <div>
+        <div class="meta-row"><span class="gprog"><b>0</b> de 12 estudiados</span><span>Abrir →</span></div>
+        <div class="mini-track" style="max-width:none"><div class="mini-fill"></div></div>
+      </div>
+    </a>
+
+    <a class="gcard" data-c="p4" href="04-seguridad.html" data-key="infra-seguridad-progreso-v1">
+      <div>
+        <span class="k"></span>
+        <div class="tag-cl">Clase 4 · 12 conceptos · 3 widgets</div>
+        <h3>4. Seguridad de la Información y TCP/IP</h3>
+        <p>Tríada CIA, segmentación y Zero Trust, cabeceras IPv4/TCP y Three-Way Handshake, firewalls estáticos (el caso FTP) vs Stateful vs Proxies/WAF, Default Deny, IDS/IPS/UTM/NGFW, IAM/MFA/RBAC, hardening y regla 3-2-1, TLS/IPsec/VPN, Syslog/SIEM y respuesta a incidentes.</p>
+      </div>
+      <div>
+        <div class="meta-row"><span class="gprog"><b>0</b> de 12 estudiados</span><span>Abrir →</span></div>
+        <div class="mini-track" style="max-width:none"><div class="mini-fill"></div></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<aside class="case-box">
+  <h2>El hilo conductor de las cinco guías: Martín en el ISEP</h2>
+  <p>Para que ningún concepto quede en el aire, las cinco guías siguen el mismo caso realista: <strong>Martín</strong> asume como responsable de infraestructura del <strong>Instituto Sur de Estadística Pública (ISEP)</strong> —un organismo público mediano con 120 empleados, 2 racks 42U, 3 hosts bare-metal Linux con KVM, un firewall pfSense perimetral en 4 zonas, servicios internos (Moodle, Nextcloud, LDAP) y un portal público de datos abiertos—. Cada concepto aplica la teoría a decisiones reales del ISEP y desarma qué comandos del taller cambian al salir del laboratorio.</p>
+</aside>
+
+<section aria-labelledby="trad-title">
+  <div class="sec-title">
+    <h2 id="trad-title">3. Traductor rápido: Labo de Exactas ↔ Producción real</h2>
+    <span>Por qué no hay que copiar y pegar IPs ni atajos del taller</span>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Dato / Atajo en los talleres</th>
+          <th>Dónde aparece</th>
+          <th>Por qué existe en el labo</th>
+          <th>Qué cambia en producción (ISEP / entorno real)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>10.41.107.1XX/24</code><br>GW <code>10.41.107.99</code><br><small>(y erratas <code>10.41.105.0/24</code>, <code>.fc</code>, <code>172.30.40.134</code>)</small></td>
+          <td>Clases 1, 2 y 3 (WAN física del laboratorio)</td>
+          <td>Cada grupo recibe un número de puesto <code>XX</code> dentro de la red interna de la facultad que simula ser Internet ("WAN").</td>
+          <td>Al usar una red RFC 1918 como WAN, el taller <strong>destilda</strong> <em>Block private networks</em> en pfSense. En producción, la WAN tiene IP pública/enlace ISP y esa casilla suele quedar tildada.</td>
+        </tr>
+        <tr>
+          <td><code>44.0.fc.0/24</code> / <code>44.0.0.0/24</code><br>Servidor <code>44.0.0.2</code></td>
+          <td>Clase 3 (<code>DMZ_RUTEADA</code>)</td>
+          <td>Prefijo fácil de distinguir visualmente de <code>192.168.x.x</code> para demostrar routing puro sin NAT ni Port Forward.</td>
+          <td>En Internet real, <code>44.0.0.0/8</code> pertenece a AMPRNet (radioaficionados). En producción se usa el prefijo público asignado por el ISP/LACNIC o una subred corporativa con ruta anunciada aguas arriba.</td>
+        </tr>
+        <tr>
+          <td><code>enp1s0</code> / <code>netplan-enp1s0</code> / <code>enp195s0f0</code></td>
+          <td>Clases 2 y 3 (<code>nmcli</code> bridge)</td>
+          <td>Nombres predecibles de placa PCIe y perfil por defecto en los equipos de prueba del laboratorio.</td>
+          <td>Nunca se hardcodean: se descubren con <code>nmcli -t -f DEVICE,TYPE,STATE device status</code>, <code>nmcli -g GENERAL.CONNECTION device show "$NIC"</code> y <code>/sys/class/net/$NIC/address</code>.</td>
+        </tr>
+        <tr>
+          <td><code>192.168.122.0/24</code> (<code>virbr0</code> / <code>default</code>)</td>
+          <td>Clases 1 y 2 (KVM NAT y Preseed)</td>
+          <td>Red virtual privada automática de <code>libvirt</code> con <code>dnsmasq</code> para dar salida rápida a VMs recién creadas.</td>
+          <td>Sirve para pruebas aisladas o servidor HTTP temporal de Preseed en <code>192.168.122.1:8000</code>, pero no expone servicios entrantes a la LAN ni segmenta zonas por sí sola.</td>
+        </tr>
+        <tr>
+          <td><code>alumno/alumno</code>, <code>python3 -m http.server</code>, <code>httpd -p 8000</code> sin TLS</td>
+          <td>Clases 2 y 3 (Preseed y prueba DMZ)</td>
+          <td>Evita gestionar certificados TLS, puertos privilegiados (&lt;1024) y bóvedas de secretos durante la práctica.</td>
+          <td>En producción: contraseñas hasheadas o deshabilitadas + claves SSH, servidores web detrás de proxy reverso TLS (443) + WAF, y aprovisionamiento con cloud-init / Ansible / Vault.</td>
+        </tr>
+        <tr>
+          <td>IP temporal <code>192.168.10.2/24</code> sobre <code>br-lan</code></td>
+          <td>Clase 3 (slides 33 y 69)</td>
+          <td>Permite abrir la WebGUI de pfSense (<code>192.168.10.1</code>) desde el host KVM antes de configurar una VM en LAN.</td>
+          <td>Es una excepción temporal de bootstrap. Se elimina al terminar con <code>nmcli device reapply br-lan</code> para que el host no quede expuesto ni participe a nivel IP dentro de la LAN interna.</td>
+        </tr>
+        <tr>
+          <td>Debian 13 en <code>virt-install</code> vs comandos Alpine (<code>apk</code>, <code>rc-service</code>, <code>httpd</code>)</td>
+          <td>Clase 3 (slides 29–31 vs 45–46 y 58)</td>
+          <td>Inconsistencia menor entre láminas que armaron el TP sobre Alpine y las que crean VMs Debian 13.</td>
+          <td>En Debian 13 usá <code>apt install apache2</code> (o <code>python3 -m http.server 8000</code>), <code>systemctl enable --now</code> y <code>/etc/network/interfaces</code> o Netplan según el instalador usado.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div>
+
+<footer class="end">
+  <span>Material de estudio visual · Infraestructura Tecnológica (FCEN-UBA).</span>
+  <span>Guardado local por navegador vía <code>localStorage</code>.</span>
+</footer>
+
+<script>
+(function(){
+  /* Tema claro/oscuro compartido por las 5 guias */
+  var btn = document.getElementById('themeToggle');
+  function currentTheme(){
+    var dt = document.documentElement.dataset.theme;
+    if(dt === 'dark' || dt === 'light') return dt;
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  function paintTheme(t){
+    document.documentElement.dataset.theme = t;
+    if(btn) btn.textContent = (t === 'dark') ? 'Tema: Oscuro' : 'Tema: Claro';
+  }
+  try{
+    var savedTheme = localStorage.getItem('infra-theme');
+    if(savedTheme === 'dark' || savedTheme === 'light') paintTheme(savedTheme);
+    else if(btn) btn.textContent = (currentTheme() === 'dark') ? 'Tema: Oscuro' : 'Tema: Claro';
+  }catch(e){}
+  if(btn){
+    btn.addEventListener('click', function(){
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      paintTheme(next);
+      try{ localStorage.setItem('infra-theme', next); }catch(e){}
+    });
+  }
+
+  /* Agregado de progreso de las 5 guías */
+  var KEYS = [
+    'infra-pareto-progreso-v1',
+    'infra-redes-progreso-v1',
+    'infra-kvm-progreso-v1',
+    'infra-pfsense-progreso-v1',
+    'infra-seguridad-progreso-v1'
+  ];
+  function countDone(k){
+    try{
+      var raw = localStorage.getItem(k);
+      if(!raw) return 0;
+      var obj = JSON.parse(raw);
+      return obj ? Object.keys(obj).filter(function(id){ return !!obj[id]; }).length : 0;
+    }catch(e){ return 0; }
+  }
+  function refreshProgress(){
+    var total = 0;
+    var cards = document.querySelectorAll('[data-key]');
+    cards.forEach(function(card){
+      var k = card.dataset.key;
+      var n = Math.min(12, countDone(k));
+      total += n;
+      var lbl = card.querySelector('.gprog');
+      var bar = card.querySelector('.mini-fill');
+      if(lbl) lbl.innerHTML = '<b>' + n + '</b> de 12 estudiados';
+      if(bar) bar.style.width = Math.round((n / 12) * 100) + '%';
+    });
+    var maxTotal = KEYS.length * 12;
+    var pct = Math.round((total / maxTotal) * 100);
+    var gs = document.getElementById('globalStats');
+    var gf = document.getElementById('globalFill');
+    if(gs) gs.innerHTML = '<b>' + total + '</b> de ' + maxTotal + ' conceptos estudiados (' + pct + '%)';
+    if(gf) gf.style.width = pct + '%';
+  }
+  refreshProgress();
+  window.addEventListener('pageshow', refreshProgress);
+  window.addEventListener('storage', refreshProgress);
+
+  var resetBtn = document.getElementById('resetProgress');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      if(!confirm('¿Querés reiniciar el progreso marcado en las 5 guías?')) return;
+      KEYS.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+      refreshProgress();
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Configuración local de agentes y skills
+.agents/
+
+# Archivos del sistema operativo y temporales
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
