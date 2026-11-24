@@ -193,7 +193,7 @@ details.check .a{margin-top:.75rem;font-size:1rem}
 .widget svg{display:block;width:100%;height:auto}
 .widget svg text{font-family:var(--sans);fill:var(--ink)}
 .widget .h{font-size:13.5px;font-weight:600}.widget .l{font-size:12px}.widget .s{font-size:11px;fill:var(--muted)}
-.btn{font-family:var(--sans);font-weight:600;font-size:.84rem;border:1.5px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:99px;padding:.34rem .8rem;cursor:pointer}
+.btn{font-family:var(--sans);font-weight:600;font-size:.84rem;border:1.5px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:99px;padding:.34rem .8rem;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
 .btn:hover:not(:disabled){border-color:var(--ink)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
@@ -207,8 +207,8 @@ details.check .a{margin-top:.75rem;font-size:1rem}
 .check-list label{display:flex;gap:.45rem;align-items:flex-start;cursor:pointer;line-height:1.35}
 .check-list input{margin-top:.2rem;accent-color:var(--p1);flex:none}
 @media (max-width:560px){
-  .wgrid,.hop-grid,.check-list{grid-template-columns:minmax(0,1fr);min-width:0}
-  .wgrid > *,.hop-grid > *,.check-list > *{min-width:0}
+  .wgrid,.hop-grid,.check-list,.gloss-grid{grid-template-columns:minmax(0,1fr);min-width:0}
+  .wgrid > *,.hop-grid > *,.check-list > *,.gloss-grid > *{min-width:0}
 }
 .wcard{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:.65rem .8rem;font-family:var(--sans);font-size:.85rem;line-height:1.4;min-width:0}
 .wcard.ok{border-color:var(--good);background:var(--p4s)}
@@ -227,6 +227,17 @@ input[type=range]{width:100%;accent-color:var(--p1);min-width:0}
 .note{font-family:var(--sans);font-size:.87rem;color:var(--muted);line-height:1.5}
 .section-plain{border-top:2px solid var(--ink);padding:1.4rem 0 3rem;min-width:0}
 .section-plain h2{font-size:clamp(1.5rem,3.2vw,1.85rem);margin-bottom:.9rem}
+
+/* glosario visual de piezas */
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:.85rem;margin-top:1rem;min-width:0}
+.gloss-grid > *{min-width:0}
+.gloss-card{background:var(--surface);border:1px solid var(--rule);border-radius:11px;padding:.9rem 1rem;display:flex;flex-direction:column;gap:.55rem;min-width:0}
+.gloss-card[hidden]{display:none}
+.gloss-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem}
+.gloss-head h3{font-size:1.02rem;font-weight:700;margin:0;line-height:1.25}
+.gloss-card p{margin:0;font-size:.94rem;line-height:1.5}
+.gloss-card .gloss-lab{background:var(--bg);border-left:3px solid var(--p1);padding:.45rem .65rem;border-radius:0 6px 6px 0;font-family:var(--sans);font-size:.83rem;line-height:1.42}
+.gloss-card .gloss-links{margin-top:auto;padding-top:.2rem;font-family:var(--sans);font-size:.8rem;color:var(--muted)}
 
 /* visuales, analogías, práctica */
 .viz svg{display:block;width:100%;height:auto}
@@ -268,6 +279,13 @@ footer.end{max-width:74rem;margin:0 auto;padding:2rem clamp(1.1rem,4vw,3rem) 3re
   <div class="signature"><svg viewBox="0 0 820 312" role="img" aria-label="Plano integral de la infraestructura del taller: red física y VMs conectadas a los cuatro bridges Linux del host KVM y gobernadas en capa 3 por pfSense."><defs><marker id="hero_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="hero_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="hero_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="hero_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="hero_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="hero_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker><marker id="hero_good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker><marker id="hero_bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--bad)"/></marker></defs><rect x="246" y="20" width="252" height="272" rx="12" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.4"/><text x="372.0" y="41.0" class="h" text-anchor="middle">Host KVM Linux (4 bridges L2)</text><rect x="570" y="20" width="228" height="272" rx="12" style="fill:var(--surface);stroke:var(--ink)" stroke-width="1.7"/><text x="684.0" y="41.0" class="h" text-anchor="middle">VM pfSense (L3 · 4 NICs)</text><rect x="22" y="54" width="162" height="46" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/><text x="103.0" y="73.0" class="l sig-main" text-anchor="middle">Red física / vm-wan</text><text x="103.0" y="90.0" class="s sig-sub" text-anchor="middle">10.41.107.0/24 · GW .99</text><rect x="264" y="54" width="216" height="46" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="372.0" y="73.0" class="l sig-main" text-anchor="middle" style="fill:var(--p1)">br-wan (IP host)</text><text x="372.0" y="90.0" class="s sig-sub" text-anchor="middle">enp1s0 · 10.41.107.XXX</text><rect x="586" y="54" width="196" height="46" rx="8" style="fill:var(--bg);stroke:var(--p1)" stroke-width="1.4"/><text x="684.0" y="73.0" class="l sig-main" text-anchor="middle">vtnet0 → WAN</text><text x="684.0" y="90.0" class="s sig-sub" text-anchor="middle">10.41.107.1XX · GW .99</text><line x1="186.0" y1="77.0" x2="262.0" y2="77.0" style="stroke:var(--p1)" stroke-width="1.7" marker-end="url(#hero_p1)"/><text x="224.0" y="70.0" class="s sig-sub" text-anchor="middle">enp1s0</text><line x1="482.0" y1="77.0" x2="584.0" y2="77.0" style="stroke:var(--p1)" stroke-width="1.9" class="sig-flow" marker-end="url(#hero_p1)"/><text x="533.0" y="70.0" class="s sig-sub" text-anchor="middle">vnet0</text><rect x="22" y="114" width="162" height="46" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="103.0" y="133.0" class="l sig-main" text-anchor="middle">vm-lan (Debian 13)</text><text x="103.0" y="150.0" class="s sig-sub" text-anchor="middle">DHCP · 192.168.10.x</text><rect x="264" y="114" width="216" height="46" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.5"/><text x="372.0" y="133.0" class="l sig-main" text-anchor="middle" style="fill:var(--p4)">br-lan (sin IP)</text><text x="372.0" y="150.0" class="s sig-sub" text-anchor="middle">Dominio L2 interno</text><rect x="586" y="114" width="196" height="46" rx="8" style="fill:var(--bg);stroke:var(--p4)" stroke-width="1.4"/><text x="684.0" y="133.0" class="l sig-main" text-anchor="middle">vtnet1 → LAN</text><text x="684.0" y="150.0" class="s sig-sub" text-anchor="middle">192.168.10.1 · Kea</text><line x1="186.0" y1="137.0" x2="262.0" y2="137.0" style="stroke:var(--p4)" stroke-width="1.7" marker-end="url(#hero_p4)"/><text x="224.0" y="130.0" class="s sig-sub" text-anchor="middle">tap</text><line x1="482.0" y1="137.0" x2="584.0" y2="137.0" style="stroke:var(--p4)" stroke-width="1.9" class="sig-flow" marker-end="url(#hero_p4)"/><text x="533.0" y="130.0" class="s sig-sub" text-anchor="middle">vnet1</text><rect x="22" y="174" width="162" height="46" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/><text x="103.0" y="193.0" class="l sig-main" text-anchor="middle">vm-dmz-ruteada</text><text x="103.0" y="210.0" class="s sig-sub" text-anchor="middle">Fija · 44.0.XX.2/24</text><rect x="264" y="174" width="216" height="46" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.5"/><text x="372.0" y="193.0" class="l sig-main" text-anchor="middle" style="fill:var(--p3)">br-dmz-ruteada</text><text x="372.0" y="210.0" class="s sig-sub" text-anchor="middle">L2 puro · sin IP host</text><rect x="586" y="174" width="196" height="46" rx="8" style="fill:var(--bg);stroke:var(--p3)" stroke-width="1.4"/><text x="684.0" y="193.0" class="l sig-main" text-anchor="middle">vtnet2 → DMZ_RUT</text><text x="684.0" y="210.0" class="s sig-sub" text-anchor="middle">44.0.XX.1 · Sin NAT</text><line x1="186.0" y1="197.0" x2="262.0" y2="197.0" style="stroke:var(--p3)" stroke-width="1.7" marker-end="url(#hero_p3)"/><text x="224.0" y="190.0" class="s sig-sub" text-anchor="middle">tap</text><line x1="482.0" y1="197.0" x2="584.0" y2="197.0" style="stroke:var(--p3)" stroke-width="1.9" class="sig-flow" marker-end="url(#hero_p3)"/><text x="533.0" y="190.0" class="s sig-sub" text-anchor="middle">vnet2</text><rect x="22" y="234" width="162" height="46" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/><text x="103.0" y="253.0" class="l sig-main" text-anchor="middle">vm-dmz-portfw</text><text x="103.0" y="270.0" class="s sig-sub" text-anchor="middle">Fija · 192.168.20.10</text><rect x="264" y="234" width="216" height="46" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.5"/><text x="372.0" y="253.0" class="l sig-main" text-anchor="middle" style="fill:var(--p2)">br-dmz-portfw</text><text x="372.0" y="270.0" class="s sig-sub" text-anchor="middle">L2 puro · sin IP host</text><rect x="586" y="234" width="196" height="46" rx="8" style="fill:var(--bg);stroke:var(--p2)" stroke-width="1.4"/><text x="684.0" y="253.0" class="l sig-main" text-anchor="middle">vtnet3 → DMZ_PFW</text><text x="684.0" y="270.0" class="s sig-sub" text-anchor="middle">192.168.20.1 · DNAT</text><line x1="186.0" y1="257.0" x2="262.0" y2="257.0" style="stroke:var(--p2)" stroke-width="1.7" marker-end="url(#hero_p2)"/><text x="224.0" y="250.0" class="s sig-sub" text-anchor="middle">tap</text><line x1="482.0" y1="257.0" x2="584.0" y2="257.0" style="stroke:var(--p2)" stroke-width="1.9" class="sig-flow" marker-end="url(#hero_p2)"/><text x="533.0" y="250.0" class="s sig-sub" text-anchor="middle">vnet3</text></svg></div>
   <p class="lede">Un recorrido cronológico desde el primer comando en el kernel hasta la matriz final de pruebas en 6 capas, explicando qué construye cada paso, qué salida confirma que quedó sano y cómo corregir las erratas de las filminas.</p>
   <p class="meta">Combina documentación primaria de Linux, KVM/libvirt, Debian, NetworkManager, RFCs IETF y Netgate pfSense con las láminas de cátedra de Infraestructura Tecnológica (Clases 2 y 3). Fuentes consultadas el 24 de noviembre de 2026. Los números entre corchetes llevan a la bibliografía; cada paso incluye visual, comandos parametrizados, analogía, bajada práctica con prompt y límites.</p>
+  <div class="btnrow" style="margin-top:1rem" aria-label="Accesos rápidos a los visualizadores del laboratorio">
+    <a class="btn" href="#glosario-piezas">Glosario: qué es cada pieza</a>
+    <a class="btn" href="#w1-labo">Parametrizar puesto XX</a>
+    <a class="btn" href="#w2-labo">Mapa evolutivo: Etapas 0 → 6</a>
+    <a class="btn" href="#w3-labo">Inspector de 11 componentes</a>
+    <a class="btn" href="#w4-labo">Trazador de 7 flujos y fallas</a>
+  </div>
 
   <section class="axioms" aria-labelledby="ax-title">
     <h2 id="ax-title">Cuatro supuestos sostienen todo el laboratorio</h2>
@@ -296,6 +314,7 @@ footer.end{max-width:74rem;margin:0 auto;padding:2rem clamp(1.1rem,4vw,3rem) 3re
       <h2>Pasos del taller</h2>
       <ol id="sidenav"></ol>
       <ol class="extra">
+        <li><a href="#glosario-piezas"><span class="dot" style="border-color:transparent"></span>Glosario: qué es cada pieza</a></li>
         <li><a href="#aplicacion"><span class="dot" style="border-color:transparent"></span>Del concepto a la práctica</a></li>
         <li><a href="#fuentes"><span class="dot" style="border-color:transparent"></span>Bibliografía</a></li>
       </ol>
@@ -303,6 +322,106 @@ footer.end{max-width:74rem;margin:0 auto;padding:2rem clamp(1.1rem,4vw,3rem) 3re
   </aside>
 
 <main id="main">
+
+<section class="section-plain" id="glosario-piezas" aria-labelledby="gloss-title">
+  <h2 id="gloss-title">Glosario visual: qué significa cada pieza que agregás al labo</h2>
+  <p>Si algún término del taller (como <em>bridge</em>, <em>router</em>, <em>firewall</em>, <em>IP privada</em>, <em>NAT</em> o <em>port-forwarding</em>) todavía suena abstracto, arrancá acá. Cada tarjeta explica qué hace esa pieza desde cero, cómo se llama exactamente en tu laboratorio y en qué paso se arma.</p>
+  <div class="btnrow" id="gloss-filters" role="group" aria-label="Filtrar glosario por categoría">
+    <button type="button" class="btn" data-gcat="all" aria-pressed="true">Todas (12)</button>
+    <button type="button" class="btn" data-gcat="zona" aria-pressed="false">Zonas (LAN · WAN · DMZ)</button>
+    <button type="button" class="btn" data-gcat="disp" aria-pressed="false">Dispositivos (Bridge · Router · FW)</button>
+    <button type="button" class="btn" data-gcat="trafico" aria-pressed="false">IPs, NAT y salida a Internet</button>
+    <button type="button" class="btn" data-gcat="serv" aria-pressed="false">Servicios y KVM</button>
+  </div>
+  <p class="axhint" id="gloss-hint" aria-live="polite">Mostrando las 12 piezas fundamentales del laboratorio.</p>
+
+  <div class="gloss-grid" id="gloss-grid">
+    <div class="gloss-card" data-gcat="zona" id="glos-lan">
+      <div class="gloss-head"><h3>LAN (Red de Área Local)</h3><span class="chip p4">Zona</span></div>
+      <p><b>Qué es desde cero:</b> Es la red interna privada donde viven las máquinas de usuarios o clientes de una oficina o casa. Todos los equipos dentro de la misma LAN comparten un mismo segmento Ethernet y se ven directo por dirección MAC sin cruzar un router.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Es el segmento <code>192.168.10.0/24</code> conectado al bridge <code>br-lan</code>, donde <code>vm-lan</code> recibe IP automática por DHCP y queda protegida desde afuera (<a href="#paso-09-dhcp-kea-lan-e-ips-dmz">Paso 9</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="01-fundamentos-y-redes.html#capa2-switch-mac-arp-vlan">Capa 2 y dominios LAN (Guía 1)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="zona" id="glos-wan">
+      <div class="gloss-head"><h3>WAN (Red Externa / Salida)</h3><span class="chip p4">Zona</span></div>
+      <p><b>Qué es desde cero:</b> Es el enlace "de la calle" que conecta tu router con el proveedor (ISP) o con una red externa que vos no administrás. Todo tráfico que entra por la WAN se considera potencialmente hostil y pasa primero por el firewall.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Es la red física del aula (<code>10.41.107.0/24</code>, Gateway <code>.99</code>) compartida mediante <code>br-wan</code> hacia la interfaz <code>vtnet0</code> de pfSense y el cliente de prueba <code>vm-wan</code> (<a href="#paso-06-migrar-br-wan-y-bridges-internos">Paso 6</a>, <a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="03-bridges-y-pfsense.html#bridge-linux-br-wan">Bridge br-wan y red del aula (Guía 3)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="zona" id="glos-dmz">
+      <div class="gloss-head"><h3>DMZ (Zona Desmilitarizada)</h3><span class="chip p4">Zona</span></div>
+      <p><b>Qué es desde cero:</b> Es una "antesala" separada de tu LAN donde ubicás servidores que necesitan recibir conexiones externas (por ejemplo, una web). Si un atacante compromete ese servidor, las reglas del firewall impiden que salte hacia las PCs internas de la LAN.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Armás dos DMZ: <code>DMZ_PORTFW</code> (<code>192.168.20.0/24</code> con <code>vm-dmz-portfw</code>) y <code>DMZ_RUTEADA</code> (<code>44.0.XX.0/24</code> con <code>vm-dmz-ruteada</code>), ambas bloqueadas hacia <code>LAN net</code> (<a href="#paso-10-reglas-firewall-y-aislamiento">Paso 10</a>, <a href="#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="04-seguridad.html#segmentacion-vlan-dmz-zerotrust">Segmentación y DMZ (Guía 4)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="disp" id="glos-bridge">
+      <div class="gloss-head"><h3>Bridge Linux / Switch (Capa 2)</h3><span class="chip p1">Dispositivo</span></div>
+      <p><b>Qué es desde cero:</b> Es una "zapatilla de red" virtual en Capa 2: une cables (interfaces físicas o <code>vnetX</code> de VMs) mirando direcciones MAC y reenviando tramas dentro del mismo segmento, pero <strong>no decide rutas</strong> ni bloquea tráfico entre redes distintas.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Creás 4 bridges en el host (<code>br-wan</code>, <code>br-lan</code>, <code>br-dmz-ruteada</code>, <code>br-dmz-portfw</code>). Los 3 internos quedan <strong>sin IP en el host</strong> para que el kernel no puentee a pfSense (<a href="#paso-06-migrar-br-wan-y-bridges-internos">Paso 6</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#dominio-l2-vs-frontera-l3">Dominio L2 vs Frontera L3 (Guía 0)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="disp" id="glos-router">
+      <div class="gloss-head"><h3>Router (Frontera de Capa 3)</h3><span class="chip p1">Dispositivo</span></div>
+      <p><b>Qué es desde cero:</b> Es el distribuidor de Capa 3 que conecta redes IP diferentes. Cuando llega un paquete, mira la IP de destino contra su <strong>tabla de ruteo</strong> (la ruta con máscara más específica gana) y decide por cuál de sus placas sacarlo hacia el siguiente salto.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Ese rol lo cumple la VM <code>pfSense</code> con sus 4 NICs virtuales (<code>vtnet0</code>..<code>vtnet3</code>). Es la única máquina que toca las 4 redes y sabe enviar paquetes hacia el Upstream Gateway <code>10.41.107.99</code> (<a href="#paso-07-desplegar-pfsense-y-vms-zona">Paso 7</a>, <a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="01-fundamentos-y-redes.html#capa3-cidr-ruteo">Capa 3, CIDR y ruteo (Guía 1)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="disp" id="glos-firewall">
+      <div class="gloss-head"><h3>Firewall (Stateful · Default Deny)</h3><span class="chip p1">Dispositivo</span></div>
+      <p><b>Qué es desde cero:</b> Es el guardia de seguridad de la red: evalúa cada conexión nueva en la interfaz por donde <strong>entra</strong> (<em>ingress</em>) leyendo reglas de arriba hacia abajo. Si nada la autoriza, la descarta (<em>Default Deny</em>); si la aprueba, anota la sesión en su <strong>tabla de estados</strong> (<em>stateful</em>) para dejar volver la respuesta automáticamente.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Vive dentro de <code>pfSense</code>. Por eso en las DMZs ponés regla <code>#1 BLOCK → LAN net</code> arriba de <code>#2 PASS → any</code> (<a href="#paso-10-reglas-firewall-y-aislamiento">Paso 10</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#firewalls-stateless-stateful-waf">Tipos de firewall (Guía 0)</a> · <a href="04-seguridad.html#stateful-packet-inspection">Stateful Inspection (Guía 4)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="trafico" id="glos-ip-privada">
+      <div class="gloss-head"><h3>IP pública vs IP privada (RFC 1918)</h3><span class="chip p2">IPs y NAT</span></div>
+      <p><b>Qué es desde cero:</b> Como IPv4 tiene direcciones limitadas, la norma <strong>RFC 1918</strong> reservó rangos privados (<code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>) que cualquiera puede repetir puertas adentro pero <strong>no se rutean en Internet público</strong>. Una IP pública, en cambio, es única y enrutable desde afuera.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> <code>192.168.10.x</code> y <code>192.168.20.10</code> son privadas; <code>44.0.XX.2</code> simula un bloque público ruteable; y como la WAN del aula usa la privada <code>10.41.107.0/24</code>, tenés que destildar <em>Block private networks</em> en pfSense (<a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="01-fundamentos-y-redes.html#rfc1918-nat-pat">RFC 1918 y direcciones privadas (Guía 1)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="trafico" id="glos-internet">
+      <div class="gloss-head"><h3>Salida a Internet (Gateway + Ruta default)</h3><span class="chip p2">IPs y NAT</span></div>
+      <p><b>Qué es desde cero:</b> Tener "salida a Internet" no es magia: requiere 5 piezas juntas: (1) una <strong>IP</strong> y su <strong>máscara</strong> para saber qué está cerca, (2) una <strong>ruta por defecto (Default Gateway)</strong> para todo destino remoto, (3) permiso de <strong>firewall + NAT</strong> si usás IP privada, y (4) <strong>DNS</strong> para traducir nombres como <code>debian.org</code>.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Cada VM interna apunta su Gateway a su interfaz de <code>pfSense</code> (<code>.1</code>), y <code>pfSense</code> tiene configurado el <em>Upstream Gateway</em> <code>10.41.107.99</code> solo en la pestaña WAN (<a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>, <a href="#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#cinco-piezas-internet">Las 5 piezas para tener Internet (Guía 0)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="trafico" id="glos-snat">
+      <div class="gloss-head"><h3>NAT de salida (Outbound NAT / SNAT)</h3><span class="chip p2">IPs y NAT</span></div>
+      <p><b>Qué es desde cero:</b> Como un router externo no sabe devolver un paquete a una IP privada <code>192.168.x.x</code>, el <strong>Source NAT (SNAT)</strong> tacha la IP privada de origen al salir por WAN y la reemplaza por la IP de la WAN del router, recordando el cambio en memoria para devolver la respuesta al cliente exacto.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Lo configurás en modo <em>Manual Outbound NAT</em> activo para LAN y <code>DMZ_PORTFW</code>, pero lo dejás <strong>desactivado</strong> en <code>DMZ_RUTEADA</code> para comprobar cómo viaja el tráfico sin traducción (<a href="#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#rfc1918-nat-portfw">NAT y traducción de direcciones (Guía 0)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="trafico" id="glos-portfw">
+      <div class="gloss-head"><h3>Port-Forwarding (DNAT / Reenvío de puertos)</h3><span class="chip p2">IPs y NAT</span></div>
+      <p><b>Qué es desde cero:</b> Es el camino inverso para publicar un servicio que está oculto tras una IP privada: alguien desde afuera golpea a la IP WAN + un puerto (ej. <code>:8000</code>), y el router reescribe la IP de <strong>destino</strong> (<em>Destination NAT</em>) hacia el servidor privado interno.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> En <code>NAT → Port Forward</code> redirigís <code>WAN:8000 → 192.168.20.10:8000</code> (junto con su regla asociada en WAN) y lo comparás contra la <code>DMZ_RUTEADA</code> que se alcanza directo sin NAT vía <code>ip route add</code> (<a href="#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="03-bridges-y-pfsense.html#dmz-portfw-vs-dmz-ruteada">Port-Forward vs DMZ Ruteada (Guía 3)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="serv" id="glos-dhcp-dns">
+      <div class="gloss-head"><h3>DHCP y DNS (Kea + Resolver)</h3><span class="chip p3">Servicios y KVM</span></div>
+      <p><b>Qué es desde cero:</b> <strong>DHCP</strong> es la recepción automática que entrega IP, máscara, Gateway y servidor DNS apenas una máquina se enchufa a la red (proceso DORA en broadcast L2). <strong>DNS</strong> es la guía telefónica que traduce nombres (<code>deb.debian.org</code>) a números IP.</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Activás <strong>Kea DHCP</strong> y <strong>DNS Resolver</strong> en la LAN de <code>pfSense</code> para <code>vm-lan</code>, mientras que los servidores DMZ usan <strong>IP estática</strong> para no cambiar nunca de dirección (<a href="#paso-09-dhcp-kea-lan-e-ips-dmz">Paso 9</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="01-fundamentos-y-redes.html#dhcp-broadcast-dora">DHCP paso a paso</a> · <a href="01-fundamentos-y-redes.html#dns-resolucion-nombres">DNS (Guía 1)</a></p>
+    </div>
+
+    <div class="gloss-card" data-gcat="serv" id="glos-kvm-tap">
+      <div class="gloss-head"><h3>Hipervisor KVM, VM y TAP (<code>vnetX</code>)</h3><span class="chip p3">Servicios y KVM</span></div>
+      <p><b>Qué es desde cero:</b> Un <strong>hipervisor</strong> permite ejecutar sistemas operativos completos (VMs) dentro de tu PC física usando soporte del procesador (VT-x/AMD-V). Para conectar una VM a un bridge del host, el kernel crea un cable virtual llamado interfaz <strong>TAP</strong> (<code>vnet0</code>, <code>vnet1</code>...).</p>
+      <p class="gloss-lab"><b>En tu labo:</b> El host corre <code>KVM + QEMU + libvirt</code> en contexto <code>qemu:///system</code>, los discos son archivos <code>.qcow2</code> y cada VM (<code>pfSense</code> y las Debian 13) expone sus <code>vnetX</code> en <code>bridge link</code> (<a href="#paso-01-preparar-host-kvm">Paso 1</a>, <a href="#paso-02-primera-vm-virbr0">Paso 2</a>).</p>
+      <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#hipervisor-stack-kvm">Stack KVM (Guía 0)</a> · <a href="02-kvm-y-preseed.html#redes-libvirt-virbr0-tap">virbr0 y TAP (Guía 2)</a></p>
+    </div>
+  </div>
+</section>
+
 
 <article class="concept" id="paso-01-preparar-host-kvm" data-p="p1 p4" data-short="1. Preparar host KVM" data-lede="Validar VT-x/AMD-V, /dev/kvm, libvirtd y grupos kvm/libvirt permite administrar máquinas virtuales de sistema (qemu:///system) sin sudo.">
   <div class="top"><span class="num">1</span><div>
@@ -544,7 +663,7 @@ No inventes rutas; marcá [FALTA: dato] si falta información.</pre></div>
     <li><span class="tag p1">1</span> El instalador de Debian (<code>d-i</code>) lee sus opciones desde una base de respuestas tipo <code>debconf</code>: idioma/teclado (<code>en_US.UTF-8</code>, <code>latam</code>), red automática, usuario, zona horaria (<code>America/Argentina/Buenos_Aires</code>) y mirror APT (<code>deb.debian.org</code>)<a class="ref" href="#r10">[10]</a>.</li><li>Como nuestras VMs arrancan con firmware <strong>UEFI</strong> y disco paravirtual VirtIO, el bloque <code>partman</code> de <code>preseed.cfg</code> debe apuntar explícitamente a <code>/dev/vda</code>, usar receta atómica simple y forzar etiqueta de particiones <strong><code>gpt</code></strong> sin confirmaciones interactivas<a class="ref" href="#r10">[10]</a><a class="ref" href="#r18">[18]</a>.</li><li>Para no depender de instalar paquetes manualmente al terminar, <code>tasksel</code> selecciona <code>standard, ssh-server</code>, <code>pkgsel/include</code> suma <code>qemu-guest-agent</code> y herramientas de red, y <code>preseed/late_command</code> ejecuta <code>in-target systemctl enable</code> sobre el agente y sobre la consola serial <code>ttyS0</code><a class="ref" href="#r10">[10]</a>.</li><li><span class="tag p4">4</span> El host publica el archivo con un servidor HTTP mínimo en <code>192.168.122.1:8000</code> (verificado antes con <code>curl</code>) y lanza <code>virt-install</code> usando <strong><code>--location</code></strong> (no <code>--cdrom</code>, porque solo <code>--location</code> permite inyectar parámetros al kernel) junto con <code>--extra-args="auto=true priority=critical ... url=http://192.168.122.1:8000/preseed.cfg --- console=ttyS0,115200n8"</code><a class="ref" href="#r6">[6]</a><a class="ref" href="#r10">[10]</a>.</li>
   </ol>
 
-  <figure class="viz"><div class="scroll"><div style="min-width:480px"><svg viewBox="0 0 560 246" role="img" aria-label="Secuencia de instalación desatendida con Debian Preseed: servidor HTTP local, virt-install con --location y --extra-args, particionado GPT en /dev/vda y late_command."><defs><marker id="s4_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="s4_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="s4_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="s4_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="s4_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="s4_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker><marker id="s4_good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker><marker id="s4_bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--bad)"/></marker></defs><rect x="20" y="22" width="112" height="108" rx="9" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/><text x="76.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p3)">1. HTTP Host</text><text x="76.0" y="76.0" class="s" text-anchor="middle"><tspan x="76.0" dy="0">192.168.122.1:8000</tspan><tspan x="76.0" dy="17">Sirve preseed.cfg</tspan></text><line x1="134.0" y1="76.0" x2="154.0" y2="76.0" style="stroke:var(--ink)" stroke-width="1.6" marker-end="url(#s4_ink)"/><rect x="156" y="22" width="112" height="108" rx="9" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/><text x="212.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p1)">2. virt-install</text><text x="212.0" y="76.0" class="s" text-anchor="middle"><tspan x="212.0" dy="0">--location (no cdrom)</tspan><tspan x="212.0" dy="17">--extra-args url=...</tspan></text><line x1="270.0" y1="76.0" x2="290.0" y2="76.0" style="stroke:var(--ink)" stroke-width="1.6" marker-end="url(#s4_ink)"/><rect x="292" y="22" width="112" height="108" rx="9" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="348.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p4)">3. partman GPT</text><text x="348.0" y="76.0" class="s" text-anchor="middle"><tspan x="348.0" dy="0">Disco /dev/vda</tspan><tspan x="348.0" dy="17">Tabla GPT para UEFI</tspan></text><line x1="406.0" y1="76.0" x2="426.0" y2="76.0" style="stroke:var(--ink)" stroke-width="1.6" marker-end="url(#s4_ink)"/><rect x="428" y="22" width="112" height="108" rx="9" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/><text x="484.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p2)">4. late_command</text><text x="484.0" y="76.0" class="s" text-anchor="middle"><tspan x="484.0" dy="0">in-target systemctl</tspan><tspan x="484.0" dy="17">guest-agent + ttyS0</tspan></text><line x1="484.0" y1="132.0" x2="484.0" y2="156.0" style="stroke:var(--p4)" stroke-width="1.6" marker-end="url(#s4_p4)"/><rect x="20" y="160" width="520" height="66" rx="9" style="fill:var(--surface);stroke:var(--p4)" stroke-width="1.5"/><text x="36.0" y="184.0" class="h" text-anchor="start" style="fill:var(--p4)">Resultado desatendido: VM Debian 13 reproducible sin clics</text><text x="36.0" y="206.0" class="s" text-anchor="start">Separador '---' antes de console=ttyS0 asegura consola serial persistente tras instalar.</text></svg></div></div><figcaption>Pipeline de instalación desatendida con Debian Preseed (esquema, no datos). Mirá por qué --location, GPT en /dev/vda y el separador '---' son críticos para no detener la instalación.</figcaption></figure>
+  <figure class="viz"><div class="scroll"><div style="min-width:480px"><svg viewBox="0 0 620 246" role="img" aria-label="Secuencia de instalación desatendida con Debian Preseed: servidor HTTP local, virt-install con --location y --extra-args, particionado GPT en /dev/vda y late_command."><defs><marker id="s4_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="s4_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="s4_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="s4_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="s4_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="s4_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker><marker id="s4_good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker><marker id="s4_bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--bad)"/></marker></defs><rect x="20" y="22" width="128" height="108" rx="9" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/><text x="84.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p3)">1. HTTP Host</text><text x="84.0" y="76.0" class="s" text-anchor="middle"><tspan x="84.0" dy="0">192.168.122.1</tspan><tspan x="84.0" dy="17">:8000/preseed.cfg</tspan></text><line x1="150.0" y1="76.0" x2="168.0" y2="76.0" style="stroke:var(--ink)" stroke-width="1.6" marker-end="url(#s4_ink)"/><rect x="170" y="22" width="128" height="108" rx="9" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/><text x="234.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p1)">2. virt-install</text><text x="234.0" y="76.0" class="s" text-anchor="middle"><tspan x="234.0" dy="0">--location (no cdrom)</tspan><tspan x="234.0" dy="17">--extra-args url=...</tspan></text><line x1="300.0" y1="76.0" x2="318.0" y2="76.0" style="stroke:var(--ink)" stroke-width="1.6" marker-end="url(#s4_ink)"/><rect x="320" y="22" width="128" height="108" rx="9" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="384.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p4)">3. partman GPT</text><text x="384.0" y="76.0" class="s" text-anchor="middle"><tspan x="384.0" dy="0">Disco /dev/vda</tspan><tspan x="384.0" dy="17">Tabla GPT (UEFI)</tspan></text><line x1="450.0" y1="76.0" x2="468.0" y2="76.0" style="stroke:var(--ink)" stroke-width="1.6" marker-end="url(#s4_ink)"/><rect x="470" y="22" width="128" height="108" rx="9" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/><text x="534.0" y="46.0" class="h" text-anchor="middle" style="fill:var(--p2)">4. late_command</text><text x="534.0" y="76.0" class="s" text-anchor="middle"><tspan x="534.0" dy="0">in-target systemctl</tspan><tspan x="534.0" dy="17">agent + ttyS0</tspan></text><line x1="534.0" y1="132.0" x2="534.0" y2="156.0" style="stroke:var(--p4)" stroke-width="1.6" marker-end="url(#s4_p4)"/><rect x="20" y="160" width="578" height="66" rx="9" style="fill:var(--surface);stroke:var(--p4)" stroke-width="1.5"/><text x="36.0" y="184.0" class="h" text-anchor="start" style="fill:var(--p4)">Resultado desatendido: VM Debian 13 reproducible sin clics</text><text x="36.0" y="206.0" class="s" text-anchor="start">Separador '---' antes de console=ttyS0 asegura consola serial persistente tras instalar.</text></svg></div></div><figcaption>Pipeline de instalación desatendida con Debian Preseed (esquema, no datos). Mirá por qué --location, GPT en /dev/vda y el separador '---' son críticos para no detener la instalación.</figcaption></figure>
 
   <div class="apply">
     <h3>En tu puesto del laboratorio (comandos, salida esperada y qué dato cambia)</h3>
@@ -632,7 +751,7 @@ No inventes rutas ni IPs; marcá [FALTA: dato] si falta información.</pre></div
     <li><span class="tag p4">4</span> En Linux pueden coexistir distintos administradores de red (<code>NetworkManager</code>, <code>systemd-networkd</code> o el histórico <code>/etc/network/interfaces</code>); en nuestro host, Netplan delega explícitamente el control mediante <code>renderer: NetworkManager</code>, por lo que toda la migración se realiza con <code>nmcli</code><a class="ref" href="#r12">[12]</a><a class="ref" href="#r18">[18]</a>.</li><li><span class="tag p2">2</span> NetworkManager separa el hardware del archivo de configuración: un <strong>Device</strong> (<code>enp1s0</code>, <code>br-wan</code>) es la interfaz real o virtual en el kernel vista con <code>ip -br a</code>; una <strong>Connection</strong> es un perfil persistente guardado en disco; y una <strong>Active Connection</strong> es el único perfil actualmente aplicado sobre ese device<a class="ref" href="#r12">[12]</a>.</li><li>Un mismo device físico puede tener varios perfiles guardados (por ejemplo <code>netplan-enp1s0</code> con DHCP y otro futuro <code>bridge-slave-enp1s0</code> como puerto L2 sin IP), sin que activar uno destruya el archivo de respaldo del otro<a class="ref" href="#r12">[12]</a>.</li><li>Como en las PCs reales del aula la placa física puede llamarse <code>enp1s0</code>, <code>enp3s0</code> o <code>enp195s0f0</code>, el taller detecta en bash <code>$NIC</code>, <code>$NIC_MAC</code> y <code>$ORIGINAL_CONN</code> consultando a NetworkManager y a <code>/sys/class/net/</code> antes de crear un solo perfil<a class="ref" href="#r12">[12]</a><a class="ref" href="#r18">[18]</a>.</li>
   </ol>
 
-  <figure class="viz"><div class="scroll"><div style="min-width:480px"><svg viewBox="0 0 560 246" role="img" aria-label="Relación entre Netplan, el Device físico en el kernel Linux y múltiples perfiles Connection en NetworkManager, junto con las variables dinámicas a relevar."><defs><marker id="s5_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="s5_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="s5_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="s5_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="s5_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="s5_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker><marker id="s5_good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker><marker id="s5_bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--bad)"/></marker></defs><rect x="20" y="20" width="150" height="74" rx="9" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="95.0" y="44.0" class="h" text-anchor="middle" style="fill:var(--p4)">Netplan YAML</text><text x="95.0" y="66.0" class="s" text-anchor="middle"><tspan x="95.0" dy="0">renderer:</tspan><tspan x="95.0" dy="15">NetworkManager</tspan></text><rect x="205" y="20" width="150" height="74" rx="9" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="280.0" y="44.0" class="h" text-anchor="middle" style="fill:var(--p1)">Device ($NIC)</text><text x="280.0" y="66.0" class="s" text-anchor="middle"><tspan x="280.0" dy="0">Interfaz en kernel</tspan><tspan x="280.0" dy="15">ej. enp1s0 + MAC</tspan></text><line x1="172.0" y1="57.0" x2="203.0" y2="57.0" style="stroke:var(--p4)" stroke-width="1.6" marker-end="url(#s5_p4)"/><text x="452.0" y="34.0" class="h" text-anchor="middle">Perfiles guardados (Connections)</text><rect x="374" y="46" width="166" height="52" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="457.0" y="67.0" class="l" text-anchor="middle" style="fill:var(--p1)">netplan-enp1s0</text><text x="457.0" y="85.0" class="s" text-anchor="middle">ACTIVO hoy (DHCP)</text><rect x="374" y="110" width="166" height="52" rx="8" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/><text x="457.0" y="131.0" class="l" text-anchor="middle">bridge-slave-enp1s0</text><text x="457.0" y="149.0" class="s" text-anchor="middle">Guardado (futuro)</text><rect x="374" y="174" width="166" height="52" rx="8" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/><text x="457.0" y="195.0" class="l" text-anchor="middle">enp1s0-estatica</text><text x="457.0" y="213.0" class="s" text-anchor="middle">Guardado (opcional)</text><line x1="356.6" y1="59.2" x2="372.4" y2="70.8" style="stroke:var(--p1)" stroke-width="1.6" marker-end="url(#s5_p1)"/><line x1="355.6" y1="77.9" x2="373.4" y2="134.1" style="stroke:var(--muted)" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#s5_mu)"/><rect x="20" y="118" width="335" height="108" rx="9" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.3"/><text x="34.0" y="142.0" class="h" text-anchor="start">Relevamiento dinámico antes de migrar</text><text x="34.0" y="164.0" class="s" text-anchor="start"><tspan x="34.0" dy="0">1. NIC: primer device ethernet connected</tspan><tspan x="34.0" dy="17">2. NIC_MAC: /sys/class/net/$NIC/address</tspan><tspan x="34.0" dy="17">3. ORIGINAL_CONN: GENERAL.CONNECTION actual</tspan></text></svg></div></div><figcaption>Delegación Netplan → NetworkManager, relación 1-a-N entre Device y perfiles Connection, y variables dinámicas relevadas (esquema, no datos). Mirá que cambiar el perfil activo no borra el original.</figcaption></figure>
+  <figure class="viz"><div class="scroll"><div style="min-width:480px"><svg viewBox="0 0 560 246" role="img" aria-label="Relación entre Netplan, el Device físico en el kernel Linux y múltiples perfiles Connection en NetworkManager, junto con las variables dinámicas a relevar."><defs><marker id="s5_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="s5_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="s5_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="s5_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="s5_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="s5_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker><marker id="s5_good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker><marker id="s5_bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--bad)"/></marker></defs><rect x="20" y="20" width="150" height="74" rx="9" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="95.0" y="44.0" class="h" text-anchor="middle" style="fill:var(--p4)">Netplan YAML</text><text x="95.0" y="66.0" class="s" text-anchor="middle"><tspan x="95.0" dy="0">renderer:</tspan><tspan x="95.0" dy="15">NetworkManager</tspan></text><rect x="205" y="20" width="150" height="74" rx="9" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="280.0" y="44.0" class="h" text-anchor="middle" style="fill:var(--p1)">Device ($NIC)</text><text x="280.0" y="66.0" class="s" text-anchor="middle"><tspan x="280.0" dy="0">Interfaz en kernel</tspan><tspan x="280.0" dy="15">ej. enp1s0 + MAC</tspan></text><line x1="172.0" y1="57.0" x2="203.0" y2="57.0" style="stroke:var(--p4)" stroke-width="1.6" marker-end="url(#s5_p4)"/><text x="457.0" y="34.0" class="h" text-anchor="middle">Perfiles (Connections)</text><rect x="374" y="46" width="166" height="52" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="457.0" y="67.0" class="l" text-anchor="middle" style="fill:var(--p1)">netplan-enp1s0</text><text x="457.0" y="85.0" class="s" text-anchor="middle">ACTIVO hoy (DHCP)</text><rect x="374" y="110" width="166" height="52" rx="8" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/><text x="457.0" y="131.0" class="l" text-anchor="middle">bridge-slave-enp1s0</text><text x="457.0" y="149.0" class="s" text-anchor="middle">Guardado (futuro)</text><rect x="374" y="174" width="166" height="52" rx="8" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/><text x="457.0" y="195.0" class="l" text-anchor="middle">enp1s0-estatica</text><text x="457.0" y="213.0" class="s" text-anchor="middle">Guardado (opcional)</text><line x1="356.6" y1="59.2" x2="372.4" y2="70.8" style="stroke:var(--p1)" stroke-width="1.6" marker-end="url(#s5_p1)"/><line x1="355.6" y1="77.9" x2="373.4" y2="134.1" style="stroke:var(--muted)" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#s5_mu)"/><rect x="20" y="118" width="335" height="108" rx="9" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.3"/><text x="34.0" y="142.0" class="h" text-anchor="start">Relevamiento dinámico antes de migrar</text><text x="34.0" y="164.0" class="s" text-anchor="start"><tspan x="34.0" dy="0">1. NIC: primer device ethernet connected</tspan><tspan x="34.0" dy="17">2. NIC_MAC: /sys/class/net/$NIC/address</tspan><tspan x="34.0" dy="17">3. ORIGINAL_CONN: GENERAL.CONNECTION actual</tspan></text></svg></div></div><figcaption>Delegación Netplan → NetworkManager, relación 1-a-N entre Device y perfiles Connection, y variables dinámicas relevadas (esquema, no datos). Mirá que cambiar el perfil activo no borra el original.</figcaption></figure>
 
   <div class="apply">
     <h3>En tu puesto del laboratorio (comandos, salida esperada y qué dato cambia)</h3>
@@ -1195,11 +1314,11 @@ ip addr show br-lan     # Esperado: sin línea "inet 192.168.10.2/24" (L2 puro!)
   <p class="wdesc">Elegí uno de los 7 flujos de prueba de la matriz del taller y activá fallas típicas para ver en vivo dónde se corta, cambia de IP o filtra el paquete.</p>
   <div class="btnrow" id="w4-flows"></div>
   <div class="check-list" id="w4-faults">
-    <label><input type="checkbox" data-fault="noRoute"> Sin ruta aguas arriba (<code>ip route add</code> faltante en <code>vm-wan</code>)</label>
-    <label><input type="checkbox" data-fault="blockPriv"> <em>Block private networks</em> tildado en WAN</label>
-    <label><input type="checkbox" data-fault="invOrder"> Orden <code>PASS</code>/<code>BLOCK</code> invertido en las DMZ</label>
-    <label><input type="checkbox" data-fault="noAssoc"> Falta <em>associated filter rule</em> en Port Forward</label>
-    <label><input type="checkbox" data-fault="badNat"> Outbound NAT accidental sobre <code>DMZ_RUTEADA</code></label>
+    <label><input type="checkbox" data-fault="noRoute"><span>Sin ruta aguas arriba (<code>ip route add</code> faltante en <code>vm-wan</code>)</span></label>
+    <label><input type="checkbox" data-fault="blockPriv"><span><em>Block private networks</em> tildado en WAN</span></label>
+    <label><input type="checkbox" data-fault="invOrder"><span>Orden <code>PASS</code>/<code>BLOCK</code> invertido en las DMZ</span></label>
+    <label><input type="checkbox" data-fault="noAssoc"><span>Falta <em>associated filter rule</em> en Port Forward</span></label>
+    <label><input type="checkbox" data-fault="badNat"><span>Outbound NAT accidental sobre <code>DMZ_RUTEADA</code></span></label>
   </div>
   <div class="scroll" style="margin-top:.6rem"><div style="min-width:520px" id="w4-svg-wrap"></div></div>
   <div class="wgrid" id="w4-cards"></div>
@@ -1512,25 +1631,39 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
     if(!btns) return;
 
     var STAGES=[
-      {lbl:'0. Host base', kern:'NIC física conectada al switch del aula; sin KVM ni bridges internos.',
+      {lbl:'0. Host base',
+       why:'Partimos de una PC Linux común conectada al switch del aula para comprobar cómo es la red antes de virtualizar.',
+       kern:'NIC física conectada al switch del aula; sin KVM ni bridges internos.',
        ips:'IP host en $NIC (10.41.107.69/24) · GW .99',
        msg:'Punto de partida: Linux administra la placa física directamente vía NetworkManager y no existe virtualización activa.'},
-      {lbl:'1. KVM + virbr0', kern:'Módulos kvm/kvm_* activos; libvirt crea virbr0 y el puerto TAP vnet0 al encender debian-lab1.',
+      {lbl:'1. KVM + virbr0',
+       why:'Para correr VMs sin hardware extra, activamos KVM en el kernel y usamos virbr0 (switch privado + NAT) para darles salida rápida.',
+       kern:'Módulos kvm/kvm_* activos; libvirt crea virbr0 y el puerto TAP vnet0 al encender debian-lab1.',
        ips:'Host en $NIC + virbr0 (192.168.122.1/24)',
        msg:'Con virbr0 y NAT, debian-lab1 sale a Internet detrás del host, pero queda aislada de conexiones entrantes desde la LAN.'},
-      {lbl:'2. Preseed HTTP', kern:'python3 -m http.server 8000 escuchando en 192.168.122.1 alimenta a d-i vía --location.',
+      {lbl:'2. Preseed HTTP',
+       why:'Como vamos a crear 4 VMs de laboratorio, evitamos repetir instalaciones manuales sirviendo un preseed.cfg por HTTP sobre virbr0.',
+       kern:'python3 -m http.server 8000 escuchando en 192.168.122.1 alimenta a d-i vía --location.',
        ips:'Host en $NIC + virbr0:8000 activo',
        msg:'La automatización desatendida reemplaza clics manuales por un archivo preseed.cfg versionable sobre la red virtual.'},
-      {lbl:'3. Bridge br-wan', kern:'Se crea br-wan con MAC clonada y STP off; $NIC pasa a bridge-slave sin IP propia.',
+      {lbl:'3. Bridge br-wan',
+       why:'virbr0 oculta todo detrás de NAT; para que pfSense y vm-wan pertenezcan a la red real del aula, convertimos la NIC en puerto de br-wan.',
+       kern:'Se crea br-wan con MAC clonada y STP off; $NIC pasa a bridge-slave (uplink L2) sin IP propia.',
        ips:'IP host movida a br-wan (10.41.107.69/24)',
        msg:'No movemos la placa física: migramos la configuración IP hacia el switch L2 br-wan para compartir la LAN sin doble NAT.'},
-      {lbl:'4. 3 Bridges internos', kern:'Se crean br-lan, br-dmz-ruteada y br-dmz-portfw con ipv4.method disabled (estado DOWN).',
+      {lbl:'4. 3 Bridges internos',
+       why:'Necesitamos 3 cables/switches L2 privados e independientes (LAN y dos DMZ) donde el host preste soporte sin meterse en Capa 3.',
+       kern:'Se crean br-lan, br-dmz-ruteada y br-dmz-portfw con ipv4.method disabled (estado DOWN).',
        ips:'Solo br-wan tiene IP en el host',
        msg:'Los switches internos están tendidos en el kernel pero vacíos (DOWN) y ciegos en Capa 3 para no mezclar al host con las zonas.'},
-      {lbl:'5. pfSense + VMs + temp', kern:'Aparecen vnet0..3 de pfSense y TAPs de las 4 VMs; los bridges suben a UP; IP temp .10.2 en br-lan.',
+      {lbl:'5. pfSense + VMs + temp',
+       why:'Unimos las 4 islas L2 enchufando las 4 NICs de pfSense, encendemos las VMs e inyectamos .10.2 temporal solo para abrir la WebGUI.',
+       kern:'Aparecen vnet0..3 de pfSense y TAPs de las 4 VMs; los bridges suben a UP; IP temp .10.2 en br-lan.',
        ips:'br-wan + IP temporal 192.168.10.2/24 en br-lan',
        msg:'pfSense une las cuatro islas L2 en Capa 3 mientras la IP transitoria en br-lan permite configurar firewall, Kea y NAT desde la WebGUI.'},
-      {lbl:'6. Topología final', kern:'nmcli device reapply br-lan quita la IP temporal; solo pfSense rutea y filtra entre zonas.',
+      {lbl:'6. Topología final',
+       why:'Una vez configurado pfSense, retiramos la IP temporal de br-lan para que el host quede aislado de las zonas protegidas.',
+       kern:'nmcli device reapply br-lan quita la IP temporal; solo pfSense rutea y filtra entre zonas.',
        ips:'Únicamente br-wan conserva IP del host',
        msg:'Arquitectura final limpia: el host vuelve a aportar solo Capa 2 en las redes internas y pfSense controla todo el tráfico L3.'}
     ];
@@ -1539,109 +1672,118 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
     function drawStage(s){
       var n=puestoState.xx, nic=puestoState.nic||'enp1s0', wan=pfsWan(n), rgw=rutGw(n), rvm=rutVm(n);
       var b='';
-      // Red física izquierda
-      b+=svgBox(20,46,154,48,'var(--p1s)','var(--p1)',8,1.4);
-      b+=svgTxt(97,66,'Red física del aula','l','middle');
-      b+=svgTxt(97,83,'10.41.107.0/24 · GW .99','s','middle');
-
       // Contenedor Host KVM
-      b+=svgBox(204,20,236,292,'var(--surface)','var(--rule)',10,1.4);
-      b+=svgTxt(322,39,'Host KVM ('+nic+')','h','middle');
+      b+=svgBox(204,18,236,304,'var(--surface)','var(--rule)',10,1.4);
+      b+=svgTxt(322,36,'Host KVM ('+nic+')','h','middle');
 
-      // Fila 1: NIC vs br-wan
+      // Fila 1 y uplink físico
       if(s<3){
-        b+=svgBox(218,48,208,46,'var(--p1s)','var(--p1)',8,1.5);
-        b+=svgTxt(322,67,nic+' (IP del host)','l','middle','fill:var(--p1)');
-        b+=svgTxt(322,84,'10.41.107.69/24 directo','s','middle');
-        b+=svgAr('w2_',174,70,218,70,'p1',false);
+        b+=svgBox(20,44,154,44,'var(--p1s)','var(--p1)',8,1.4);
+        b+=svgTxt(97,62,'Red física del aula','l','middle');
+        b+=svgTxt(97,79,'10.41.107.0/24 · GW .99','s','middle');
+
+        b+=svgBox(216,44,212,44,'var(--p1s)','var(--p1)',8,s===0?2.4:1.4);
+        b+=svgTxt(322,62,nic+' (IP del host)','l','middle','fill:var(--p1)');
+        b+=svgTxt(322,79,'10.41.107.69/24 directo','s','middle');
+        b+=svgAr('w2_',174,66,216,66,'p1',false);
       }else{
-        b+=svgBox(216,48,74,46,'var(--bg)','var(--rule)',7,1.2);
-        b+=svgTxt(253,67,nic,'l','middle');
-        b+=svgTxt(253,84,'puerto L2','s','middle');
-        b+=svgBox(304,48,124,46,'var(--p1s)','var(--p1)',8,1.5);
-        b+=svgTxt(366,67,'br-wan (IP host)','l','middle','fill:var(--p1)');
-        b+=svgTxt(366,84,'MAC clonada · UP','s','middle');
-        b+=svgAr('w2_',174,70,216,70,'p1',false);
-        b+=svgAr('w2_',290,70,304,70,'p1',false);
+        var wBr=(s===3)?2.5:1.4;
+        b+=svgBox(216,44,212,42,'var(--p1s)','var(--p1)',8,wBr);
+        b+=svgTxt(322,61,'br-wan (IP del host)','l','middle','fill:var(--p1)');
+        b+=svgTxt(322,77,'MAC clonada · UP','s','middle');
+
+        // Uplink físico debajo de br-wan conectando directo hacia arriba
+        b+=svgBox(246,94,152,28,'var(--bg)','var(--rule)',6,s===3?2.2:1.2);
+        b+=svgTxt(322,112,nic+' · uplink L2','s','middle','fill:var(--ink)');
+        b+=svgAr('w2_',322,94,322,86,'p1',false,1.5);
+
+        b+=svgBox(20,90,154,36,'var(--p1s)','var(--p1)',7,1.2);
+        b+=svgTxt(97,105,'Red física del aula','l','middle');
+        b+=svgTxt(97,119,'10.41.107.0/24 · GW .99','s','middle');
+        b+=svgAr('w2_',174,108,246,108,'p1',false);
       }
 
       // Fila 2: virbr0 (etapa 1+)
       if(s>=1){
-        var op=(s<=2)?'1':'0.62';
+        var op=(s<=2)?'1':'0.58';
+        var wVir=(s===1||s===2)?2.4:1.2;
         b+='<g opacity="'+op+'">';
-        b+=svgBox(218,104,208,44,'var(--p4s)','var(--p4)',8,1.3);
-        b+=svgTxt(322,122,'virbr0 · 192.168.122.1','l','middle','fill:var(--p4)');
-        b+=svgTxt(322,139,s===2?'HTTP Preseed :8000 activo':'NAT + dnsmasq (default)','s','middle');
+        b+=svgBox(216,132,212,36,'var(--p4s)','var(--p4)',8,wVir);
+        b+=svgTxt(322,147,'virbr0 · 192.168.122.1','l','middle','fill:var(--p4)');
+        b+=svgTxt(322,162,s===2?'HTTP Preseed :8000 activo':'NAT + dnsmasq (default)','s','middle');
         b+='</g>';
       }
 
-      // Fila 3-5: bridges internos (etapa 4+)
+      // Filas 3-5: bridges internos (etapa 4+)
       if(s>=4){
         var stL2=(s===4)?'DOWN · sin IP':'UP · L2 puro (sin IP)';
         var brLanSub=(s===5)?'UP · TEMP 192.168.10.2':stL2;
         var brLanCol=(s===5)?'p3':'p4';
-        b+=svgBox(218,158,208,42,'var(--'+brLanCol+'s)','var(--'+brLanCol+')',8,s===5?1.6:1.3);
-        b+=svgTxt(322,175,'br-lan','l','middle','fill:var(--'+brLanCol+')');
-        b+=svgTxt(322,191,brLanSub,'s','middle');
+        var wInt=(s===4)?2.4:(s===6?2.2:1.4);
+        b+=svgBox(216,176,212,40,'var(--'+brLanCol+'s)','var(--'+brLanCol+')',8,s===5?2.4:wInt);
+        b+=svgTxt(322,193,'br-lan','l','middle','fill:var(--'+brLanCol+')');
+        b+=svgTxt(322,208,brLanSub,'s','middle');
 
-        b+=svgBox(218,210,208,42,'var(--p3s)','var(--p3)',8,1.3);
-        b+=svgTxt(322,227,'br-dmz-ruteada','l','middle','fill:var(--p3)');
-        b+=svgTxt(322,243,stL2,'s','middle');
+        b+=svgBox(216,224,212,40,'var(--p3s)','var(--p3)',8,wInt);
+        b+=svgTxt(322,241,'br-dmz-ruteada','l','middle','fill:var(--p3)');
+        b+=svgTxt(322,256,stL2,'s','middle');
 
-        b+=svgBox(218,262,208,42,'var(--p2s)','var(--p2)',8,1.3);
-        b+=svgTxt(322,279,'br-dmz-portfw','l','middle','fill:var(--p2)');
-        b+=svgTxt(322,295,stL2,'s','middle');
+        b+=svgBox(216,272,212,40,'var(--p2s)','var(--p2)',8,wInt);
+        b+=svgTxt(322,289,'br-dmz-portfw','l','middle','fill:var(--p2)');
+        b+=svgTxt(322,304,stL2,'s','middle');
       }else{
-        b+=svgBox(218,166,208,128,'var(--bg)','var(--rule)',8,1.1,' stroke-dasharray="5 4"');
-        b+=svgTxt(322,232,'Sin bridges internos aún','s','middle');
+        b+=svgBox(216,178,212,130,'var(--bg)','var(--rule)',8,1.1,' stroke-dasharray="5 4"');
+        b+=svgTxt(322,245,'Sin bridges internos aún','s','middle');
       }
 
       // Derecha: VMs de etapa 1-2 vs pfSense etapa 5-6
       if(s===1 || s===2){
-        b+=svgBox(472,102,148,48,'var(--p4s)','var(--p4)',8,1.4);
-        b+=svgTxt(546,122,s===2?'debian-auto2':'debian-lab1','l','middle');
-        b+=svgTxt(546,139,'192.168.122.x (vnet0)','s','middle');
-        b+=svgAr('w2_',426,126,472,126,'p4',false);
+        b+=svgBox(472,126,148,48,'var(--p4s)','var(--p4)',8,2.2);
+        b+=svgTxt(546,146,s===2?'debian-auto2':'debian-lab1','l','middle');
+        b+=svgTxt(546,163,'192.168.122.x (vnet0)','s','middle');
+        b+=svgAr('w2_',428,150,472,150,'p4',false);
         if(s===2){
-          b+=svgBox(472,162,148,44,'var(--p3s)','var(--p3)',8,1.3);
-          b+=svgTxt(546,181,'preseed.cfg','l','middle','fill:var(--p3)');
-          b+=svgTxt(546,197,'descarga HTTP :8000','s','middle');
-          b+=svgAr('w2_',546,162,546,150,'p3',true);
+          b+=svgBox(472,188,148,44,'var(--p3s)','var(--p3)',8,2.2);
+          b+=svgTxt(546,207,'preseed.cfg','l','middle','fill:var(--p3)');
+          b+=svgTxt(546,223,'descarga HTTP :8000','s','middle');
+          b+=svgAr('w2_',546,188,546,174,'p3',true);
         }
       }else if(s>=5){
-        b+=svgBox(472,20,148,292,'var(--surface)','var(--ink)',10,1.6);
-        b+=svgTxt(546,39,'pfSense (L3 · 4 NICs)','h','middle');
+        var wPf=(s===5)?2.4:1.6;
+        b+=svgBox(472,18,148,304,'var(--surface)','var(--ink)',10,wPf);
+        b+=svgTxt(546,36,'pfSense (L3 · 4 NICs)','h','middle');
         var pfRows=[
-          [48,'vtnet0 WAN',wan,'p1',71],
-          [158,'vtnet1 LAN','192.168.10.1','p4',179],
-          [210,'vtnet2 RUT',rgw,'p3',231],
-          [262,'vtnet3 PFW','192.168.20.1','p2',283]
+          [44,'vtnet0 WAN',wan,'p1',65],
+          [176,'vtnet1 LAN','192.168.10.1','p4',196],
+          [224,'vtnet2 RUT',rgw,'p3',244],
+          [272,'vtnet3 PFW','192.168.20.1','p2',292]
         ];
         pfRows.forEach(function(r){
-          b+=svgBox(484,r[0],124,42,'var(--bg)','var(--'+r[3]+')',7,1.3);
-          b+=svgTxt(546,r[0]+18,r[1],'l','middle');
-          b+=svgTxt(546,r[0]+34,r[2],'s','middle');
-          b+=svgAr('w2_',426,r[4],484,r[4],r[3],false);
+          b+=svgBox(484,r[0],124,40,'var(--bg)','var(--'+r[3]+')',7,1.4);
+          b+=svgTxt(546,r[0]+17,r[1],'l','middle');
+          b+=svgTxt(546,r[0]+32,r[2],'s','middle');
+          b+=svgAr('w2_',428,r[4],484,r[4],r[3],false);
         });
-        // VMs satélite a la izquierda (bajo red física)
-        b+=svgBox(20,104,154,42,'var(--p1s)','var(--p1)',7,1.2);
-        b+=svgTxt(97,122,'vm-wan','l','middle');
-        b+=svgTxt(97,138,'10.41.107.y (br-wan)','s','middle');
+        // vm-wan conectada directo a br-wan (puerto L2 paralelo a enp1s0!)
+        b+=svgBox(20,44,154,42,'var(--p1s)','var(--p1)',7,s===5?2.2:1.3);
+        b+=svgTxt(97,61,'vm-wan','l','middle');
+        b+=svgTxt(97,77,'10.41.107.y (TAP)','s','middle');
+        b+=svgAr('w2_',174,65,216,65,'p1',false);
 
         var vms=[
-          [158,'vm-lan','DHCP .10.100-200','p4'],
-          [210,'vm-dmz-ruteada',rvm+'/24','p3'],
-          [262,'vm-dmz-portfw','192.168.20.10','p2']
+          [176,'vm-lan','DHCP .10.100-200','p4'],
+          [224,'vm-dmz-ruteada',rvm+'/24','p3'],
+          [272,'vm-dmz-portfw','192.168.20.10','p2']
         ];
         vms.forEach(function(v){
-          b+=svgBox(20,v[0],154,42,'var(--'+v[3]+'s)','var(--'+v[3]+')',7,1.3);
-          b+=svgTxt(97,v[0]+18,v[1],'l','middle');
-          b+=svgTxt(97,v[0]+34,v[2],'s','middle');
-          b+=svgAr('w2_',174,v[0]+21,218,v[0]+21,v[3],false);
+          b+=svgBox(20,v[0],154,40,'var(--'+v[3]+'s)','var(--'+v[3]+')',7,s===5?2.2:1.3);
+          b+=svgTxt(97,v[0]+17,v[1],'l','middle');
+          b+=svgTxt(97,v[0]+32,v[2],'s','middle');
+          b+=svgAr('w2_',174,v[0]+20,216,v[0]+20,v[3],false);
         });
       }
 
-      return '<svg viewBox="0 0 640 330" role="img" aria-label="Evolución del laboratorio en etapa '+s+': '+STAGES[s].lbl+'">'+svgMarkerDefs('w2_')+b+'</svg>';
+      return '<svg viewBox="0 0 640 340" role="img" aria-label="Evolución del laboratorio en etapa '+s+': '+STAGES[s].lbl+'">'+svgMarkerDefs('w2_')+b+'</svg>';
     }
 
     function render(){
@@ -1657,6 +1799,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       var st=STAGES[cur];
       svgWrap.innerHTML=drawStage(cur);
       cards.innerHTML=
+        '<div class="wcard ok"><b>Por qué damos este paso</b><br>'+st.why+'</div>'+
         '<div class="wcard"><b>Qué aparece en el kernel</b><br>'+st.kern+'</div>'+
         '<div class="wcard"><b>Direcciones IP en el host</b><br>'+st.ips+'</div>';
       sum.innerHTML='<b class="ok">Etapa '+cur+' ('+st.lbl+'):</b> '+st.msg;
@@ -1678,37 +1821,48 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       return [
         {id:'Host KVM', lbl:'Host KVM', layer:'Hipervisor Linux (Kernel + libvirt)', ip:'Solo IP física en br-wan (sin IP en L2 internos)',
          cmd:'apt install qemu-system-x86 libvirt-daemon-system ...', ver:'virt-host-validate && virsh list --all',
-         msg:'Aporta CPU (VT-x), archivos qcow2 y switches L2 virtuales en el kernel sin gastar hardware adicional.'},
+         msg:'Aporta CPU (VT-x), archivos qcow2 y switches L2 virtuales en el kernel sin gastar hardware adicional.',
+         learn:'<a href="#glos-kvm-tap">Hipervisor KVM y TAP</a> · <a href="00-pareto-20-80.html#hipervisor-stack-kvm">Stack KVM (Guía 0)</a>'},
         {id:'enp1s0', lbl:nic, layer:'Capa 1/2 (NIC física como bridge-slave)', ip:'Sin IP propia (puerto L2 de br-wan)',
          cmd:'nmcli connection add type bridge-slave ifname '+nic+' master br-wan', ver:'bridge link | grep '+nic,
-         msg:'Conecta físicamente el switch del aula con br-wan; la IP del host ya no vive acá sino en el bridge.'},
+         msg:'Conecta físicamente el switch del aula con br-wan; la IP del host ya no vive acá sino en el bridge.',
+         learn:'<a href="#glos-bridge">Bridge L2</a> · <a href="#glos-wan">WAN</a> · <a href="03-bridges-y-pfsense.html#bridge-linux-br-wan">br-wan (Guía 3)</a>'},
         {id:'br-wan', lbl:'br-wan', layer:'Capa 2 (switch) + IP del host', ip:'DHCP host 10.41.107.x/24 · GW 10.41.107.99',
          cmd:'nmcli connection add type bridge ifname br-wan con-name perfil-br-wan', ver:'ip -br a show br-wan && bridge link',
-         msg:'Extiende el dominio Ethernet de la facultad hacia la WAN de pfSense y vm-wan sin doble NAT.'},
+         msg:'Extiende el dominio Ethernet de la facultad hacia la WAN de pfSense y vm-wan sin doble NAT.',
+         learn:'<a href="#glos-bridge">Bridge / Switch L2</a> · <a href="#glos-wan">Zona WAN</a> · <a href="03-bridges-y-pfsense.html#bridge-linux-br-wan">Guía 3</a>'},
         {id:'br-lan', lbl:'br-lan', layer:'Capa 2 pura (sin IP en el host tras reapply)', ip:'Sin IP en host (temporal .10.2 solo al configurar)',
          cmd:'nmcli connection modify perfil-br-lan ipv4.method disabled', ver:'ip addr show br-lan && virsh domiflist vm-lan',
-         msg:'Aísla el tráfico Ethernet entre vm-lan y vtnet1 para que únicamente pfSense gobierne esta red.'},
+         msg:'Aísla el tráfico Ethernet entre vm-lan y vtnet1 para que únicamente pfSense gobierne esta red.',
+         learn:'<a href="#glos-bridge">Bridge sin IP</a> · <a href="#glos-lan">LAN</a> · <a href="00-pareto-20-80.html#dominio-l2-vs-frontera-l3">L2 vs L3 (Guía 0)</a>'},
         {id:'br-dmz-ruteada', lbl:'br-dmz-ruteada', layer:'Capa 2 pura (sin IP en el host)', ip:'Sin IP en el host KVM',
          cmd:'nmcli connection modify perfil-br-dmz-ruteada ipv4.method disabled', ver:'bridge link | grep br-dmz-ruteada',
-         msg:'Conecta en L2 el servidor público ruteado con vtnet2 evitando que el host entre en la DMZ.'},
+         msg:'Conecta en L2 el servidor público ruteado con vtnet2 evitando que el host entre en la DMZ.',
+         learn:'<a href="#glos-bridge">Bridge L2</a> · <a href="#glos-dmz">DMZ</a> · <a href="00-pareto-20-80.html#dominio-l2-vs-frontera-l3">L2 vs L3 (Guía 0)</a>'},
         {id:'br-dmz-portfw', lbl:'br-dmz-portfw', layer:'Capa 2 pura (sin IP en el host)', ip:'Sin IP en el host KVM',
          cmd:'nmcli connection modify perfil-br-dmz-portfw ipv4.method disabled', ver:'bridge link | grep br-dmz-portfw',
-         msg:'Une en L2 al servidor privado publicado por Port Forward con vtnet3 de pfSense.'},
+         msg:'Une en L2 al servidor privado publicado por Port Forward con vtnet3 de pfSense.',
+         learn:'<a href="#glos-bridge">Bridge L2</a> · <a href="#glos-dmz">DMZ</a> · <a href="04-seguridad.html#segmentacion-vlan-dmz-zerotrust">Segmentación (Guía 4)</a>'},
         {id:'pfSense', lbl:'pfSense', layer:'Capa 3 / Stateful Firewall / NAT (4 NICs)', ip:'WAN '+wan+' · LAN 192.168.10.1 · RUT '+rgw+' · PFW 192.168.20.1',
          cmd:'virt-install --name pfsense --network bridge=br-wan ... (x4)', ver:'virsh domiflist pfsense + WebGUI Diagnostics',
-         msg:'Único dispositivo de Capa 3 que decide rutas, políticas de firewall por interfaz y reglas de NAT entre las cuatro zonas.'},
+         msg:'Único dispositivo de Capa 3 que decide rutas, políticas de firewall por interfaz y reglas de NAT entre las cuatro zonas.',
+         learn:'<a href="#glos-router">Router L3</a> · <a href="#glos-firewall">Firewall</a> · <a href="#glos-snat">NAT</a> · <a href="00-pareto-20-80.html#triangulo-pfsense-routing-fw-nat">Guía 0</a>'},
         {id:'vm-lan', lbl:'vm-lan', layer:'Endpoint cliente Debian 13 (Capa 3/7)', ip:'DHCP Kea 192.168.10.100–200 · GW 192.168.10.1',
          cmd:'virt-install --name vm-lan --network bridge=br-lan,model=virtio', ver:'ip -br a && ip route && cat /etc/resolv.conf',
-         msg:'Valida DHCP Kea, DNS Resolver y salida a Internet mediante Source NAT protegido desde fuera.'},
+         msg:'Valida DHCP Kea, DNS Resolver y salida a Internet mediante Source NAT protegido desde fuera.',
+         learn:'<a href="#glos-lan">LAN</a> · <a href="#glos-dhcp-dns">DHCP y DNS</a> · <a href="#glos-internet">Salida a Internet</a> · <a href="00-pareto-20-80.html#cinco-piezas-internet">Guía 0</a>'},
         {id:'vm-dmz-portfw', lbl:'vm-dmz-portfw', layer:'Servidor privado publicado Debian 13', ip:'Fija 192.168.20.10/24 · GW 192.168.20.1 · TCP :8000',
          cmd:'virt-install --name vm-dmz-portfw --network bridge=br-dmz-portfw', ver:'curl http://127.0.0.1:8000 && ping -c2 192.168.20.1',
-         msg:'Demuestra cómo publicar un servicio privado usando DNAT (Port Forward) y salir por SNAT aislado de LAN.'},
+         msg:'Demuestra cómo publicar un servicio privado usando DNAT (Port Forward) y salir por SNAT aislado de LAN.',
+         learn:'<a href="#glos-dmz">DMZ</a> · <a href="#glos-portfw">Port-Forwarding (DNAT)</a> · <a href="#glos-ip-privada">IP privada</a> · <a href="03-bridges-y-pfsense.html#dmz-portfw-vs-dmz-ruteada">Guía 3</a>'},
         {id:'vm-dmz-ruteada', lbl:'vm-dmz-ruteada', layer:'Servidor ruteado sin NAT Debian 13', ip:'Fija '+rvm+'/24 · GW '+rgw+' · TCP :8000',
          cmd:'virt-install --name vm-dmz-ruteada --network bridge=br-dmz-ruteada', ver:'ip -br a && curl http://127.0.0.1:8000',
-         msg:'Conserva su IP real en ambos sentidos demostrando routing puro sin NAT en '+rnet+'.'},
+         msg:'Conserva su IP real en ambos sentidos demostrando routing puro sin NAT en '+rnet+'.',
+         learn:'<a href="#glos-router">Routing puro</a> · <a href="#glos-ip-privada">IP pública vs privada</a> · <a href="01-fundamentos-y-redes.html#capa3-cidr-ruteo">Guía 1</a>'},
         {id:'vm-wan', lbl:'vm-wan', layer:'Cliente externo de pruebas en red física', ip:'DHCP 10.41.107.y/24 + ip route add '+rnet+' via '+wan,
          cmd:'virt-install --name vm-wan --network bridge=br-wan,model=virtio', ver:'ip route get '+rvm+' && curl http://'+wan+':8000',
-         msg:'Simula un usuario externo de Internet/facultad para validar Port Forward y routing hacia la DMZ.'}
+         msg:'Simula un usuario externo de Internet/facultad para validar Port Forward y routing hacia la DMZ.',
+         learn:'<a href="#glos-wan">WAN</a> · <a href="#glos-portfw">Port-Forwarding</a> · <a href="#glos-internet">Gateway y ruta</a>'}
       ];
     }
 
@@ -1722,62 +1876,61 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       // Contenedor Host KVM
       b+='<g'+nodeAttr('Host KVM')+' opacity="'+op('Host KVM')+'">';
       b+=svgBox(204,20,242,292,hi('Host KVM')?'var(--p1s)':'var(--surface)',hi('Host KVM')?'var(--p1)':'var(--rule)',10,hi('Host KVM')?2.6:1.4);
-      b+=svgTxt(325,39,'Host KVM (L2)','h','middle',hi('Host KVM')?'fill:var(--p1)':'');
+      b+=svgTxt(325,38,'Host KVM (L2)','h','middle',hi('Host KVM')?'fill:var(--p1)':'');
       b+='</g>';
 
       // Contenedor pfSense
       b+='<g'+nodeAttr('pfSense')+' opacity="'+op('pfSense')+'">';
       b+=svgBox(476,20,144,292,hi('pfSense')?'var(--p3s)':'var(--surface)',hi('pfSense')?'var(--p3)':'var(--ink)',10,hi('pfSense')?2.8:1.6);
-      b+=svgTxt(548,39,'pfSense (L3)','h','middle',hi('pfSense')?'fill:var(--p3)':'');
-      var pfNics=[['vtnet0 WAN',wan,'p1',50],['vtnet1 LAN','192.168.10.1','p4',128],['vtnet2 RUT',rgw,'p3',192],['vtnet3 PFW','192.168.20.1','p2',256]];
+      b+=svgTxt(548,38,'pfSense (L3)','h','middle',hi('pfSense')?'fill:var(--p3)':'');
+      var pfNics=[['vtnet0 WAN',wan,'p1',48],['vtnet1 LAN','192.168.10.1','p4',144],['vtnet2 RUT',rgw,'p3',200],['vtnet3 PFW','192.168.20.1','p2',256]];
       pfNics.forEach(function(r){
-        b+=svgBox(488,r[3],120,44,'var(--bg)','var(--'+r[2]+')',7,hi('pfSense')?1.8:1.2);
-        b+=svgTxt(548,r[3]+18,r[0],'l','middle');
-        b+=svgTxt(548,r[3]+34,r[1],'s','middle');
+        b+=svgBox(488,r[3],120,42,'var(--bg)','var(--'+r[2]+')',7,hi('pfSense')?1.8:1.2);
+        b+=svgTxt(548,r[3]+17,r[0],'l','middle');
+        b+=svgTxt(548,r[3]+33,r[1],'s','middle');
       });
       b+='</g>';
 
-      // enp1s0 + bridges
-      b+='<g'+nodeAttr('enp1s0')+' opacity="'+op('enp1s0')+'">';
-      b+=svgBox(216,50,76,44,hi('enp1s0')?'var(--p1s)':'var(--bg)',hi('enp1s0')?'var(--p1)':'var(--rule)',7,hi('enp1s0')?2.6:1.3);
-      b+=svgTxt(254,68,nic,'l','middle');
-      b+=svgTxt(254,84,'L2 port','s','middle');
-      b+='</g>';
-
+      // br-wan arriba + enp1s0 debajo como puerto L2 paralelo conectado hacia arriba
       b+='<g'+nodeAttr('br-wan')+' opacity="'+op('br-wan')+'">';
-      b+=svgBox(304,50,130,44,'var(--p1s)','var(--p1)',7,hi('br-wan')?2.8:1.4);
-      b+=svgTxt(369,68,'br-wan','l','middle','fill:var(--p1)');
-      b+=svgTxt(369,84,'IP del host','s','middle');
+      b+=svgBox(216,48,218,42,'var(--p1s)','var(--p1)',7,hi('br-wan')?2.8:1.4);
+      b+=svgTxt(325,65,'br-wan','l','middle','fill:var(--p1)');
+      b+=svgTxt(325,81,'IP del host (switch L2)','s','middle');
       b+='</g>';
-      b+=svgAr('w3_',292,72,304,72,'p1',false);
-      b+=svgAr('w3_',434,72,488,72,'p1',false);
+      b+=svgAr('w3_',434,69,488,69,'p1',false);
+
+      b+='<g'+nodeAttr('enp1s0')+' opacity="'+op('enp1s0')+'">';
+      b+=svgBox(242,100,166,28,hi('enp1s0')?'var(--p1s)':'var(--bg)',hi('enp1s0')?'var(--p1)':'var(--rule)',7,hi('enp1s0')?2.6:1.3);
+      b+=svgTxt(325,118,nic+' · uplink L2','s','middle','fill:var(--ink)');
+      b+='</g>';
+      b+=svgAr('w3_',325,100,325,90,'p1',false,1.5);
 
       var brs=[
-        ['br-lan','L2 sin IP','p4',128,150],
-        ['br-dmz-ruteada','L2 sin IP','p3',192,214],
-        ['br-dmz-portfw','L2 sin IP','p2',256,278]
+        ['br-lan','L2 sin IP','p4',144,165],
+        ['br-dmz-ruteada','L2 sin IP','p3',200,221],
+        ['br-dmz-portfw','L2 sin IP','p2',256,277]
       ];
       brs.forEach(function(br){
         b+='<g'+nodeAttr(br[0])+' opacity="'+op(br[0])+'">';
-        b+=svgBox(216,br[3],218,44,'var(--'+br[2]+'s)','var(--'+br[2]+')',7,hi(br[0])?2.8:1.4);
-        b+=svgTxt(325,br[3]+18,br[0],'l','middle','fill:var(--'+br[2]+')');
-        b+=svgTxt(325,br[3]+34,br[1],'s','middle');
+        b+=svgBox(216,br[3],218,42,'var(--'+br[2]+'s)','var(--'+br[2]+')',7,hi(br[0])?2.8:1.4);
+        b+=svgTxt(325,br[3]+17,br[0],'l','middle','fill:var(--'+br[2]+')');
+        b+=svgTxt(325,br[3]+33,br[1],'s','middle');
         b+='</g>';
         b+=svgAr('w3_',434,br[4],488,br[4],br[2],false);
       });
 
-      // VMs izquierda
+      // VMs izquierda conectadas directo a cada bridge correspondiente
       var vms=[
-        ['vm-wan','vm-wan','10.41.107.y','p1',50,72,216],
-        ['vm-lan','vm-lan','192.168.10.x','p4',128,150,216],
-        ['vm-dmz-ruteada','vm-dmz-ruteada',rvm,'p3',192,214,216],
-        ['vm-dmz-portfw','vm-dmz-portfw','192.168.20.10','p2',256,278,216]
+        ['vm-wan','vm-wan','10.41.107.y','p1',48,69,216],
+        ['vm-lan','vm-lan','192.168.10.x','p4',144,165,216],
+        ['vm-dmz-ruteada','vm-dmz-ruteada',rvm,'p3',200,221,216],
+        ['vm-dmz-portfw','vm-dmz-portfw','192.168.20.10','p2',256,277,216]
       ];
       vms.forEach(function(v){
         b+='<g'+nodeAttr(v[0])+' opacity="'+op(v[0])+'">';
-        b+=svgBox(20,v[4],152,44,'var(--'+v[3]+'s)','var(--'+v[3]+')',7,hi(v[0])?2.8:1.3);
-        b+=svgTxt(96,v[4]+18,v[1],'l','middle');
-        b+=svgTxt(96,v[4]+34,v[2],'s','middle');
+        b+=svgBox(20,v[4],152,42,'var(--'+v[3]+'s)','var(--'+v[3]+')',7,hi(v[0])?2.8:1.3);
+        b+=svgTxt(96,v[4]+17,v[1],'l','middle');
+        b+=svgTxt(96,v[4]+33,v[2],'s','middle');
         b+='</g>';
         b+=svgAr('w3_',172,v[5],v[6],v[5],v[3],false);
       });
@@ -1806,7 +1959,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         '<div class="wcard"><b>IP / Gateway:</b><br>'+item.ip+'</div>'+
         '<div class="wcard"><b>Comando creación:</b><br><code>'+item.cmd+'</code></div>'+
         '<div class="wcard"><b>Verificación:</b><br><code>'+item.ver+'</code></div>';
-      sum.innerHTML='<b class="ok">'+item.lbl+':</b> '+item.msg;
+      sum.innerHTML='<b class="ok">'+item.lbl+':</b> '+item.msg+(item.learn?'<br><span class="note">Conceptos desde cero: '+item.learn+'</span>':'');
     }
     puestoListeners.push(render);
     render();
@@ -1984,31 +2137,31 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
     function drawTrace(res){
       var n=puestoState.xx, wan=pfsWan(n), rvm=rutVm(n);
       var coords={
-        'vm-wan':[92,70], 'vm-lan':[92,138], 'vm-dmz-ruteada':[92,200], 'vm-dmz-portfw':[92,262],
-        'br-wan':[300,70], 'br-lan':[300,138], 'br-dmz-ruteada':[300,200], 'br-dmz-portfw':[300,262],
-        'vtnet0':[538,70], 'vtnet1':[538,138], 'vtnet2':[538,200], 'vtnet3':[538,262]
+        'vm-wan':[92,70], 'vm-lan':[92,142], 'vm-dmz-ruteada':[92,214], 'vm-dmz-portfw':[92,286],
+        'br-wan':[300,70], 'br-lan':[300,142], 'br-dmz-ruteada':[300,214], 'br-dmz-portfw':[300,286],
+        'vtnet0':[538,70], 'vtnet1':[538,142], 'vtnet2':[538,214], 'vtnet3':[538,286]
       };
       var activeNodes={};
       res.hops.forEach(function(h){ activeNodes[h[0]]=true; activeNodes[h[1]]=true; });
       var b='';
-      b+=svgBox(212,20,176,268,'var(--surface)','var(--rule)',10,1.2);
+      b+=svgBox(212,20,176,298,'var(--surface)','var(--rule)',10,1.2);
       b+=svgTxt(300,38,'Bridges L2','h','middle');
-      b+=svgBox(454,20,166,268,'var(--surface)','var(--ink)',10,1.5);
+      b+=svgBox(454,20,166,298,'var(--surface)','var(--ink)',10,1.5);
       b+=svgTxt(537,38,'pfSense (L3)','h','middle');
 
       var nodes=[
         ['vm-wan',20,48,144,44,'vm-wan','10.41.107.y','p1'],
-        ['vm-lan',20,116,144,44,'vm-lan','192.168.10.x','p4'],
-        ['vm-dmz-ruteada',20,178,144,44,'vm-dmz-ruteada',rvm,'p3'],
-        ['vm-dmz-portfw',20,240,144,44,'vm-dmz-portfw','192.168.20.10','p2'],
+        ['vm-lan',20,120,144,44,'vm-lan','192.168.10.x','p4'],
+        ['vm-dmz-ruteada',20,192,144,44,'vm-dmz-ruteada',rvm,'p3'],
+        ['vm-dmz-portfw',20,264,144,44,'vm-dmz-portfw','192.168.20.10','p2'],
         ['br-wan',226,48,148,44,'br-wan','L2 + IP host','p1'],
-        ['br-lan',226,116,148,44,'br-lan','L2 sin IP','p4'],
-        ['br-dmz-ruteada',226,178,148,44,'br-dmz-ruteada','L2 sin IP','p3'],
-        ['br-dmz-portfw',226,240,148,44,'br-dmz-portfw','L2 sin IP','p2'],
+        ['br-lan',226,120,148,44,'br-lan','L2 sin IP','p4'],
+        ['br-dmz-ruteada',226,192,148,44,'br-dmz-ruteada','L2 sin IP','p3'],
+        ['br-dmz-portfw',226,264,148,44,'br-dmz-portfw','L2 sin IP','p2'],
         ['vtnet0',468,48,140,44,'vtnet0 WAN',wan,'p1'],
-        ['vtnet1',468,116,140,44,'vtnet1 LAN','192.168.10.1','p4'],
-        ['vtnet2',468,178,140,44,'vtnet2 RUT',rutGw(n),'p3'],
-        ['vtnet3',468,240,140,44,'vtnet3 PFW','192.168.20.1','p2']
+        ['vtnet1',468,120,140,44,'vtnet1 LAN','192.168.10.1','p4'],
+        ['vtnet2',468,192,140,44,'vtnet2 RUT',rutGw(n),'p3'],
+        ['vtnet3',468,264,140,44,'vtnet3 PFW','192.168.20.1','p2']
       ];
       nodes.forEach(function(nd){
         var on=!!activeNodes[nd[0]];
@@ -2039,11 +2192,11 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       if(res.stopAt){
         var sp=coords[res.stopAt.node];
         var bx=Math.min(502, Math.max(20, sp[0]-58));
-        var by=Math.max(20, sp[1]-36);
-        b+=svgBox(bx,by,116,22,'var(--surface)','var(--'+res.stopAt.col+')',6,1.8);
-        b+=svgTxt(bx+58,by+15,res.stopAt.txt,'s','middle','fill:var(--'+res.stopAt.col+');font-weight:700');
+        var by=(sp[1]>250)?(sp[1]-46):(sp[1]+25);
+        b+=svgBox(bx,by,116,20,'var(--surface)','var(--'+res.stopAt.col+')',6,1.8);
+        b+=svgTxt(bx+58,by+14,res.stopAt.txt,'s','middle','fill:var(--'+res.stopAt.col+');font-weight:700');
       }
-      return '<svg viewBox="0 0 640 300" role="img" aria-label="Trazado del flujo '+res.lbl+': '+res.badge+'">'+svgMarkerDefs('w4_')+b+'</svg>';
+      return '<svg viewBox="0 0 640 338" role="img" aria-label="Trazado del flujo '+res.lbl+': '+res.badge+'">'+svgMarkerDefs('w4_')+b+'</svg>';
     }
 
     var FLOW_NAMES=[
@@ -2075,6 +2228,28 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
     faultChecks.forEach(function(c){ c.addEventListener('change', render); });
     puestoListeners.push(render);
     render();
+  })();
+
+  /* Filtro interactivo del glosario de piezas */
+  (function(){
+    var bar=document.getElementById('gloss-filters'), grid=document.getElementById('gloss-grid'), hint=document.getElementById('gloss-hint');
+    if(!bar||!grid) return;
+    var btns=[].slice.call(bar.querySelectorAll('button[data-gcat]'));
+    var cards=[].slice.call(grid.querySelectorAll('.gloss-card'));
+    function applyCat(cat){
+      var shown=0;
+      btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.gcat===cat?'true':'false'); });
+      cards.forEach(function(c){
+        var ok=(cat==='all'||c.dataset.gcat===cat);
+        c.hidden=!ok;
+        if(ok) shown++;
+      });
+      if(hint){
+        hint.textContent=(cat==='all')?'Mostrando las '+shown+' piezas fundamentales del laboratorio.':'Mostrando '+shown+(shown===1?' pieza':' piezas')+' en esta categoría.';
+      }
+    }
+    btns.forEach(function(b){ b.addEventListener('click',function(){ applyCat(b.dataset.gcat); }); });
+    applyCat('all');
   })();
 
 })();

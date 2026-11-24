@@ -84,8 +84,12 @@ p{margin:0 0 1em}
 .sec-title h2{font-size:1.45rem}
 .sec-title span{font-family:var(--sans);font-size:.88rem;color:var(--muted)}
 
-.pareto-card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:2px solid var(--p1);border-radius:14px;padding:1.3rem 1.4rem;margin-bottom:1.2rem;transition:transform .15s, box-shadow .15s}
+.pareto-card{display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit;background:var(--surface);border:2px solid var(--p1);border-radius:14px;padding:1.3rem 1.4rem;transition:transform .15s, box-shadow .15s}
 .pareto-card:hover{background:var(--p1s)}
+.labo-card{border-color:var(--p4)}
+.labo-card:hover{background:var(--p4s)}
+.labo-card .badge{background:var(--p4)}
+.top-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1rem;margin-bottom:1.4rem}
 .badge{display:inline-block;font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.18rem .58rem;border-radius:99px;background:var(--p1);color:var(--surface);margin-bottom:.6rem}
 .pareto-card h3{font-size:1.45rem;margin-bottom:.45rem}
 .pareto-card p{max-width:68ch;margin:0 0 .9rem;color:var(--ink)}
@@ -135,6 +139,7 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
       <a href="02-kvm-y-preseed.html">2. KVM y Preseed</a>
       <a href="03-bridges-y-pfsense.html">3. Bridges y pfSense</a>
       <a href="04-seguridad.html">4. Seguridad</a>
+      <a href="05-labo-taller-completo.html">5. Labo Taller</a>
     </div>
     <button type="button" class="btn theme-btn" id="themeToggle" aria-label="Cambiar tema claro u oscuro">Tema</button>
   </div>
@@ -142,69 +147,90 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
 
 <div class="wrap">
 <header class="hero">
-  <div class="eyebrow">FCEN · UBA · Materia completa en 5 guías interactivas</div>
+  <div class="eyebrow">FCEN · UBA · Materia completa en 6 guías interactivas</div>
   <h1>Infraestructura Tecnológica: del rack a la automatización</h1>
-  <p class="lede">Un recorrido diseñado con la regla de Pareto: primero dominás el <strong>20% de los conceptos que explican el 80%</strong> de toda la materia, y después bajás al detalle operativo de cada bloque desarmando los comandos del laboratorio.</p>
+  <p class="lede">Un recorrido diseñado con la regla de Pareto: primero dominás el <strong>20% de los conceptos que explican el 80%</strong> de toda la materia, después bajás a cada bloque teórico y seguís el <strong>laboratorio del taller pieza por pieza</strong>.</p>
   <p class="meta">Basado en las Clases 1 a 4 (Fundamentos de Datacenter y Redes, Virtualización KVM/QEMU/libvirt y Preseed, Bridges Linux + pfSense en 4 zonas, y Seguridad de la Información) junto con RFCs y papers primarios. Todo funciona offline en tu navegador y guarda el progreso localmente.</p>
 
   <section class="global-bar" aria-labelledby="prog-title">
     <div class="gb-top">
       <h2 id="prog-title">Tu progreso global en la materia</h2>
-      <div class="gb-stats" id="globalStats"><b>0</b> de 60 conceptos estudiados (0%)</div>
+      <div class="gb-stats" id="globalStats"><b>0</b> de 72 conceptos estudiados (0%)</div>
     </div>
     <div class="track" aria-hidden="true"><div class="fill" id="globalFill"></div></div>
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;font-family:var(--sans);font-size:.82rem;color:var(--muted)">
-      <span>El progreso se sincroniza automáticamente al marcar conceptos como estudiados en cualquiera de las 5 guías.</span>
+      <span>El progreso se sincroniza automáticamente al marcar conceptos como estudiados en cualquiera de las 6 guías.</span>
       <button type="button" class="btn" id="resetProgress">Reiniciar progreso</button>
     </div>
   </section>
 
   <figure class="viz">
-    <div class="scroll"><div style="min-width:540px"><svg viewBox="0 0 680 252" role="img" aria-label="Mapa de ruta de estudio: primero el núcleo Pareto 20/80 y luego las cuatro guías de profundización"><defs><marker id="hub_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="hub_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="hub_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="hub_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="hub_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="hub_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker></defs><rect x="12" y="14" width="656" height="224" rx="12" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/>
-<rect x="28" y="38" width="170" height="176" rx="10" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.8"/>
-<text x="113.0" y="64.0" class="s" text-anchor="middle" style="fill:var(--p1);font-weight:700;letter-spacing:.04em">PASO 1 · PARETO 20/80</text>
-<text x="113.0" y="88.0" class="h" text-anchor="middle" style="fill:var(--ink)">Núcleo esencial</text>
-<text x="113.0" y="110.0" class="s" text-anchor="middle"><tspan x="113.0" dy="0">12 conceptos clave</tspan><tspan x="113.0" dy="17">4 widgets · Capas 1 a 4</tspan><tspan x="113.0" dy="17">El 80% de la lógica real</tspan></text>
-<rect x="52" y="172" width="122" height="24" rx="99" style="fill:var(--p1)"/>
-<text x="113.0" y="188.0" class="s" text-anchor="middle" style="fill:var(--surface);font-weight:700">Empezá por acá</text>
-<rect x="360" y="26" width="290" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/>
+    <div class="scroll"><div style="min-width:540px"><svg viewBox="0 0 680 306" role="img" aria-label="Mapa de ruta de estudio: primero el núcleo Pareto 20/80, luego las cuatro guías teóricas y la guía paso a paso del laboratorio del taller"><defs><marker id="hub_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="hub_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="hub_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="hub_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="hub_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="hub_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker></defs><rect x="12" y="14" width="656" height="278" rx="12" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.2"/>
+<rect x="26" y="64" width="168" height="178" rx="10" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.8"/>
+<text x="110.0" y="90.0" class="s" text-anchor="middle" style="fill:var(--p1);font-weight:700;letter-spacing:.04em">PASO 1 · PARETO 20/80</text>
+<text x="110.0" y="114.0" class="h" text-anchor="middle" style="fill:var(--ink)">Núcleo esencial</text>
+<text x="110.0" y="136.0" class="s" text-anchor="middle"><tspan x="110.0" dy="0">12 conceptos clave</tspan><tspan x="110.0" dy="17">4 widgets · Capas 1 a 4</tspan><tspan x="110.0" dy="17">El 80% de la lógica real</tspan></text>
+<rect x="49" y="198" width="122" height="24" rx="99" style="fill:var(--p1)"/>
+<text x="110.0" y="214.0" class="s" text-anchor="middle" style="fill:var(--surface);font-weight:700">Empezá por acá</text>
+<rect x="360" y="26" width="292" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/>
 <text x="374.0" y="44.0" class="t" text-anchor="start" style="fill:var(--p1);font-weight:700">1. Redes e Infraestructura</text>
 <text x="374.0" y="60.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 1 · Rack, energía, L2/L3, NAT, DNS, CLI</text>
-<path d="M 194 125 C 268 125, 282 47, 352 47" fill="none" style="stroke:var(--p1)" stroke-width="1.8" marker-end="url(#hub_p1)"/>
-<rect x="360" y="78" width="290" height="42" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/>
-<text x="374.0" y="96.0" class="t" text-anchor="start" style="fill:var(--p2);font-weight:700">2. Virtualización KVM y Preseed</text>
-<text x="374.0" y="112.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 2 · Hipervisor, libvirt, qcow2, Preseed</text>
-<path d="M 194 125 C 268 125, 282 99, 352 99" fill="none" style="stroke:var(--p2)" stroke-width="1.8" marker-end="url(#hub_p2)"/>
-<rect x="360" y="130" width="290" height="42" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/>
-<text x="374.0" y="148.0" class="t" text-anchor="start" style="fill:var(--p3);font-weight:700">3. Bridges Linux y pfSense</text>
-<text x="374.0" y="164.0" class="s" text-anchor="start" style="fill:var(--ink)">Clases 2–3 · nmcli, 4 zonas, reglas, NAT/DNAT</text>
-<path d="M 194 125 C 268 125, 282 151, 352 151" fill="none" style="stroke:var(--p3)" stroke-width="1.8" marker-end="url(#hub_p3)"/>
-<rect x="360" y="182" width="290" height="42" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/>
-<text x="374.0" y="200.0" class="t" text-anchor="start" style="fill:var(--p4);font-weight:700">4. Seguridad de la Información</text>
-<text x="374.0" y="216.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 4 · CIA, TCP/IP, Stateful/WAF, TLS, SIEM</text>
-<path d="M 194 125 C 268 125, 282 203, 352 203" fill="none" style="stroke:var(--p4)" stroke-width="1.8" marker-end="url(#hub_p4)"/>
-<rect x="220" y="111" width="114" height="24" rx="12" style="fill:var(--bg);stroke:var(--rule)" stroke-width="1"/>
-<text x="277.0" y="127.0" class="s" text-anchor="middle" style="fill:var(--ink);font-weight:600">Profundizá por eje</text></svg></div></div>
-    <figcaption>Ruta recomendada: arrancá por la Guía 0 (Pareto 20/80) para armar el mapa mental completo y luego entrá a cada guía de profundización según el taller que estés practicando. Esquema conceptual.</figcaption>
+<path d="M 194 153 C 268 153, 282 47, 352 47" fill="none" style="stroke:var(--p1)" stroke-width="1.7" marker-end="url(#hub_p1)"/>
+<rect x="360" y="80" width="292" height="42" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/>
+<text x="374.0" y="98.0" class="t" text-anchor="start" style="fill:var(--p2);font-weight:700">2. Virtualización KVM y Preseed</text>
+<text x="374.0" y="114.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 2 · Hipervisor, libvirt, qcow2, Preseed</text>
+<path d="M 194 153 C 268 153, 282 101, 352 101" fill="none" style="stroke:var(--p2)" stroke-width="1.7" marker-end="url(#hub_p2)"/>
+<rect x="360" y="134" width="292" height="42" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/>
+<text x="374.0" y="152.0" class="t" text-anchor="start" style="fill:var(--p3);font-weight:700">3. Bridges Linux y pfSense</text>
+<text x="374.0" y="168.0" class="s" text-anchor="start" style="fill:var(--ink)">Clases 2–3 · nmcli, 4 zonas, reglas, NAT/DNAT</text>
+<path d="M 194 153 C 268 153, 282 155, 352 155" fill="none" style="stroke:var(--p3)" stroke-width="1.7" marker-end="url(#hub_p3)"/>
+<rect x="360" y="188" width="292" height="42" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/>
+<text x="374.0" y="206.0" class="t" text-anchor="start" style="fill:var(--p4);font-weight:700">4. Seguridad de la Información</text>
+<text x="374.0" y="222.0" class="s" text-anchor="start" style="fill:var(--ink)">Clase 4 · CIA, TCP/IP, Stateful/WAF, TLS, SIEM</text>
+<path d="M 194 153 C 268 153, 282 209, 352 209" fill="none" style="stroke:var(--p4)" stroke-width="1.7" marker-end="url(#hub_p4)"/>
+<rect x="360" y="242" width="292" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/>
+<text x="374.0" y="260.0" class="t" text-anchor="start" style="fill:var(--p1);font-weight:700">5. Laboratorio del Taller (vivo)</text>
+<text x="374.0" y="276.0" class="s" text-anchor="start" style="fill:var(--ink)">Clases 2–3 · Tu red KVM + pfSense paso a paso</text>
+<path d="M 194 153 C 268 153, 282 263, 352 263" fill="none" style="stroke:var(--p1)" stroke-width="1.7" marker-end="url(#hub_p1)"/>
+<rect x="206" y="140" width="142" height="24" rx="12" style="fill:var(--bg);stroke:var(--rule)" stroke-width="1"/>
+<text x="277.0" y="156.0" class="s" text-anchor="middle" style="fill:var(--ink);font-weight:600">Profundizá o practicá</text></svg></div></div>
+    <figcaption>Ruta recomendada: arrancá por la Guía 0 (Pareto 20/80) para armar el mapa mental completo, usá las Guías 1–4 para profundizar la teoría y seguí la Guía 5 para construir y visualizar el laboratorio real del taller. Esquema conceptual.</figcaption>
   </figure>
 </header>
 
 <section aria-labelledby="route-title">
   <div class="sec-title">
-    <h2 id="route-title">1. Empezá por el núcleo Pareto (20/80)</h2>
-    <span>12 conceptos transversales · 4 widgets interactivos</span>
+    <h2 id="route-title">1. Empezá por el núcleo Pareto o seguí tu laboratorio del taller</h2>
+    <span>24 conceptos clave · 8 widgets interactivos</span>
   </div>
 
-  <a class="pareto-card" href="00-pareto-20-80.html" data-key="infra-pareto-progreso-v1">
-    <span class="badge">Paso recomendado · Empezá acá</span>
-    <h3>Guía 0 · Núcleo Pareto 20/80: El 20% que explica el 80% de la infraestructura</h3>
-    <p>Condensa los modelos mentales esenciales de las cuatro clases sin copiar ni pegar a ciegas: pila de diagnóstico Linux, frontera L2 vs L3, NAT vs Port Forward, arquitectura KVM/libvirt/<code>qcow2</code>, redes <code>virbr0</code> vs <code>br-wan</code>, Preseed, el triángulo Routing ≠ Firewall ≠ NAT en pfSense, Default Deny, Stateful/WAF y criptografía/SIEM. Cada concepto enlaza directo a su profundización.</p>
-    <div class="card-foot">
-      <span class="gprog"><b>0</b> de 12 estudiados</span>
-      <div class="mini-track"><div class="mini-fill"></div></div>
-      <span>Abrir Guía 0 →</span>
-    </div>
-  </a>
+  <div class="top-pair">
+    <a class="pareto-card" href="00-pareto-20-80.html" data-key="infra-pareto-progreso-v1">
+      <div>
+        <span class="badge">Paso recomendado · Empezá acá</span>
+        <h3>Guía 0 · Núcleo Pareto 20/80</h3>
+        <p>El 20% que explica el 80% de las cuatro clases sin copiar ni pegar a ciegas: pila Linux, L2 vs L3, NAT vs Port Forward, KVM/<code>qcow2</code>, <code>virbr0</code> vs <code>br-wan</code>, Preseed, Routing ≠ Firewall ≠ NAT, Default Deny, WAF y TLS/SIEM.</p>
+      </div>
+      <div class="card-foot">
+        <span class="gprog"><b>0</b> de 12 estudiados</span>
+        <div class="mini-track"><div class="mini-fill"></div></div>
+        <span>Abrir Guía 0 →</span>
+      </div>
+    </a>
+
+    <a class="pareto-card labo-card" href="05-labo-taller-completo.html" data-key="infra-labo-progreso-v1">
+      <div>
+        <span class="badge">Recorrido práctico · Todo el taller</span>
+        <h3>Guía 5 · Tu laboratorio KVM + pfSense paso a paso</h3>
+        <p>Centrada 100% en seguir el labo real armado en clase (de <code>/dev/kvm</code> y <code>debian-lab1</code> a <code>br-wan</code>, bridges internos, pfSense 4 zonas y pruebas <code>curl</code>), explicando la teoría detrás de cada comando y visualizando la infraestructura viva.</p>
+      </div>
+      <div class="card-foot">
+        <span class="gprog"><b>0</b> de 12 estudiados</span>
+        <div class="mini-track"><div class="mini-fill"></div></div>
+        <span>Abrir Labo Taller →</span>
+      </div>
+    </a>
+  </div>
 
   <div class="sec-title">
     <h2 id="deep-title">2. Profundización por módulo y taller</h2>
@@ -366,13 +392,14 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
     });
   }
 
-  /* Agregado de progreso de las 5 guías */
+  /* Agregado de progreso de las 6 guías */
   var KEYS = [
     'infra-pareto-progreso-v1',
     'infra-redes-progreso-v1',
     'infra-kvm-progreso-v1',
     'infra-pfsense-progreso-v1',
-    'infra-seguridad-progreso-v1'
+    'infra-seguridad-progreso-v1',
+    'infra-labo-progreso-v1'
   ];
   function countDone(k){
     try{
@@ -408,7 +435,7 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
   var resetBtn = document.getElementById('resetProgress');
   if(resetBtn){
     resetBtn.addEventListener('click', function(){
-      if(!confirm('¿Querés reiniciar el progreso marcado en las 5 guías?')) return;
+      if(!confirm('¿Querés reiniciar el progreso marcado en las 6 guías?')) return;
       KEYS.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
       refreshProgress();
     });
