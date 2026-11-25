@@ -89,7 +89,10 @@ p{margin:0 0 1em}
 .labo-card{border-color:var(--p4)}
 .labo-card:hover{background:var(--p4s)}
 .labo-card .badge{background:var(--p4)}
-.top-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1rem;margin-bottom:1.4rem}
+.tp-card{border-color:var(--p3);margin-bottom:1.4rem}
+.tp-card:hover{background:var(--p3s)}
+.tp-card .badge{background:var(--p3)}
+.top-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1rem;margin-bottom:1rem}
 .badge{display:inline-block;font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.18rem .58rem;border-radius:99px;background:var(--p1);color:var(--surface);margin-bottom:.6rem}
 .pareto-card h3{font-size:1.45rem;margin-bottom:.45rem}
 .pareto-card p{max-width:68ch;margin:0 0 .9rem;color:var(--ink)}
@@ -140,6 +143,7 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
       <a href="03-bridges-y-pfsense.html">3. Bridges y pfSense</a>
       <a href="04-seguridad.html">4. Seguridad</a>
       <a href="05-labo-taller-completo.html">5. Labo Taller</a>
+      <a href="06-tp-integrador.html">6. TP Integrador</a>
     </div>
     <button type="button" class="btn theme-btn" id="themeToggle" aria-label="Cambiar tema claro u oscuro">Tema</button>
   </div>
@@ -231,6 +235,18 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
       </div>
     </a>
   </div>
+
+  <a class="pareto-card tp-card" href="06-tp-integrador.html">
+    <div>
+      <span class="badge">Tablero en vivo · Entorno real ThinkPad + Linksys</span>
+      <h3>Guía 6 · Tu TP Integrador (5 zonas · 6 VMs · Defensa)</h3>
+      <p>Seguimiento interactivo específico para armar el TP en tu casa: bitácora del hardware y red real (<code>192.168.1.1</code> / <code>.111</code> / <code>.162</code>), inspector de 14 componentes, simulador de las 10 pruebas de aceptación + cambios de defensa, y checklist de los 8 entregables.</p>
+    </div>
+    <div class="card-foot">
+      <span>Bitácora, simulador 5 zonas y checklist persistido (Fases 0 → 7)</span>
+      <span>Abrir TP Integrador →</span>
+    </div>
+  </a>
 
   <div class="sec-title">
     <h2 id="deep-title">2. Profundización por módulo y taller</h2>

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TP Integrador · Seguimiento visual ThinkPad + pfSense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --ink:#161C24; --muted:#505B69; --rule:#C8D1DC;
+  --p1:#0F627C; --p2:#9F3548; --p3:#8C5810; --p4:#246A49;
+  --p1s:#D8ECF2; --p2s:#F6DDE2; --p3s:#F4E7CF; --p4s:#D9EDE2;
+  --good:#246A49; --bad:#9F3548;
+  --serif:"Newsreader", Georgia, serif;
+  --sans:"IBM Plex Sans", system-ui, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1217; --surface:#161C24; --ink:#E6ECF2; --muted:#97A4B3; --rule:#293340;
+    --p1:#66C0DB; --p2:#EC8698; --p3:#E5B15E; --p4:#70C89C;
+    --p1s:#122B36; --p2s:#361C23; --p3s:#332613; --p4s:#142E22;
+    --good:#70C89C; --bad:#EC8698;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1217; --surface:#161C24; --ink:#E6ECF2; --muted:#97A4B3; --rule:#293340;
+  --p1:#66C0DB; --p2:#EC8698; --p3:#E5B15E; --p4:#70C89C;
+  --p1s:#122B36; --p2s:#361C23; --p3s:#332613; --p4s:#142E22;
+  --good:#70C89C; --bad:#EC8698;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:1.06rem;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:var(--p1);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid var(--p1);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--sans);line-height:1.15;margin:0}
+p{margin:0 0 1em}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.85em;background:var(--bg);padding:.08em .32em;border-radius:4px;border:1px solid var(--rule);overflow-wrap:anywhere}
+pre{max-width:100%;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+pre.cmd{margin:.6rem 0 .8rem;padding:.75rem .9rem;background:var(--bg);border:1px solid var(--rule);border-radius:8px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.8rem;line-height:1.5;color:var(--ink)}
+
+.suite-nav{background:var(--surface);border-bottom:1px solid var(--rule);font-family:var(--sans);font-size:.84rem}
+.suite-inner{max-width:74rem;margin:0 auto;padding:.55rem clamp(1rem,4vw,3rem);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.45rem .85rem;min-width:0}
+.suite-home{font-weight:700;color:var(--ink);text-decoration:none;white-space:nowrap}
+.suite-home:hover{color:var(--p1)}
+.suite-links{display:flex;flex-wrap:wrap;gap:.25rem .35rem;align-items:center;min-width:0}
+.suite-links a{text-decoration:none;color:var(--muted);padding:.22rem .52rem;border-radius:99px;font-weight:500;white-space:nowrap}
+.suite-links a:hover{color:var(--ink);background:var(--bg)}
+.suite-links a[aria-current="page"]{background:var(--p3s);color:var(--p3);font-weight:600}
+.theme-btn{flex:none;white-space:nowrap}
+
+.wrap{max-width:74rem;margin:0 auto;padding:clamp(1.6rem,5vw,3rem) clamp(1.1rem,4vw,3rem) 3rem;min-width:0}
+.eyebrow{font-family:var(--sans);font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--p3);margin-bottom:.5rem}
+h1{font-size:clamp(2.1rem,6vw,3.9rem);font-weight:700;letter-spacing:-.035em;line-height:1;max-width:17ch}
+.lede{font-size:clamp(1.1rem,2vw,1.3rem);max-width:56ch;margin:1rem 0 0}
+.meta{font-family:var(--sans);font-size:.86rem;color:var(--muted);margin-top:.85rem;max-width:68ch}
+
+.signature{margin:1.3rem 0 .6rem}
+.signature svg{display:block;width:100%;height:auto}
+.signature text{font-family:var(--sans);fill:var(--ink)}
+.signature .h{font-size:13.5px;font-weight:600}.signature .l{font-size:12px}.signature .s{font-size:10.5px;fill:var(--muted)}
+@media (prefers-reduced-motion: no-preference){
+  .signature .sig-flow{stroke-dasharray:6 6;animation:sigDash 1.4s ease-out forwards}
+  @keyframes sigDash{from{stroke-dashoffset:48;opacity:.25}to{stroke-dashoffset:0;opacity:1}}
+}
+@media (max-width:560px){
+  .signature .sig-sub{display:none}
+  .signature .sig-main{font-size:13.5px;font-weight:600}
+}
+
+.btn{font-family:var(--sans);font-weight:600;font-size:.83rem;border:1.5px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:99px;padding:.34rem .8rem;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover:not(:disabled){border-color:var(--ink)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btnrow{display:flex;flex-wrap:wrap;gap:.4rem;min-width:0}
+
+.sec{border-top:2px solid var(--ink);padding-top:1.35rem;margin-top:2.2rem;min-width:0}
+.sec h2{font-size:clamp(1.4rem,3vw,1.8rem);margin-bottom:.45rem}
+.sec > p{max-width:68ch}
+
+.prog-box{background:var(--surface);border:1.5px solid var(--rule);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;min-width:0}
+.prog-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.4rem 1rem;margin-bottom:.55rem;font-family:var(--sans)}
+.track{height:.6rem;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--rule)}
+.track .fill{height:100%;width:0%;background:var(--good);transition:width .2s ease}
+
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(16.5rem,1fr));gap:.85rem;margin-top:1rem;min-width:0}
+.bgrid > *{min-width:0}
+.bcard{background:var(--surface);border:1.5px solid var(--rule);border-radius:11px;padding:.95rem 1.05rem;font-family:var(--sans);font-size:.87rem;line-height:1.48;min-width:0}
+.bcard.ok{border-color:var(--good)}
+.bcard h3{font-size:1rem;margin-bottom:.4rem}
+.bcard ul{margin:0;padding-left:1.15rem}
+.bcard li{margin-bottom:.3rem}
+
+.widget{margin:1.2rem 0;background:var(--surface);border:1.5px solid var(--p1);border-radius:12px;padding:1rem 1.15rem;min-width:0;max-width:100%}
+.widget > *{min-width:0}
+.widget h3{margin:0 0 .35rem;font-size:1.06rem;color:var(--p1)}
+.widget .wdesc{font-family:var(--sans);font-size:.89rem;color:var(--muted);margin:0 0 .85rem;line-height:1.45}
+.widget svg{display:block;width:100%;height:auto}
+.widget svg text{font-family:var(--sans);fill:var(--ink)}
+.widget .h{font-size:13.5px;font-weight:600}.widget .l{font-size:12px}.widget .s{font-size:10.8px;fill:var(--muted)}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(13.5rem,1fr));gap:.6rem;margin-top:.8rem;min-width:0}
+.wgrid > *{min-width:0}
+.wcard{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:.65rem .8rem;font-family:var(--sans);font-size:.85rem;line-height:1.42;min-width:0}
+.wcard.ok{border-color:var(--good);background:var(--p4s)}
+.wcard.bad{border-color:var(--bad);background:var(--p2s)}
+.wcard.warn{border-color:var(--p3);background:var(--p3s)}
+.result{margin-top:.8rem;padding:.78rem .95rem;border-radius:8px;background:var(--bg);font-size:.94rem;line-height:1.5;min-width:0}
+.result b.ok{color:var(--good)} .result b.no{color:var(--bad)}
+.check-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.45rem .85rem;font-family:var(--sans);font-size:.85rem;margin:.7rem 0;min-width:0}
+.check-list label{display:flex;gap:.45rem;align-items:flex-start;cursor:pointer;line-height:1.35}
+.check-list input{margin-top:.2rem;accent-color:var(--p1);flex:none}
+.scroll{min-width:0;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.phase{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:1rem 1.15rem;margin-top:1rem;min-width:0}
+.phase-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.4rem 1rem;margin-bottom:.5rem}
+.phase-head h3{font-size:1.08rem}
+.chip{font-family:var(--sans);font-size:.74rem;font-weight:600;border-radius:99px;padding:.12rem .52rem;white-space:nowrap}
+.chip.p1{background:var(--p1s);color:var(--p1)} .chip.p2{background:var(--p2s);color:var(--p2)}
+.chip.p3{background:var(--p3s);color:var(--p3)} .chip.p4{background:var(--p4s);color:var(--p4)}
+.task-list{display:grid;gap:.45rem;margin:.6rem 0}
+.task-row{display:flex;gap:.55rem;align-items:flex-start;padding:.55rem .7rem;border:1px solid var(--rule);border-radius:8px;background:var(--bg);font-family:var(--sans);font-size:.87rem;line-height:1.45;cursor:pointer;min-width:0}
+.task-row input{margin-top:.22rem;accent-color:var(--good);flex:none}
+.task-row.is-done{border-color:var(--good);background:var(--p4s)}
+
+table{border-collapse:collapse;width:100%;font-size:.9rem;line-height:1.45;background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+th,td{text-align:left;vertical-align:top;padding:.58rem .68rem;border-bottom:1px solid var(--rule)}
+th{font-family:var(--sans);font-weight:700;font-size:.83rem;background:var(--bg)}
+thead th{border-bottom:2px solid var(--ink)}
+tr.is-done td{background:var(--p4s)}
+
+@media (max-width:560px){
+  .bgrid,.wgrid,.check-list{grid-template-columns:minmax(0,1fr);min-width:0}
+  .bgrid > *,.wgrid > *,.check-list > *{min-width:0}
+}
+footer.end{max-width:74rem;margin:2rem auto 0;padding:1.5rem clamp(1.1rem,4vw,3rem) 2.5rem;font-family:var(--sans);font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule)}
+</style>
+</head>
+<body>
+
+<nav class="suite-nav" aria-label="Navegación de la materia">
+  <div class="suite-inner">
+    <a class="suite-home" href="index.html">← Hub de la materia</a>
+    <div class="suite-links">
+      <a href="00-pareto-20-80.html">Pareto 20/80</a>
+      <a href="01-fundamentos-y-redes.html">1. Redes e Infra</a>
+      <a href="02-kvm-y-preseed.html">2. KVM y Preseed</a>
+      <a href="03-bridges-y-pfsense.html">3. Bridges y pfSense</a>
+      <a href="04-seguridad.html">4. Seguridad</a>
+      <a href="05-labo-taller-completo.html">5. Labo Taller</a>
+      <a href="06-tp-integrador.html" aria-current="page">6. TP Integrador</a>
+    </div>
+    <button type="button" class="btn theme-btn" id="themeToggle" aria-label="Cambiar tema claro u oscuro">Tema</button>
+  </div>
+</nav>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Guía 6 · Tablero de seguimiento en vivo · Basado en TpIntegrador.pdf</div>
+  <h1>Tu TP Integrador sobre ThinkPad + red de casa</h1>
+  <p class="lede">Esta página documenta la infraestructura real que estás construyendo en tu casa, visualiza las <strong>5 zonas + 6 VMs</strong> requeridas por el TP y te deja llevar el progreso paso a paso sin repetir teoría de cero (cada componente enlaza directo al <a href="05-labo-taller-completo.html#glosario-piezas">Glosario</a> y a las <a href="index.html">Guías 0–5</a>).</p>
+  <p class="meta">Entorno real relevado el 25/11/2026: ThinkPad L15 Gen 4 (Ryzen 7 PRO 7730U · 16 GB RAM · Ubuntu KVM · 40 GB libres) conectada por cable a repetidor transparente del Linksys WRT120N (192.168.1.1).</p>
+
+  <figure class="viz" style="margin-top:1.2rem;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1rem">
+    <div class="signature" style="margin:0"><div class="scroll"><div style="min-width:540px"><svg viewBox="0 0 860 395" role="img" aria-label="Topología objetivo del TP Integrador en tu ThinkPad conectada al Linksys WRT120N: 5 bridges Linux, pfSense con 5 NICs y 5 VMs Linux"><defs><marker id="tphero_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker><marker id="tphero_p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p1)"/></marker><marker id="tphero_p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p2)"/></marker><marker id="tphero_p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p3)"/></marker><marker id="tphero_p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--p4)"/></marker><marker id="tphero_mu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker><marker id="tphero_good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker><marker id="tphero_bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--bad)"/></marker></defs><rect x="16" y="22" width="166" height="120" rx="10" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="99.0" y="44.0" class="h sig-main" text-anchor="middle" style="fill:var(--p1)">Linksys WRT120N</text><text x="99.0" y="64.0" class="s sig-sub" text-anchor="middle"><tspan x="99.0" dy="0">GW casa: 192.168.1.1</tspan><tspan x="99.0" dy="16">DHCP: .100 – .149</tspan><tspan x="99.0" dy="16">Repetidor cableado (L2)</tspan><tspan x="99.0" dy="16">Static Routing (bonus)</tspan></text><rect x="216" y="22" width="222" height="354" rx="12" style="fill:var(--surface);stroke:var(--rule)" stroke-width="1.4"/><text x="327.0" y="43.0" class="h" text-anchor="middle">ThinkPad L15 Gen 4 (KVM)</text><rect x="472" y="22" width="190" height="354" rx="12" style="fill:var(--surface);stroke:var(--ink)" stroke-width="1.7"/><text x="567.0" y="43.0" class="h" text-anchor="middle">pfSense (L3 · 5 NICs)</text><rect x="228" y="56" width="198" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.5"/><text x="327.0" y="74.0" class="l sig-main" text-anchor="middle" style="fill:var(--p1)">br-wan (IP host .111)</text><text x="327.0" y="90.0" class="s sig-sub" text-anchor="middle">Switch L2 externo</text><rect x="252" y="108" width="150" height="26" rx="6" style="fill:var(--bg);stroke:var(--rule)" stroke-width="1.2"/><text x="327.0" y="125.0" class="s sig-sub" text-anchor="middle">enp3s0f0 · uplink cable</text><line x1="327.0" y1="107.0" x2="327.0" y2="99.0" style="stroke:var(--p1)" stroke-width="1.5" marker-end="url(#tphero_p1)"/><line x1="183.8" y1="84.9" x2="250.2" y2="120.1" style="stroke:var(--p1)" stroke-width="1.6" marker-end="url(#tphero_p1)"/><rect x="484" y="56" width="166" height="42" rx="8" style="fill:var(--bg);stroke:var(--p1)" stroke-width="1.4"/><text x="567.0" y="74.0" class="l sig-main" text-anchor="middle">vtnet0 · WAN</text><text x="567.0" y="90.0" class="s sig-sub" text-anchor="middle">192.168.1.162 · GW .1</text><line x1="428.0" y1="77.0" x2="482.0" y2="77.0" style="stroke:var(--p1)" stroke-width="1.8" class="sig-flow" marker-end="url(#tphero_p1)"/><rect x="690" y="56" width="154" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/><text x="767.0" y="74.0" class="l sig-main" text-anchor="middle">vm-wan (prueba ext.)</text><text x="767.0" y="90.0" class="s sig-sub" text-anchor="middle">DHCP .100–.149 (br-wan)</text><line x1="428.0" y1="63.0" x2="688.0" y2="63.0" style="stroke:var(--p1)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#tphero_p1)"/><rect x="228" y="146" width="198" height="42" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="327.0" y="164.0" class="l sig-main" text-anchor="middle" style="fill:var(--p4)">br-users</text><text x="327.0" y="180.0" class="s sig-sub" text-anchor="middle">L2 puro · sin IP host</text><rect x="484" y="146" width="166" height="42" rx="8" style="fill:var(--bg);stroke:var(--p4)" stroke-width="1.4"/><text x="567.0" y="164.0" class="l sig-main" text-anchor="middle">vtnet1 · USUARIOS</text><text x="567.0" y="180.0" class="s sig-sub" text-anchor="middle">192.168.10.1 · Kea</text><rect x="690" y="146" width="154" height="42" rx="8" style="fill:var(--p4s);stroke:var(--p4)" stroke-width="1.4"/><text x="767.0" y="164.0" class="l sig-main" text-anchor="middle">vm-user</text><text x="767.0" y="180.0" class="s sig-sub" text-anchor="middle">DHCP .100–.200</text><line x1="428.0" y1="167.0" x2="482.0" y2="167.0" style="stroke:var(--p4)" stroke-width="1.7" class="sig-flow" marker-end="url(#tphero_p4)"/><line x1="652.0" y1="167.0" x2="688.0" y2="167.0" style="stroke:var(--p4)" stroke-width="1.6" marker-end="url(#tphero_p4)"/><rect x="228" y="206" width="198" height="42" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/><text x="327.0" y="224.0" class="l sig-main" text-anchor="middle" style="fill:var(--p3)">br-admin</text><text x="327.0" y="240.0" class="s sig-sub" text-anchor="middle">L2 puro · sin IP host</text><rect x="484" y="206" width="166" height="42" rx="8" style="fill:var(--bg);stroke:var(--p3)" stroke-width="1.4"/><text x="567.0" y="224.0" class="l sig-main" text-anchor="middle">vtnet2 · ADMIN</text><text x="567.0" y="240.0" class="s sig-sub" text-anchor="middle">192.168.30.1 · GUI/SSH</text><rect x="690" y="206" width="154" height="42" rx="8" style="fill:var(--p3s);stroke:var(--p3)" stroke-width="1.4"/><text x="767.0" y="224.0" class="l sig-main" text-anchor="middle">vm-admin</text><text x="767.0" y="240.0" class="s sig-sub" text-anchor="middle">Fija 192.168.30.10</text><line x1="428.0" y1="227.0" x2="482.0" y2="227.0" style="stroke:var(--p3)" stroke-width="1.7" class="sig-flow" marker-end="url(#tphero_p3)"/><line x1="652.0" y1="227.0" x2="688.0" y2="227.0" style="stroke:var(--p3)" stroke-width="1.6" marker-end="url(#tphero_p3)"/><rect x="228" y="266" width="198" height="42" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/><text x="327.0" y="284.0" class="l sig-main" text-anchor="middle" style="fill:var(--p2)">br-portfw</text><text x="327.0" y="300.0" class="s sig-sub" text-anchor="middle">L2 puro · sin IP host</text><rect x="484" y="266" width="166" height="42" rx="8" style="fill:var(--bg);stroke:var(--p2)" stroke-width="1.4"/><text x="567.0" y="284.0" class="l sig-main" text-anchor="middle">vtnet3 · SERV A</text><text x="567.0" y="300.0" class="s sig-sub" text-anchor="middle">192.168.20.1 · DNAT</text><rect x="690" y="266" width="154" height="42" rx="8" style="fill:var(--p2s);stroke:var(--p2)" stroke-width="1.4"/><text x="767.0" y="284.0" class="l sig-main" text-anchor="middle">vm-portfw</text><text x="767.0" y="300.0" class="s sig-sub" text-anchor="middle">192.168.20.10:8000</text><line x1="428.0" y1="287.0" x2="482.0" y2="287.0" style="stroke:var(--p2)" stroke-width="1.7" class="sig-flow" marker-end="url(#tphero_p2)"/><line x1="652.0" y1="287.0" x2="688.0" y2="287.0" style="stroke:var(--p2)" stroke-width="1.6" marker-end="url(#tphero_p2)"/><rect x="228" y="326" width="198" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/><text x="327.0" y="344.0" class="l sig-main" text-anchor="middle" style="fill:var(--p1)">br-ruteada</text><text x="327.0" y="360.0" class="s sig-sub" text-anchor="middle">L2 puro · sin IP host</text><rect x="484" y="326" width="166" height="42" rx="8" style="fill:var(--bg);stroke:var(--p1)" stroke-width="1.4"/><text x="567.0" y="344.0" class="l sig-main" text-anchor="middle">vtnet4 · SERV B</text><text x="567.0" y="360.0" class="s sig-sub" text-anchor="middle">44.0.62.1 · Sin NAT</text><rect x="690" y="326" width="154" height="42" rx="8" style="fill:var(--p1s);stroke:var(--p1)" stroke-width="1.4"/><text x="767.0" y="344.0" class="l sig-main" text-anchor="middle">vm-ruteada</text><text x="767.0" y="360.0" class="s sig-sub" text-anchor="middle">44.0.62.2:8000</text><line x1="428.0" y1="347.0" x2="482.0" y2="347.0" style="stroke:var(--p1)" stroke-width="1.7" class="sig-flow" marker-end="url(#tphero_p1)"/><line x1="652.0" y1="347.0" x2="688.0" y2="347.0" style="stroke:var(--p1)" stroke-width="1.6" marker-end="url(#tphero_p1)"/><rect x="16" y="162" width="166" height="94" rx="9" style="fill:var(--bg);stroke:var(--rule)" stroke-width="1.2"/><text x="99.0" y="183.0" class="l" text-anchor="middle">Estado Host ThinkPad</text><text x="99.0" y="202.0" class="s" text-anchor="middle"><tspan x="99.0" dy="0">CPU: R7 7730U (AMD-V)</tspan><tspan x="99.0" dy="14">RAM: 16 GB · Disco: 40G free</tspan><tspan x="99.0" dy="14">SSH: lisandro@192.168.1.111</tspan><tspan x="99.0" dy="14">Backups scp -> PC D:/Z:</tspan></text></svg></div></div></div>
+    <figcaption style="font-family:var(--sans);font-size:.83rem;color:var(--muted);margin-top:.65rem">Mapa objetivo del TP Integrador en tu red real: Linksys (<code>192.168.1.1</code>) → ThinkPad (<code>192.168.1.111</code>, 5 bridges L2) → pfSense (5 NICs, WAN <code>192.168.1.162</code>) → 5 VMs Linux.</figcaption>
+  </figure>
+
+  <div class="btnrow" aria-label="Secciones del tablero">
+    <a class="btn" href="#bitacora">Bitácora de lo hecho hoy</a>
+    <a class="btn" href="#inspector-tp">Inspector de 14 piezas</a>
+    <a class="btn" href="#matriz-pruebas">Simulador de 10 pruebas + Defensa</a>
+    <a class="btn" href="#fases-tp">Hoja de ruta (Fases 0 → 7)</a>
+    <a class="btn" href="#entregables-tp">8 Entregables oficiales</a>
+  </div>
+</header>
+
+<section class="sec" id="bitacora" aria-labelledby="bit-title">
+  <h2 id="bit-title">1. Bitácora viva: qué quedó verificado y listo hoy</h2>
+  <p>Todo lo relevado y configurado en esta primera sesión queda guardado acá como punto de partida limpio para retomar mañana.</p>
+
+  <div class="prog-box">
+    <div class="prog-top">
+      <span id="tp-prog-txt"><b>0</b> de 0 hitos completados (0%)</span>
+      <button type="button" class="btn" id="tp-reset-btn">Restaurar estado inicial</button>
+    </div>
+    <div class="track" aria-hidden="true"><div class="fill" id="tp-prog-fill"></div></div>
+  </div>
+
+  <div class="bgrid">
+    <div class="bcard ok">
+      <h3>Red de tu casa (Linksys WRT120N)</h3>
+      <ul>
+        <li>Gateway / salida Internet: <code>192.168.1.1/24</code> (Fibertel/Personal).</li>
+        <li>Pool DHCP del router: <code>192.168.1.100</code> a <code>.149</code> → rango <code>.150–.254</code> libre para estáticas.</li>
+        <li>Repetidor unido <strong>por cable Ethernet</strong> actuando como bridge transparente (ThinkPad en <code>.111</code>, PC Windows en <code>.100</code>).</li>
+        <li>WAN asignada para pfSense: <code>192.168.1.162/24</code> (mismo sufijo <code>fc=62</code> de tu puesto en la facu).</li>
+        <li>Extra disponible: pestaña <em>Advanced Routing → Static Routing</em> para probar salida real de <code>SERVIDORES B</code>.</li>
+      </ul>
+    </div>
+
+    <div class="bcard ok">
+      <h3>Host KVM (ThinkPad L15 Gen 4)</h3>
+      <ul>
+        <li>CPU <code>AMD Ryzen 7 PRO 7730U</code> con virtualización <code>AMD-V</code> verificada (<code>PASS</code>).</li>
+        <li>KVM, QEMU y <code>libvirtd</code> instalados; <code>lisandro</code> en grupos <code>kvm,libvirt</code> y <code>virsh uri = qemu:///system</code>.</li>
+        <li>NIC cableada <code>enp3s0f0</code> (<code>192.168.1.111</code>) administrada por NetworkManager (Netplan vacío).</li>
+        <li>Espacio optimizado de 32 GB a <strong>40 GB libres</strong> en NVMe desmontando ISO fantasma (5,7 GB) + snaps viejos + <code>apt clean</code> + <code>journalctl</code>.</li>
+      </ul>
+    </div>
+
+    <div class="bcard ok">
+      <h3>Acceso SSH, Backups e ISOs nocturnas</h3>
+      <ul>
+        <li>Acceso remoto funcionando desde PC de escritorio con llave <code>id_ed25519</code> y <code>ssh-agent</code> activo (<code>ssh lisandro@192.168.1.111</code>).</li>
+        <li>PC de escritorio con <strong>839 GB (D:)</strong> y <strong>992 GB (Z:)</strong> libres para respaldos vía <code>scp</code> (Entregables 7 y 8).</li>
+        <li>Descargas oficiales lanzadas en segundo plano hacia <code>~/tp-infra/isos/</code>: <code>debian-13.8.0-amd64-netinst.iso</code> (con SHA-256) y <code>pfSense-CE-2.7.2-RELEASE-amd64.iso</code>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="inspector-tp" aria-labelledby="w1-title">
+  <h2 id="w1-title">2. Inspector visual de tu topología (14 componentes reales)</h2>
+  <div class="widget">
+    <h3>Qué cumple cada pieza del TP, sus IPs reales y qué cambia frente a Clase 3</h3>
+    <p class="wdesc">Tocá cualquier nodo del mapa o botón inferior para ver su rol, su subred exacta en tu ThinkPad y su relación con las guías teóricas.</p>
+    <div class="btnrow" id="tpw1-btns"></div>
+    <div class="scroll" style="margin-top:.75rem"><div style="min-width:520px" id="tpw1-svg"></div></div>
+    <div class="wgrid" id="tpw1-cards"></div>
+    <div class="result" id="tpw1-sum"></div>
+  </div>
+</section>
+
+<section class="sec" id="matriz-pruebas" aria-labelledby="w2-title">
+  <h2 id="w2-title">3. Simulador de las 10 pruebas de aceptación + cambios de defensa</h2>
+  <div class="widget">
+    <h3>Matriz de tráfico exigida por TpIntegrador.pdf (Sección 8)</h3>
+    <p class="wdesc">Elegí una de las 10 pruebas obligatorias y activá los checkboxes de defensa o ruta estática en Linksys para anticipar qué debería ocurrir.</p>
+    <div class="btnrow" id="tpw2-tests"></div>
+    <div class="check-list" id="tpw2-flags">
+      <label><input type="checkbox" data-flag="lockGui"><span>Defensa: WebGUI exclusiva desde <code>ADMIN</code> (sin Anti-Lockout en LAN)</span></label>
+      <label><input type="checkbox" data-flag="cutServA"><span>Defensa: Cortar salida a Internet de <code>SERVIDORES A</code></span></label>
+      <label><input type="checkbox" data-flag="linksysRoute"><span>Casa: Agregar ruta estática <code>44.0.62.0/24 → 192.168.1.162</code> en Linksys</span></label>
+    </div>
+    <div class="scroll" style="margin-top:.6rem"><div style="min-width:520px" id="tpw2-svg"></div></div>
+    <div class="wgrid" id="tpw2-cards"></div>
+    <div class="result" id="tpw2-sum"></div>
+  </div>
+</section>
+
+<section class="sec" id="fases-tp" aria-labelledby="fases-title">
+  <h2 id="fases-title">4. Hoja de ruta operativa en la ThinkPad (Fases 0 → 7)</h2>
+  <p>Tildá cada hito a medida que lo ejecutás: tu avance se guarda en este navegador. Si querés repasar la teoría detrás de un paso, abrí el enlace correspondiente de la <a href="05-labo-taller-completo.html">Guía 5</a>.</p>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 0 · Red de casa, SSH, KVM y espacio en disco</h3><span class="chip p4">Completada hoy</span></div>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f0-net"><span>Confirmar Linksys WRT120N (<code>192.168.1.1</code>, DHCP <code>.100–.149</code>, Static Routing disponible) y repetidor cableado.</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f0-ssh"><span>Habilitar <code>openssh-server</code> en ThinkPad + llave <code>id_ed25519</code> y <code>ssh-agent</code> en Windows (<code>lisandro@192.168.1.111</code>).</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f0-kvm"><span>Instalar stack KVM/libvirt, sumar usuario a <code>kvm,libvirt</code> y verificar <code>AMD-V</code> + <code>qemu:///system</code>. (<a href="05-labo-taller-completo.html#paso-01-preparar-host-kvm">Paso 1</a>)</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f0-space"><span>Liberar espacio de 32 GB a 40 GB en NVMe y dejar descargando ISOs de Debian 13.8.0 y pfSense CE 2.7.2 en <code>~/tp-infra/isos/</code>.</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 1 · Verificar ISOs, apagar Wi-Fi y crear los 5 Linux Bridges</h3><span class="chip p1">Próximo paso en vivo</span></div>
+    <p class="note">Conviene tener la pantalla de la ThinkPad a mano 5 minutos mientras se migra <code>enp3s0f0</code> a <code>br-wan</code> por si cambia brevemente el enlace. (<a href="05-labo-taller-completo.html#paso-05-diagnosticar-nic-networkmanager">Pasos 5 y 6</a>)</p>
+    <pre class="cmd"># 1. Verificar descargas completas de la noche:
+cat ~/tp-infra/isos/download.log | tail -n 20 &amp;&amp; ls -lh ~/tp-infra/isos/
+
+# 2. Apagar Wi-Fi para no duplicar ruta a 192.168.1.0/24:
+nmcli radio wifi off
+
+# 3. Migrar enp3s0f0 -&gt; br-wan (con MAC clonada para conservar 192.168.1.111) + 4 bridges L2 sin IP:
+NIC="enp3s0f0"
+NIC_MAC="$(cat /sys/class/net/$NIC/address)"
+nmcli con add type bridge ifname br-wan con-name perfil-br-wan ethernet.cloned-mac-address "$NIC_MAC" bridge.stp no
+nmcli con add type bridge-slave ifname "$NIC" master br-wan con-name esclavo-wan
+nmcli con down "Wired connection 1" &amp;&amp; nmcli con up perfil-br-wan &amp;&amp; nmcli con up esclavo-wan
+
+for br in br-users br-admin br-portfw br-ruteada; do
+  nmcli con add type bridge ifname "$br" con-name "perfil-$br" bridge.stp no ipv4.method disabled ipv6.method ignore
+  nmcli con up "perfil-$br"
+done
+ip -br a &amp;&amp; bridge link</pre>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f1-isos"><span>Confirmar <code>debian-13.8.0-amd64-netinst.iso</code> (SHA-256 OK) y <code>pfSense-CE-2.7.2-RELEASE-amd64.iso</code> listas.</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f1-br"><span>Wi-Fi apagado, <code>br-wan</code> con <code>192.168.1.111</code> vía <code>enp3s0f0</code> y los 4 bridges internos <code>sin IP</code>.</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 2 · Plantilla Debian 13 + clonado de las 5 VMs Linux</h3><span class="chip p2">Ahorra ~60% de tiempo</span></div>
+    <p class="note">Instalá una sola VM plantilla sobre <code>virbr0</code> con disco liviano (<code>5 GiB</code> qcow2), saneá <code>/etc/machine-id</code> y cloná 5 veces antes de pasar cada clon a su bridge definitivo. Recordá que <code>virbr0</code> NO se usa en la topología final del TP. (<a href="05-labo-taller-completo.html#paso-03-qcow2-snapshots-clonado-xml">Pasos 2–4</a>)</p>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f2-tmpl"><span>Crear VM base Debian 13 (con <code>qemu-guest-agent</code>, <code>openssh-server</code>, <code>python3</code>, <code>curl</code>, <code>iproute2</code>) y sanear <code>/etc/machine-id</code>.</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f2-clones"><span>Clonar <code>vm-user</code> (→<code>br-users</code>), <code>vm-admin</code> (→<code>br-admin</code>, con entorno/Firefox o X11 para WebGUI), <code>vm-portfw</code> (→<code>br-portfw</code>), <code>vm-ruteada</code> (→<code>br-ruteada</code>) y <code>vm-wan</code> (→<code>br-wan</code>).</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 3 · Desplegar pfSense con 5 NICs y bootstrap WebGUI</h3><span class="chip p3">Frontera L3</span></div>
+    <p class="note">Enchufá las 5 interfaces VirtIO en orden exacto (<code>br-wan</code>, <code>br-users</code>, <code>br-admin</code>, <code>br-portfw</code>, <code>br-ruteada</code>) y validá cada <code>vtnetX</code> comparando su dirección MAC con <code>virsh domiflist pfsense</code>. (<a href="05-labo-taller-completo.html#paso-07-desplegar-pfsense-y-vms-zona">Pasos 7 y 8</a>)</p>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f3-pfs"><span>Instalar pfSense CE 2.7.2 y mapear por MAC: <code>vtnet0=WAN</code>, <code>vtnet1=USUARIOS</code>, <code>vtnet2=ADMINISTRACION</code>, <code>vtnet3=SERVIDORES_A</code>, <code>vtnet4=SERVIDORES_B</code>.</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f3-ifaces"><span>Fijar WAN <code>192.168.1.162/24</code> (Upstream GW <code>192.168.1.1</code>, <em>Block private networks</em> <strong>OFF</strong>) y las 4 internas con Upstream GW en <code>None</code>.</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 4 · Servicios de red en VMs + limpieza del host</h3><span class="chip p4">Capa 3/7 limpia</span></div>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f4-dhcp"><span>Activar <strong>Kea DHCP</strong> (<code>192.168.10.100–200</code>) y DNS Resolver en <code>USUARIOS</code>; comprobar que <code>vm-user</code> toma <code>.100</code>. (<a href="05-labo-taller-completo.html#paso-09-dhcp-kea-lan-e-ips-dmz">Paso 9</a>)</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f4-static"><span>Configurar IPs estáticas en Debian 13 (<code>enp1s0</code>): <code>vm-admin</code> (<code>192.168.30.10</code>), <code>vm-portfw</code> (<code>192.168.20.10</code> + HTTP `:8000` + SSH) y <code>vm-ruteada</code> (<code>44.0.62.2</code> + HTTP `:8000` + SSH).</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f4-clean"><span>Retirar IP temporal de bootstrap del host con <code>nmcli device reapply br-users</code> / <code>br-admin</code> para que ThinkPad vuelva a L2 pura en internas.</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 5 · Reglas top-down, Manual Outbound NAT y Port Forward</h3><span class="chip p1">Política mínima</span></div>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f5-fw"><span>Aplicar reglas top-down en las 5 pestañas: bloquear <code>USUARIOS → ADMIN</code>, aislar ambas DMZ hacia <code>USUARIOS</code> y <code>ADMIN</code>, habilitar SSH/GUI desde <code>ADMIN</code>. (<a href="05-labo-taller-completo.html#paso-10-reglas-firewall-y-aislamiento">Paso 10</a>)</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f5-nat"><span>Activar <strong>Manual Outbound NAT</strong> solo para <code>USUARIOS</code>, <code>ADMIN</code> y <code>SERVIDORES A</code>; eliminar toda regla para <code>44.0.62.0/24</code>; crear Port Forward <code>.1.162:8000 → .20.10:8000</code> + regla <code>WAN → 44.0.62.2:8000</code>. (<a href="05-labo-taller-completo.html#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>)</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 6 · Pruebas de aceptación (10) + verificación en Linksys</h3><span class="chip p2">Evidencias</span></div>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f6-tests"><span>Ejecutar las 10 pruebas del simulador de arriba (incluyendo <em>Packet Capture</em> en WAN para <code>vm-ruteada</code> sin NAT y ruta en <code>vm-wan</code>).</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f6-linksys"><span>Probar además el bonus en Linksys (<code>Static Routing</code> <code>44.0.62.0/24 → 192.168.1.162</code>) para validar retorno real desde Internet sin NAT.</span></label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 7 · Backups en D:/Z:, Entregable 8 y ensayo de defensa</h3><span class="chip p3">Cierre</span></div>
+    <div class="task-list">
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f7-scp"><span>Exportar <code>config.xml</code> de pfSense, hacer <code>virsh dumpxml</code> de las 6 VMs y copiar backup completo vía <code>scp</code> hacia <code>D:\</code> / <code>Z:\</code> de la PC de escritorio.</span></label>
+      <label class="task-row"><input type="checkbox" class="tp-task" data-tid="f7-rec"><span>Ensayar recuperación ante pérdida de pfSense (clon/reinstalación limpia + restore <code>config.xml</code>) y practicar en vivo cerrar WebGUI solo a <code>ADMIN</code> y cortar Internet a <code>SERVIDORES A</code>.</span></label>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="entregables-tp" aria-labelledby="ent-title">
+  <h2 id="ent-title">5. Checklist de los 8 entregables oficiales (TpIntegrador.pdf)</h2>
+  <p>Antes de la entrega y defensa, verificá que cada uno de los 8 ítems pedidos en la Sección 6 del PDF esté documentado con tus capturas y salidas reales.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Listo</th><th>#</th><th>Entregable pedido en TpIntegrador.pdf</th><th>Cómo resolverlo en tu montaje</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-1" aria-label="Entregable 1"></td><td>1</td><td>Diagrama de la topología implementada (interfaces, bridges, redes e IP)</td><td>Basarte en el plano de arriba con las MACs/<code>vnetX</code> reales de <code>virsh domiflist</code> y <code>bridge link</code>.</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-2" aria-label="Entregable 2"></td><td>2</td><td>Tabla de direccionamiento de pfSense y de todas las VMs</td><td>Incluir <code>vtnet0..4</code> (<code>.1.162</code>, <code>.10.1</code>, <code>.30.1</code>, <code>.20.1</code>, <code>44.0.62.1</code>) y las 5 VMs Linux.</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-3" aria-label="Entregable 3"></td><td>3</td><td>Matriz de comunicaciones permitidas y bloqueadas entre las 5 zonas</td><td>Completar la matriz 5×5 cruzando orígenes y destinos (permitido SNAT / DNAT / sin NAT / bloqueado).</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-4" aria-label="Entregable 4"></td><td>4</td><td>Descripción de las políticas de firewall y su justificación</td><td>Explicar en qué interfaz se evalúa cada regla (<em>ingress</em>), el orden top-down y el rol de cada <code>BLOCK</code> previo.</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-5" aria-label="Entregable 5"></td><td>5</td><td>Mecanismos de routing y NAT (dónde existe NAT y dónde no)</td><td>Mostrar qué traduce Manual Outbound NAT, qué hace Port Forward (:8000) y por qué <code>44.0.62.0/24</code> requiere ruta externa.</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-6" aria-label="Entregable 6"></td><td>6</td><td>Evidencias de comandos y pruebas de conectividad (incluidas negativas)</td><td>Guardar salidas de las 10 pruebas + capturas de <code>Status → System Logs → Firewall</code> y <code>Packet Capture</code>.</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-7" aria-label="Entregable 7"></td><td>7</td><td>Archivo de configuración exportado de pfSense</td><td>Descargar desde <code>Diagnostics → Backup &amp; Restore → Download configuration as XML</code> y guardarlo también en <code>D:\</code>/<code>Z:\</code>.</td></tr>
+      <tr><td><input type="checkbox" class="tp-task" data-tid="ent-8" aria-label="Entregable 8"></td><td>8</td><td>Procedimiento de recuperación ante pérdida de la VM del firewall</td><td>Documentar: conservar los 5 bridges + recrear VM con mismas 5 NICs en orden + restaurar <code>config.xml</code> (o snapshot/<code>qcow2</code> + XML respaldado).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+</div>
+
+<footer class="end">Guía 6 · Tablero de seguimiento en vivo del Trabajo Final Integrador · Infraestructura Tecnológica (FCEN-UBA). Guardado local vía <code>localStorage</code>.</footer>
+
+<script>
+(function(){
+
+  /* Tema compartido */
+  (function(){
+    var btn=document.getElementById('themeToggle');
+    if(!btn) return;
+    function cur(){
+      var dt=document.documentElement.dataset.theme;
+      if(dt==='dark'||dt==='light') return dt;
+      return (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+    }
+    function paint(t){
+      document.documentElement.dataset.theme=t;
+      btn.textContent=(t==='dark')?'Tema: Oscuro':'Tema: Claro';
+    }
+    try{
+      var s=localStorage.getItem('infra-theme');
+      if(s==='dark'||s==='light') paint(s);
+      else btn.textContent=(cur()==='dark')?'Tema: Oscuro':'Tema: Claro';
+    }catch(e){}
+    btn.addEventListener('click',function(){
+      var nxt=cur()==='dark'?'light':'dark';
+      paint(nxt);
+      try{ localStorage.setItem('infra-theme',nxt); }catch(e){}
+    });
+  })();
+
+  /* Helpers SVG puros (cero hex) */
+  function svgDefs(pfx){
+    var cols={ink:'var(--ink)',p1:'var(--p1)',p2:'var(--p2)',p3:'var(--p3)',p4:'var(--p4)',mu:'var(--muted)',good:'var(--good)',bad:'var(--bad)'};
+    return '<defs>'+Object.keys(cols).map(function(k){
+      return '<marker id="'+pfx+k+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:'+cols[k]+'"/></marker>';
+    }).join('')+'</defs>';
+  }
+  function sBox(x,y,w,h,fl,st,r,sw){
+    return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(r||8)+'" style="fill:'+fl+';stroke:'+st+'" stroke-width="'+(sw||1.4)+'"/>';
+  }
+  function sTxt(x,y,txt,cls,anc,st){
+    return '<text x="'+x+'" y="'+y+'" class="'+(cls||'t')+'" text-anchor="'+(anc||'middle')+'"'+(st?' style="'+st+'"':'')+'>'+txt+'</text>';
+  }
+  function sAr(pfx,x1,y1,x2,y2,col,dash,w){
+    return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" style="stroke:var(--'+col+')" stroke-width="'+(w||1.7)+'"'+(dash?' stroke-dasharray="4 4"':'')+' marker-end="url(#'+pfx+col+')"/>';
+  }
+
+  /* Progreso persistente del TP (checklists de Fases y Entregables) */
+  (function(){
+    var KEY='infra-tp-progreso-v1';
+    var boxes=[].slice.call(document.querySelectorAll('input.tp-task[data-tid]'));
+    var bar=document.getElementById('tp-prog-fill'), txt=document.getElementById('tp-prog-txt'), resetBtn=document.getElementById('tp-reset-btn');
+    var DEFAULTS={
+      'f0-net':true,'f0-ssh':true,'f0-kvm':true,'f0-space':true
+    };
+    function load(){
+      try{
+        var r=localStorage.getItem(KEY);
+        if(!r) return Object.assign({},DEFAULTS);
+        var p=JSON.parse(r);
+        return (p && typeof p==='object')?p:Object.assign({},DEFAULTS);
+      }catch(e){ return Object.assign({},DEFAULTS); }
+    }
+    var st=load();
+    function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+    function paint(){
+      var done=0;
+      boxes.forEach(function(b){
+        b.checked=!!st[b.dataset.tid];
+        if(b.checked) done++;
+        var row=b.closest('.task-row, tr');
+        if(row) row.classList.toggle('is-done', b.checked);
+      });
+      var pct=boxes.length?Math.round((done/boxes.length)*100):0;
+      if(bar) bar.style.width=pct+'%';
+      if(txt) txt.innerHTML='<b>'+done+'</b> de '+boxes.length+' hitos completados ('+pct+'%)';
+    }
+    boxes.forEach(function(b){
+      b.addEventListener('change',function(){
+        st[b.dataset.tid]=b.checked;
+        save(); paint();
+      });
+    });
+    if(resetBtn){
+      resetBtn.addEventListener('click',function(){
+        if(!confirm('¿Querés volver el checklist del TP al estado inicial de hoy (Fase 0 hecha)?')) return;
+        st=Object.assign({},DEFAULTS);
+        save(); paint();
+      });
+    }
+    paint();
+  })();
+
+  /* WIDGET 1: Inspector de las 14 piezas del TP Integrador */
+  (function(){
+    var btns=document.getElementById('tpw1-btns'), svgWrap=document.getElementById('tpw1-svg'),
+        cards=document.getElementById('tpw1-cards'), sum=document.getElementById('tpw1-sum');
+    if(!btns) return;
+    var cur='pfSense';
+    var COMPS=[
+      {id:'Linksys', lbl:'Linksys WRT120N', role:'Router ISP / Salida a Internet real', ip:'LAN 192.168.1.1/24 · DHCP .100–.149',
+       pol:'Conecta el cable hacia el repetidor L2. Tiene Static Routing en Advanced Routing para devolver tráfico a 44.0.62.0/24 si lo activás.',
+       delta:'En la facultad la salida fija era 10.41.107.99 sin acceso al router del aula; en casa vos sí controlás 192.168.1.1.',
+       links:'<a href="05-labo-taller-completo.html#glos-internet">Salida a Internet</a> · <a href="05-labo-taller-completo.html#glos-wan">WAN</a>'},
+      {id:'ThinkPad', lbl:'ThinkPad KVM', role:'Hipervisor Host (Ubuntu + AMD-V)', ip:'IP gestión: 192.168.1.111/24 en br-wan (sin IP en L2 internos)',
+       pol:'Corre QEMU/libvirt (qemu:///system). Apagar Wi-Fi (wlp6s0) al armar bridges para evitar rutas duplicadas.',
+       delta:'Misma arquitectura que la PC del aula; 40 GB libres en NVMe + SSH desde tu PC de escritorio (.100).',
+       links:'<a href="05-labo-taller-completo.html#glos-kvm-tap">KVM y TAP</a> · <a href="02-kvm-y-preseed.html#stack-kvm-qemu-libvirt">Stack KVM (Guía 2)</a>'},
+      {id:'enp3s0f0', lbl:'enp3s0f0', role:'NIC Ethernet física (bridge-slave)', ip:'Sin IP propia tras migrar a br-wan',
+       pol:'Puerto físico de br-wan hacia el repetidor cableado. Clonar su MAC en br-wan conserva el lease 192.168.1.111.',
+       delta:'En filminas figuraba enp1s0; en tu ThinkPad real la placa Gigabit es enp3s0f0.',
+       links:'<a href="05-labo-taller-completo.html#paso-05-diagnosticar-nic-networkmanager">Paso 5</a> · <a href="03-bridges-y-pfsense.html#networkmanager-device-vs-connection">nmcli (Guía 3)</a>'},
+      {id:'br-wan', lbl:'br-wan', role:'Switch L2 externo + IP del host', ip:'Host: 192.168.1.111/24 · GW 192.168.1.1',
+       pol:'Une en Capa 2 a enp3s0f0, vtnet0 (pfSense WAN) y vm-wan dentro de la LAN doméstica 192.168.1.0/24.',
+       delta:'Reemplaza el segmento 10.41.107.0/24 del aula manteniendo exactamente el mismo mecanismo sin doble NAT.',
+       links:'<a href="05-labo-taller-completo.html#glos-bridge">Bridge L2</a> · <a href="03-bridges-y-pfsense.html#bridge-linux-br-wan">br-wan (Guía 3)</a>'},
+      {id:'br-users', lbl:'br-users', role:'Switch L2 dominio USUARIOS', ip:'Sin IP en el host KVM (ipv4.method disabled)',
+       pol:'Aísla el tráfico Ethernet entre vm-user y vtnet1 para que todo pase por pfSense.',
+       delta:'Equivale al br-lan del taller, renombrado a dominio USUARIOS según TpIntegrador.pdf.',
+       links:'<a href="05-labo-taller-completo.html#glos-lan">Zona LAN</a> · <a href="05-labo-taller-completo.html#glos-bridge">Bridge sin IP</a>'},
+      {id:'br-admin', lbl:'br-admin', role:'Switch L2 dominio ADMINISTRACIÓN (NUEVO)', ip:'Sin IP en el host KVM (solo IP temporal en bootstrap)',
+       pol:'Separa físicamente en L2 la red de operación de la LAN de usuarios comunes.',
+       delta:'Es el 5.º dominio Ethernet que exige el TP Integrador (no existía en Clase 3).',
+       links:'<a href="04-seguridad.html#segmentacion-vlan-dmz-zerotrust">Segmentación (Guía 4)</a> · <a href="05-labo-taller-completo.html#glos-bridge">Bridge L2</a>'},
+      {id:'br-portfw', lbl:'br-portfw', role:'Switch L2 SERVIDORES A', ip:'Sin IP en el host KVM (ipv4.method disabled)',
+       pol:'Une vm-portfw con vtnet3 en Capa 2 sin exponer puertos del host KVM.',
+       delta:'Idéntico a br-dmz-portfw de Clase 3.',
+       links:'<a href="05-labo-taller-completo.html#glos-dmz">Zona DMZ</a> · <a href="05-labo-taller-completo.html#glos-portfw">Port-Forwarding</a>'},
+      {id:'br-ruteada', lbl:'br-ruteada', role:'Switch L2 SERVIDORES B', ip:'Sin IP en el host KVM (ipv4.method disabled)',
+       pol:'Une vm-ruteada con vtnet4 en Capa 2 para tráfico enrutable sin traducción.',
+       delta:'Idéntico a br-dmz-ruteada de Clase 3.',
+       links:'<a href="05-labo-taller-completo.html#glos-dmz">Zona DMZ</a> · <a href="05-labo-taller-completo.html#glos-router">Router L3</a>'},
+      {id:'pfSense', lbl:'pfSense (5 NICs)', role:'Router L3 + Stateful Firewall + NAT', ip:'WAN .1.162 · USR .10.1 · ADM .30.1 · PFW .20.1 · RUT 44.0.62.1',
+       pol:'Solo WAN lleva Upstream GW (192.168.1.1) y Block private networks OFF. Reglas ingress top-down + Manual Outbound NAT.',
+       delta:'Suma la 5.ª placa (vtnet2 → ADMINISTRACIÓN) y en defensa restringe su WebGUI exclusivamente a esa zona.',
+       links:'<a href="00-pareto-20-80.html#triangulo-pfsense-routing-fw-nat">Triángulo Routing/FW/NAT (Guía 0)</a> · <a href="05-labo-taller-completo.html#glos-firewall">Firewall</a>'},
+      {id:'vm-wan', lbl:'vm-wan', role:'Cliente externo de pruebas', ip:'DHCP Linksys 192.168.1.100–149 + ruta 44.0.62.0/24 via .1.162',
+       pol:'Simula un atacante/usuario externo sobre br-wan para probar DNAT :8000, routing a 44.0.62.2 y bloqueo hacia USR/ADM.',
+       delta:'Igual que en Clase 3, pero sobre la subred 192.168.1.0/24 de tu casa.',
+       links:'<a href="05-labo-taller-completo.html#glos-wan">WAN</a> · <a href="05-labo-taller-completo.html#glos-portfw">DNAT vs Routing</a>'},
+      {id:'vm-user', lbl:'vm-user', role:'Cliente interno (USUARIOS)', ip:'Kea DHCP 192.168.10.100–200 (ej. .100) · GW .10.1',
+       pol:'Sale a Internet por SNAT, pero BLOCK → ADMINISTRACIÓN en vtnet1 le impide alcanzar 192.168.30.0/24.',
+       delta:'Antes era vm-lan con PASS → any libre; ahora debe bloquear explícitamente la red de administración.',
+       links:'<a href="05-labo-taller-completo.html#glos-dhcp-dns">Kea DHCP y DNS</a> · <a href="05-labo-taller-completo.html#glos-snat">Outbound NAT</a>'},
+      {id:'vm-admin', lbl:'vm-admin', role:'Estación de operación (ADMINISTRACIÓN · NUEVA)', ip:'Estática 192.168.30.10/24 · GW 192.168.30.1',
+       pol:'Accede a pfSense WebGUI (:443), administra vm-portfw y vm-ruteada por SSH (:22) y sale a Internet por SNAT.',
+       delta:'Pieza central nueva del TP: nadie de USUARIOS/DMZ/WAN puede iniciar conexiones hacia esta red.',
+       links:'<a href="04-seguridad.html#segmentacion-vlan-dmz-zerotrust">Segmentación Zero Trust (Guía 4)</a>'},
+      {id:'vm-portfw', lbl:'vm-portfw', role:'Servidor privado publicado (SERVIDORES A)', ip:'Estática 192.168.20.10/24 · GW .20.1 · HTTP :8000 + SSH :22',
+       pol:'Publicado mediante DNAT WAN:8000 → .20.10:8000. Bloqueado hacia USUARIOS y ADMIN. Salida Internet (SNAT) inicial.',
+       delta:'Agrega aislamiento explícito hacia ADMIN, servicio SSH para administración y posible corte de salida en la defensa.',
+       links:'<a href="03-bridges-y-pfsense.html#dmz-portfw-vs-dmz-ruteada">Port Forward vs DMZ Ruteada (Guía 3)</a>'},
+      {id:'vm-ruteada', lbl:'vm-ruteada', role:'Servidor enrutable sin NAT (SERVIDORES B)', ip:'Estática 44.0.62.2/24 · GW 44.0.62.1 · HTTP :8000 + SSH :22',
+       pol:'Sin NAT en ningún sentido (ni SNAT ni Port Forward). Bloqueado hacia USUARIOS y ADMIN. Alcanzable por ruta + regla WAN.',
+       delta:'Suma regla de acceso SSH desde ADMIN y aprovechamiento opcional de Static Routing en tu Linksys.',
+       links:'<a href="05-labo-taller-completo.html#glos-ip-privada">IP pública vs privada</a> · <a href="05-labo-taller-completo.html#glos-router">Router L3</a>'}
+    ];
+
+    function drawW1(sel){
+      var b='';
+      function nd(id){ return ' class="tp1-nd" data-comp="'+id+'" tabindex="0" role="button" aria-label="Inspeccionar '+id+'" style="cursor:pointer"'; }
+      function op(id){ return (sel===id || (sel==='ThinkPad' && (id==='ThinkPad'||id==='enp3s0f0'||id.indexOf('br-')===0))) ? '1' : '0.58'; }
+      function hi(id){ return sel===id; }
+
+      // Linksys izquierda
+      b+='<g'+nd('Linksys')+' opacity="'+op('Linksys')+'">';
+      b+=sBox(16,44,126,76,hi('Linksys')?'var(--p1s)':'var(--surface)','var(--p1)',8,hi('Linksys')?2.6:1.4);
+      b+=sTxt(79,68,'Linksys WRT120N','l','middle','fill:var(--p1)');
+      b+=sTxt(79,86,'192.168.1.1/24','s','middle');
+      b+=sTxt(79,102,'DHCP .100-.149','s','middle');
+      b+='</g>';
+
+      // ThinkPad KVM
+      b+='<g'+nd('ThinkPad')+' opacity="'+op('ThinkPad')+'">';
+      b+=sBox(166,18,170,356,hi('ThinkPad')?'var(--p1s)':'var(--surface)',hi('ThinkPad')?'var(--p1)':'var(--rule)',10,hi('ThinkPad')?2.6:1.3);
+      b+=sTxt(251,36,'ThinkPad (5 Bridges)','h','middle',hi('ThinkPad')?'fill:var(--p1)':'');
+      b+='</g>';
+
+      // br-wan + enp3s0f0 paralelo debajo
+      b+='<g'+nd('br-wan')+' opacity="'+op('br-wan')+'">';
+      b+=sBox(176,46,150,38,'var(--p1s)','var(--p1)',7,hi('br-wan')?2.6:1.3);
+      b+=sTxt(251,62,'br-wan','l','middle','fill:var(--p1)');
+      b+=sTxt(251,77,'Host .1.111 (L2)','s','middle');
+      b+='</g>';
+      b+='<g'+nd('enp3s0f0')+' opacity="'+op('enp3s0f0')+'">';
+      b+=sBox(190,92,122,24,hi('enp3s0f0')?'var(--p1s)':'var(--bg)',hi('enp3s0f0')?'var(--p1)':'var(--rule)',6,hi('enp3s0f0')?2.4:1.2);
+      b+=sTxt(251,108,'enp3s0f0 (cable)','s','middle','fill:var(--ink)');
+      b+='</g>';
+      b+=sAr('tpw1_',251,92,251,84,'p1',false,1.5);
+      b+=sAr('tpw1_',142,84,190,104,'p1',false,1.5);
+
+      // pfSense contenedor
+      b+='<g'+nd('pfSense')+' opacity="'+op('pfSense')+'">';
+      b+=sBox(364,18,154,356,hi('pfSense')?'var(--p3s)':'var(--surface)',hi('pfSense')?'var(--p3)':'var(--ink)',10,hi('pfSense')?2.6:1.6);
+      b+=sTxt(441,36,'pfSense (L3 · 5 NICs)','h','middle',hi('pfSense')?'fill:var(--p3)':'');
+      var pfN=[['vtnet0 WAN','.1.162','p1',46],['vtnet1 USR','.10.1','p4',140],['vtnet2 ADM','.30.1','p3',200],['vtnet3 PFW','.20.1','p2',260],['vtnet4 RUT','44.0.62.1','p1',320]];
+      pfN.forEach(function(r){
+        b+=sBox(374,r[3],134,38,'var(--bg)','var(--'+r[2]+')',7,hi('pfSense')?1.8:1.2);
+        b+=sTxt(441,r[3]+16,r[0],'l','middle');
+        b+=sTxt(441,r[3]+31,r[1],'s','middle');
+      });
+      b+='</g>';
+      b+=sAr('tpw1_',326,65,374,65,'p1',false);
+
+      // Bridges internos
+      var brs=[['br-users','L2 sin IP','p4',140],['br-admin','L2 sin IP','p3',200],['br-portfw','L2 sin IP','p2',260],['br-ruteada','L2 sin IP','p1',320]];
+      brs.forEach(function(br){
+        b+='<g'+nd(br[0])+' opacity="'+op(br[0])+'">';
+        b+=sBox(176,br[3],150,38,'var(--'+br[2]+'s)','var(--'+br[2]+')',7,hi(br[0])?2.6:1.3);
+        b+=sTxt(251,br[3]+16,br[0],'l','middle','fill:var(--'+br[2]+')');
+        b+=sTxt(251,br[3]+31,br[1],'s','middle');
+        b+='</g>';
+        b+=sAr('tpw1_',326,br[3]+19,374,br[3]+19,br[2],false);
+      });
+
+      // VMs derecha
+      var vms=[
+        ['vm-wan','DHCP .100-.149','p1',46],
+        ['vm-user','DHCP .10.100-.200','p4',140],
+        ['vm-admin','192.168.30.10','p3',200],
+        ['vm-portfw','192.168.20.10:8000','p2',260],
+        ['vm-ruteada','44.0.62.2:8000','p1',320]
+      ];
+      vms.forEach(function(v,idx){
+        b+='<g'+nd(v[0])+' opacity="'+op(v[0])+'">';
+        b+=sBox(542,v[3],124,38,'var(--'+v[2]+'s)','var(--'+v[2]+')',7,hi(v[0])?2.6:1.3);
+        b+=sTxt(604,v[3]+16,v[0],'l','middle');
+        b+=sTxt(604,v[3]+31,v[1],'s','middle');
+        b+='</g>';
+        if(idx===0){
+          // vm-wan va paralelo al br-wan (punteado por arriba para distinguir L2)
+          b+='<polyline points="251,46 251,12 604,12 604,46" style="fill:none;stroke:var(--p1)" stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#tpw1_p1)"/>';
+        }else{
+          b+=sAr('tpw1_',508,v[3]+19,542,v[3]+19,v[2],false);
+        }
+      });
+
+      return '<svg viewBox="0 0 680 390" role="img" aria-label="Inspector del TP Integrador con '+sel+' seleccionado">'+svgDefs('tpw1_')+b+'</svg>';
+    }
+
+    function render(){
+      var item=COMPS.filter(function(c){return c.id===cur;})[0]||COMPS[0];
+      btns.innerHTML='';
+      COMPS.forEach(function(c){
+        var bt=document.createElement('button');
+        bt.type='button'; bt.className='btn'; bt.textContent=c.lbl;
+        bt.setAttribute('aria-pressed', c.id===cur?'true':'false');
+        bt.addEventListener('click',function(){ cur=c.id; render(); });
+        btns.appendChild(bt);
+      });
+      svgWrap.innerHTML=drawW1(cur);
+      svgWrap.querySelectorAll('.tp1-nd').forEach(function(el){
+        el.addEventListener('click',function(){ cur=el.dataset.comp; render(); });
+        el.addEventListener('keydown',function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); cur=el.dataset.comp; render(); } });
+      });
+      cards.innerHTML=
+        '<div class="wcard"><b>Rol / Capa:</b><br>'+item.role+'</div>'+
+        '<div class="wcard ok"><b>IP / Red real:</b><br>'+item.ip+'</div>'+
+        '<div class="wcard"><b>Política NAT y Firewall:</b><br>'+item.pol+'</div>'+
+        '<div class="wcard warn"><b>Vs Clase 3 / En tu casa:</b><br>'+item.delta+'</div>';
+      sum.innerHTML='<b class="ok">'+item.lbl+':</b> Repasá el concepto base en → '+item.links;
+    }
+    render();
+  })();
+
+  /* WIDGET 2: Simulador de las 10 pruebas de aceptación y defensa */
+  (function(){
+    var pBtns=document.getElementById('tpw2-tests'), fChecks=document.querySelectorAll('#tpw2-flags input[type=checkbox]'),
+        svgWrap=document.getElementById('tpw2-svg'), cards=document.getElementById('tpw2-cards'), sum=document.getElementById('tpw2-sum');
+    if(!pBtns) return;
+    var cur=0;
+    var TESTS=[
+      '1. vm-user → Internet',
+      '2. vm-user → ADMIN',
+      '3. vm-admin → pfSense GUI',
+      '4. vm-admin → Serv A/B (SSH)',
+      '5. vm-portfw → Internet',
+      '6. vm-wan → .1.162:8000',
+      '7. vm-wan → 44.0.62.2:8000',
+      '8. vm-wan → vm-user / admin',
+      '9. vm-ruteada → Red externa',
+      '10. vm-ruteada → USR / ADM'
+    ];
+    function getFlags(){
+      var f={};
+      fChecks.forEach(function(c){ f[c.dataset.flag]=c.checked; });
+      return f;
+    }
+    function evalTest(i,f){
+      if(i===0){
+        return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO (SNAT)', iface:'Firewall > Rules > USUARIOS + Outbound NAT',
+          pkt:'192.168.10.100 → 8.8.8.8  ⟶  192.168.1.162 → 8.8.8.8',
+          cmd:'En vm-user: ping -c 2 8.8.8.8 && curl -I https://deb.debian.org',
+          hops:[['vm-user','vtnet1','good'],['vtnet1','vtnet0','good'],['vtnet0','Linksys','good']],
+          stop:null,
+          msg:'Entra por vtnet1, pasa por debajo del BLOCK → ADMIN, aplica SNAT hacia 192.168.1.162 y sale vía Linksys.'};
+      }
+      if(i===1){
+        if(f.lockGui){
+          return {lbl:TESTS[i], st:'ok', badge:'BLOQUEADO (+ GUI CERRADA)', iface:'Firewall > Rules > USUARIOS (#1 BLOCK → ADMIN + sin Anti-Lockout)',
+            pkt:'192.168.10.100 → 192.168.30.10 (y .10.1:443 cortado)',
+            cmd:'En vm-user: ping -c 2 192.168.30.10 && curl -k --connect-timeout 2 https://192.168.10.1',
+            hops:[['vm-user','vtnet1','p1']], stop:{n:'vtnet1', t:'BLOCK ADMIN+GUI', c:'good'},
+            msg:'Cumple la prueba de aceptación y también la restricción de defensa: USUARIOS no alcanza ni a vm-admin ni a la WebGUI.'};
+        }
+        return {lbl:TESTS[i], st:'ok', badge:'BLOQUEADO (PRUEBA NEGATIVA OK)', iface:'Firewall > Rules > USUARIOS (#1 BLOCK → ADMINISTRACIÓN net)',
+          pkt:'192.168.10.100 → 192.168.30.10 (Descartado en ingreso vtnet1)',
+          cmd:'En vm-user: ping -c 2 192.168.30.10 && nc -zv -w 2 192.168.30.10 22',
+          hops:[['vm-user','vtnet1','p1']], stop:{n:'vtnet1', t:'BLOCK #1', c:'good'},
+          msg:'El #1 BLOCK → ADMINISTRACIÓN net encima de PASS → any impide que un usuario común llegue a la red de gestión.'};
+      }
+      if(i===2){
+        return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO (WEBGUI ADMIN)', iface:'Firewall > Rules > ADMIN (PASS TCP → This Firewall :443)',
+          pkt:'192.168.30.10 → 192.168.30.1:443 (sin NAT)',
+          cmd:'En vm-admin: curl -kI https://192.168.30.1 (o abrir Firefox hacia https://192.168.30.1)',
+          hops:[['vm-admin','vtnet2','good']], stop:null,
+          msg:'vm-admin administra pfSense directamente sobre vtnet2. Cuando actives la defensa GUI exclusiva, probá primero que esta siga andando.'};
+      }
+      if(i===3){
+        return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO (SSH A SERVIDORES)', iface:'Firewall > Rules > ADMIN (PASS TCP → SERV_A y SERV_B :22)',
+          pkt:'192.168.30.10 → 192.168.20.10:22 / 44.0.62.2:22 (sin NAT)',
+          cmd:'En vm-admin: ssh alumno@192.168.20.10 && ssh alumno@44.0.62.2',
+          hops:[['vm-admin','vtnet2','good'],['vtnet2','vtnet3','good'],['vtnet2','vtnet4','good']], stop:null,
+          msg:'Regla explícita en ADMIN habilita SSH (:22) hacia ambas DMZ; el retorno vuelve automático gracias a la tabla de estados stateful.'};
+      }
+      if(i===4){
+        if(f.cutServA){
+          return {lbl:TESTS[i], st:'bad', badge:'BLOQUEADO (CAMBIO DE DEFENSA)', iface:'Firewall > Rules > SERVIDORES A (regla Internet deshabilitada)',
+            pkt:'192.168.20.10 → 8.8.8.8 (Descartado por Default Deny en vtnet3)',
+            cmd:'En vm-portfw: curl --connect-timeout 2 https://deb.debian.org  # ahora falla',
+            hops:[['vm-portfw','vtnet3','bad']], stop:{n:'vtnet3', t:'Deny (Defensa)', c:'bad'},
+            msg:'Simula la defensa: "Permitido inicialmente" se vuelve bloqueado quitando/deshabilitando el PASS → any en SERVIDORES A.'};
+        }
+        return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO INICIALMENTE (SNAT)', iface:'Firewall > Rules > SERVIDORES A (#2 PASS → any) + Outbound NAT',
+          pkt:'192.168.20.10 → 8.8.8.8  ⟶  192.168.1.162 → 8.8.8.8',
+          cmd:'En vm-portfw: ping -c 2 8.8.8.8 (y verificar luego qué pasa en la defensa)',
+          hops:[['vm-portfw','vtnet3','good'],['vtnet3','vtnet0','good'],['vtnet0','Linksys','good']], stop:null,
+          msg:'Al inicio SERVIDORES A puede salir a Internet vía SNAT para actualizaciones, manteniendo #1 BLOCK hacia USUARIOS y ADMIN.'};
+      }
+      if(i===5){
+        return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO (DNAT :8000)', iface:'NAT > Port Forward + Firewall > Rules > WAN (associated)',
+          pkt:'192.168.1.120 → 192.168.1.162:8000  ⟶  192.168.20.10:8000',
+          cmd:'En vm-wan: curl -v http://192.168.1.162:8000',
+          hops:[['vm-wan','vtnet0','good'],['vtnet0','vtnet3','good'],['vtnet3','vm-portfw','good']], stop:null,
+          msg:'Port Forward reescribe el destino de .1.162:8000 a 192.168.20.10:8000; la regla WAN asociada autoriza el ingreso y Block private networks está OFF.'};
+      }
+      if(i===6){
+        return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO (ROUTING PURO)', iface:'Ruta en vm-wan + Firewall > Rules > WAN (PASS → 44.0.62.2:8000)',
+          pkt:'192.168.1.120 → 44.0.62.2:8000 (intacto, sin DNAT ni SNAT)',
+          cmd:'En vm-wan: sudo ip route add 44.0.62.0/24 via 192.168.1.162 && curl -v http://44.0.62.2:8000',
+          hops:[['vm-wan','vtnet0','good'],['vtnet0','vtnet4','good'],['vtnet4','vm-ruteada','good']], stop:null,
+          msg:'Sin Port Forward ni NAT: vm-wan enruta hacia .1.162 y pfSense reenvía hacia 44.0.62.2 conservando origen y destino.'};
+      }
+      if(i===7){
+        return {lbl:TESTS[i], st:'ok', badge:'BLOQUEADO (DEFAULT DENY WAN)', iface:'Firewall > Rules > WAN (Default Deny implícito)',
+          pkt:'192.168.1.120 → 192.168.10.100 / 192.168.30.10 (Descartado en vtnet0)',
+          cmd:'En vm-wan: ping -c 2 192.168.10.100 && curl --connect-timeout 2 http://192.168.30.10',
+          hops:[['vm-wan','vtnet0','p1']], stop:{n:'vtnet0', t:'Default Deny', c:'good'},
+          msg:'Desde WAN no existen rutas hacia redes privadas ni reglas de ingreso hacia USUARIOS o ADMIN: Default Deny corta todo al entrar en vtnet0.'};
+      }
+      if(i===8){
+        if(f.linksysRoute){
+          return {lbl:TESTS[i], st:'ok', badge:'PERMITIDO SIN NAT (HASTA INTERNET!)', iface:'Manual Outbound NAT (0 reglas 44.0.62.0/24) + Static Route en Linksys',
+            pkt:'44.0.62.2 → 192.168.1.120 / 8.8.8.8 (origen 44.0.62.2 conservado!)',
+            cmd:'En vm-ruteada: curl http://192.168.1.120  |  En pfSense WAN Packet Capture: src 44.0.62.2',
+            hops:[['vm-ruteada','vtnet4','good'],['vtnet4','vtnet0','good'],['vtnet0','Linksys','good']], stop:null,
+            msg:'Con la ruta 44.0.62.0/24 → 192.168.1.162 cargada en tu Linksys, hasta Internet real recibe el retorno desde 192.168.1.1 mientras pfSense no hace ningún NAT.'};
+        }
+        return {lbl:TESTS[i], st:'warn', badge:'SIN NAT OK HACIA vm-wan (Linksys sin ruta)', iface:'Manual Outbound NAT (sin 44.0.62.0/24) + Packet Capture WAN',
+          pkt:'44.0.62.2 → 192.168.1.120 (OK con ruta en vm-wan) | 8.8.8.8 (Linksys no vuelve sin ruta)',
+          cmd:'En vm-ruteada: ping 192.168.1.120 (con ruta en vm-wan) + Packet Capture en vtnet0 viendo src 44.0.62.2',
+          hops:[['vm-ruteada','vtnet4','good'],['vtnet4','vtnet0','good'],['vtnet0','vm-wan','p3']], stop:null,
+          msg:'pfSense saca los paquetes conservando src=44.0.62.2 sin NAT. Contra vm-wan (con ip route add) vuelve; contra Linksys sin Static Route, no vuelve — clave para explicar en defensa.'};
+      }
+      return {lbl:TESTS[i], st:'ok', badge:'BLOQUEADO (PRUEBA NEGATIVA OK)', iface:'Firewall > Rules > SERVIDORES B (#1 BLOCK → USUARIOS y ADMIN)',
+        pkt:'44.0.62.2 → 192.168.10.100 / 192.168.30.10 (Descartado en vtnet4)',
+        cmd:'En vm-ruteada: ping -c 2 192.168.10.100 && ping -c 2 192.168.30.10',
+        hops:[['vm-ruteada','vtnet4','p1']], stop:{n:'vtnet4', t:'BLOCK #1', c:'good'},
+        msg:'Aunque SERVIDORES B tenga routing puro sin NAT, el firewall en vtnet4 impide iniciar sesiones hacia USUARIOS o ADMINISTRACIÓN.'};
+    }
+
+    function drawW2(res){
+      var coords={
+        'Linksys':[72,62], 'vm-wan':[72,118],
+        'vtnet0':[292,88], 'vtnet1':[292,158], 'vtnet2':[292,220], 'vtnet3':[292,282], 'vtnet4':[292,344],
+        'vm-user':[568,158], 'vm-admin':[568,220], 'vm-portfw':[568,282], 'vm-ruteada':[568,344]
+      };
+      var active={};
+      res.hops.forEach(function(h){ active[h[0]]=true; active[h[1]]=true; });
+      var b='';
+      b+=sBox(212,20,162,354,'var(--surface)','var(--ink)',10,1.5);
+      b+=sTxt(293,38,'pfSense (5 NICs)','h','middle');
+
+      var boxes=[
+        ['Linksys',16,42,124,40,'Linksys (.1.1)','Internet / WAN','p1'],
+        ['vm-wan',16,98,124,40,'vm-wan (.1.x)','Cliente externo','p1'],
+        ['vtnet0',222,68,140,40,'vtnet0 WAN','.1.162','p1'],
+        ['vtnet1',222,138,140,40,'vtnet1 USUARIOS','.10.1','p4'],
+        ['vtnet2',222,200,140,40,'vtnet2 ADMIN','.30.1','p3'],
+        ['vtnet3',222,262,140,40,'vtnet3 SERV A','.20.1','p2'],
+        ['vtnet4',222,324,140,40,'vtnet4 SERV B','44.0.62.1','p1'],
+        ['vm-user',498,138,146,40,'vm-user','192.168.10.100','p4'],
+        ['vm-admin',498,200,146,40,'vm-admin','192.168.30.10','p3'],
+        ['vm-portfw',498,262,146,40,'vm-portfw','192.168.20.10:8000','p2'],
+        ['vm-ruteada',498,324,146,40,'vm-ruteada','44.0.62.2:8000','p1']
+      ];
+      boxes.forEach(function(nd){
+        var on=!!active[nd[0]];
+        b+='<g opacity="'+(on?'1':'0.44')+'">';
+        b+=sBox(nd[1],nd[2],nd[3],nd[4],on?'var(--'+nd[7]+'s)':'var(--bg)','var(--'+nd[7]+')',7,on?2.0:1.1);
+        b+=sTxt(nd[1]+nd[3]/2,nd[2]+16,nd[5],'l','middle');
+        b+=sTxt(nd[1]+nd[3]/2,nd[2]+32,nd[6],'s','middle');
+        b+='</g>';
+      });
+      res.hops.forEach(function(h){
+        var p1=coords[h[0]], p2=coords[h[1]], col=h[2];
+        var x1=p1[0], y1=p1[1], x2=p2[0], y2=p2[1];
+        if(x1===x2){
+          b+='<polyline points="222,'+y1+' 202,'+y1+' 202,'+y2+' 222,'+y2+'" style="fill:none;stroke:var(--'+col+')" stroke-width="2.3" marker-end="url(#tpw2_'+col+')"/>';
+        }else if(x1<x2){
+          var sx=(x1<150)?140:362;
+          var ex=(x2>400)?498:222;
+          b+=sAr('tpw2_',sx,y1,ex,y2,col,false,2.3);
+        }else{
+          var sx2=(x1>400)?498:222;
+          var ex2=(x2<150)?140:362;
+          b+=sAr('tpw2_',sx2,y1,ex2,y2,col,false,2.3);
+        }
+      });
+      if(res.stop){
+        var sp=coords[res.stop.n];
+        var bx=sp[0]-62, by=sp[1]-36;
+        b+=sBox(bx,by,124,20,'var(--surface)','var(--'+res.stop.c+')',6,1.8);
+        b+=sTxt(sp[0],by+14,res.stop.t,'s','middle','fill:var(--'+res.stop.c+');font-weight:700');
+      }
+      return '<svg viewBox="0 0 680 384" role="img" aria-label="Trazado de prueba '+res.lbl+': '+res.badge+'">'+svgDefs('tpw2_')+b+'</svg>';
+    }
+
+    function render(){
+      var f=getFlags();
+      var res=evalTest(cur,f);
+      pBtns.innerHTML='';
+      TESTS.forEach(function(t,i){
+        var bt=document.createElement('button');
+        bt.type='button'; bt.className='btn'; bt.textContent=t;
+        bt.setAttribute('aria-pressed', i===cur?'true':'false');
+        bt.addEventListener('click',function(){ cur=i; render(); });
+        pBtns.appendChild(bt);
+      });
+      svgWrap.innerHTML=drawW2(res);
+      var cls=(res.st==='ok')?'ok':(res.st==='warn'?'warn':'bad');
+      cards.innerHTML=
+        '<div class="wcard '+cls+'"><b>Resultado esperado:</b><br>'+res.badge+'</div>'+
+        '<div class="wcard"><b>Dónde se evalúa:</b><br>'+res.iface+'</div>'+
+        '<div class="wcard"><b>IPs (antes ⟶ después):</b><br><code>'+res.pkt+'</code></div>'+
+        '<div class="wcard"><b>Comando de prueba:</b><br><code>'+res.cmd+'</code></div>';
+      sum.innerHTML='<b class="'+(res.st==='bad'?'no':'ok')+'">'+res.lbl+':</b> '+res.msg;
+    }
+    fChecks.forEach(function(c){ c.addEventListener('change',render); });
+    render();
+  })();
+
+})();
+</script>
+</body>
+</html>
