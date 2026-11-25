@@ -346,7 +346,7 @@ footer.end{max-width:74rem;margin:0 auto;padding:2rem clamp(1.1rem,4vw,3rem) 3re
     <div class="gloss-card" data-gcat="zona" id="glos-wan">
       <div class="gloss-head"><h3>WAN (Red Externa / Salida)</h3><span class="chip p4">Zona</span></div>
       <p><b>Qué es desde cero:</b> Es el enlace "de la calle" que conecta tu router con el proveedor (ISP) o con una red externa que vos no administrás. Todo tráfico que entra por la WAN se considera potencialmente hostil y pasa primero por el firewall.</p>
-      <p class="gloss-lab"><b>En tu labo:</b> Es la red física del aula (<code>10.41.107.0/24</code>, Gateway <code>.99</code>) compartida mediante <code>br-wan</code> hacia la interfaz <code>vtnet0</code> de pfSense y el cliente de prueba <code>vm-wan</code> (<a href="#paso-06-migrar-br-wan-y-bridges-internos">Paso 6</a>, <a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>).</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Es la red física del aula (<code>10.41.107.0/24</code>), donde <strong><code>10.41.107.99</code> es la salida a Internet</strong> (gateway del aula), <code>10.41.107.1fc</code> es la WAN de tu pfSense (<code>fc</code> = fila/columna, ej. <code>fc=62 → .162</code>) y <code>vm-wan</code> toma una IP DHCP libre distinta de <code>.99</code> (<a href="#paso-06-migrar-br-wan-y-bridges-internos">Paso 6</a>, <a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>).</p>
       <p class="gloss-links">Profundizar: <a href="03-bridges-y-pfsense.html#bridge-linux-br-wan">Bridge br-wan y red del aula (Guía 3)</a></p>
     </div>
 
@@ -388,7 +388,7 @@ footer.end{max-width:74rem;margin:0 auto;padding:2rem clamp(1.1rem,4vw,3rem) 3re
     <div class="gloss-card" data-gcat="trafico" id="glos-internet">
       <div class="gloss-head"><h3>Salida a Internet (Gateway + Ruta default)</h3><span class="chip p2">IPs y NAT</span></div>
       <p><b>Qué es desde cero:</b> Tener "salida a Internet" no es magia: requiere 5 piezas juntas: (1) una <strong>IP</strong> y su <strong>máscara</strong> para saber qué está cerca, (2) una <strong>ruta por defecto (Default Gateway)</strong> para todo destino remoto, (3) permiso de <strong>firewall + NAT</strong> si usás IP privada, y (4) <strong>DNS</strong> para traducir nombres como <code>debian.org</code>.</p>
-      <p class="gloss-lab"><b>En tu labo:</b> Cada VM interna apunta su Gateway a su interfaz de <code>pfSense</code> (<code>.1</code>), y <code>pfSense</code> tiene configurado el <em>Upstream Gateway</em> <code>10.41.107.99</code> solo en la pestaña WAN (<a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>, <a href="#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>).</p>
+      <p class="gloss-lab"><b>En tu labo:</b> Cada VM interna apunta su Gateway a su interfaz de <code>pfSense</code> (<code>.1</code>), y <code>pfSense</code> tiene configurado como <em>Upstream Gateway</em> la <strong>salida a Internet del aula: <code>10.41.107.99</code></strong> únicamente en la pestaña WAN (<a href="#paso-08-bootstrap-webgui-e-interfaces-pfsense">Paso 8</a>, <a href="#paso-11-outbound-nat-y-publicacion-dmz">Paso 11</a>).</p>
       <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#cinco-piezas-internet">Las 5 piezas para tener Internet (Guía 0)</a></p>
     </div>
 
@@ -420,6 +420,21 @@ footer.end{max-width:74rem;margin:0 auto;padding:2rem clamp(1.1rem,4vw,3rem) 3re
       <p class="gloss-links">Profundizar: <a href="00-pareto-20-80.html#hipervisor-stack-kvm">Stack KVM (Guía 0)</a> · <a href="02-kvm-y-preseed.html#redes-libvirt-virbr0-tap">virbr0 y TAP (Guía 2)</a></p>
     </div>
   </div>
+
+  <h3 style="font-size:1.12rem;margin:1.7rem 0 .45rem">Qué está acoplado al laboratorio de la facultad vs qué cambia en tu casa (o en el TP Integrador)</h3>
+  <p>En las clases prácticas algunas IPs y convenciones existen únicamente porque corrés el montaje sobre la red física del aula. Si armás el entorno o el TP Integrador en tu casa, esta tabla separa lo que es propio de las PCs de la facultad de lo que permanece igual:</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Pieza / Dato</th><th>Acoplado a las PCs de la facultad</th><th>Qué cambia al hacerlo en tu casa / TP Integrador</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Salida a Internet (Upstream GW)</strong></td><td><code>10.41.107.99</code> (gateway fijo del laboratorio; nunca se asigna a una VM).</td><td>Cambia a la IP LAN de tu router doméstico (ej. <code>192.168.0.1</code> o <code>192.168.1.1</code>, verificada con <code>ip route</code>).</td></tr>
+      <tr><td><strong>IP WAN de pfSense (<code>vtnet0</code>)</strong></td><td><code>10.41.107.1fc/24</code>, donde <code>fc</code> es fila/columna de tu puesto (ej. <code>fc=62 → .162</code>) para no chocar con tus compañeros.</td><td>Elegís una IP estática libre dentro de la subred de tu router de casa y fuera de su rango DHCP (ej. <code>192.168.0.240/24</code>), o DHCP con reserva.</td></tr>
+      <tr><td><strong>Cliente externo (<code>vm-wan</code>)</strong></td><td>Toma una IP DHCP libre de <code>10.41.107.0/24</code> en el aula (distinta de <code>.99</code> y de <code>.1fc</code>).</td><td>Toma otra IP libre de tu LAN doméstica sobre <code>br-wan</code> y sigue necesitando <code>ip route add 44.0.XX.0/24 via &lt;IP_WAN_PFSENSE&gt;</code>.</td></tr>
+      <tr><td><strong>Prefijo <code>DMZ_RUTEADA</code></strong></td><td><code>44.0.fc.0/24</code> (ej. <code>44.0.62.0/24</code>), elegido para distinguir routing sin NAT por puesto.</td><td>Usás <code>44.0.XX.0/24</code>; el acceso desde <code>vm-wan</code> funciona igual, pero tu router hogareño común no conoce ruta de vuelta hacia <code>44.0.XX.0/24</code> al salir a Internet sin NAT.</td></tr>
+      <tr><td><strong>Bridge <code>br-wan</code> y NIC física</strong></td><td>Se conecta por el cable Ethernet del aula (<code>enp1s0</code> o similar).</td><td>En tu casa <strong>también requiere cable Ethernet</strong> al router: los bridges L2 puros no funcionan sobre Wi-Fi (límite de 3 direcciones MAC en 802.11).</td></tr>
+      <tr><td><strong><em>Block private networks</em> (WAN)</strong></td><td>Se destilda porque la WAN del aula (<code>10.41.107.0/24</code>) es RFC 1918.</td><td>En casa también va destildado porque tu router hogareño entrega RFC 1918 (<code>192.168.x.x</code> / <code>10.x</code>). Solo se tilda en un ISP con IP pública real.</td></tr>
+      <tr><td><strong>Pool DHCP en LAN</strong></td><td>Kea DHCP entrega <code>192.168.10.100–200</code> (por ej. <code>vm-lan</code> toma <code>.100</code>).</td><td>Se mantiene idéntico: la red interna de KVM es 100% portable entre tu casa y la facultad.</td></tr>
+    </tbody>
+  </table></div>
 </section>
 
 
@@ -691,10 +706,10 @@ virsh domifaddr debian-auto2 --source agent</pre>
 
   
 <div class="widget" id="w1-labo">
-  <h3>Widget 1 · Parametrizador de tu puesto de laboratorio (XX y NIC física)</h3>
-  <p class="wdesc">Elegí tu número de puesto <code>XX</code> (<code>05</code> a <code>50</code>, por defecto <code>15</code>) y la interfaz Ethernet real de tu PC. Genera tu tabla sin erratas ni <code>fc</code> sueltos y guarda el puesto localmente.</p>
+  <h3>Widget 1 · Parametrizador de tu puesto de laboratorio (fc y NIC física)</h3>
+  <p class="wdesc">Por convención de la cátedra, <code>fc</code> es la <strong>fila/columna</strong> de la PC que te asignaron (por ejemplo, si <code>fc = 62</code>, tu pfSense WAN usa <code>10.41.107.162/24</code> y tu <code>DMZ_RUTEADA</code> usa <code>44.0.62.0/24</code>). La salida a Internet fija del aula es <code>10.41.107.99</code>. Elegí tu <code>fc</code> (<code>01</code> a <code>99</code>, por defecto <code>62</code>) y la NIC Ethernet real de tu PC.</p>
   <div class="ctrl">
-    <label for="w1-xx-range"><span>Número de puesto (XX)</span><input type="range" id="w1-xx-range" min="5" max="50" value="15"><output id="w1-xx-out">15</output></label>
+    <label for="w1-xx-range"><span>Fila/Columna de tu puesto (fc, ej. 62)</span><input type="range" id="w1-xx-range" min="1" max="99" value="62"><output id="w1-xx-out">62</output></label>
   </div>
   <div class="btnrow" style="margin-top:.65rem;align-items:center">
     <span style="font-family:var(--sans);font-size:.85rem;font-weight:600">NIC física (<code>$NIC</code>):</span>
@@ -998,7 +1013,7 @@ No inventes direcciones MAC; marcá [FALTA: salida] si falta alguna tabla.</pre>
 
   <div class="apply">
     <h3>En tu puesto del laboratorio (comandos, salida esperada y qué dato cambia)</h3>
-    <p>En tu puesto, aplicá la IP provisoria sobre <code>br-lan</code>, abrí la WebGUI (usuario inicial de fábrica <code>admin</code> / contraseña <code>pfsense</code> si no se cambió en consola) y configurá las cuatro interfaces usando el prefijo exacto de tu puesto <code>XX</code> (ej. Puesto <code>15</code> → WAN <code>10.41.107.115/24</code>, DMZ_RUTEADA <code>44.0.15.1/24</code>)<a class="ref" href="#r18">[18]</a>.</p>
+    <p>En tu puesto, aplicá la IP provisoria sobre <code>br-lan</code>, abrí la WebGUI (usuario inicial de fábrica <code>admin</code> / contraseña <code>pfsense</code> si no se cambió en consola) y configurá las cuatro interfaces usando tu código <code>fc</code> (fila/columna de tu puesto, ej. <code>fc = 62</code> → WAN <code>10.41.107.162/24</code>, DMZ_RUTEADA <code>44.0.62.1/24</code>)<a class="ref" href="#r18">[18]</a>.</p>
 <pre class="cmd"># En el host KVM: habilitar acceso temporal en runtime (sin persistir en disco)
 nmcli device modify br-lan ipv4.method manual ipv4.addresses 192.168.10.2/24
 ping -c 2 192.168.10.1
@@ -1006,11 +1021,11 @@ ping -c 2 192.168.10.1
 
 # Resumen de configuración en WebGUI de pfSense (Save + Apply Changes en cada paso):
 # 1. Interfaces &gt; Assignments: WAN=vtnet0, LAN=vtnet1, Add OPT1=vtnet2, Add OPT2=vtnet3
-# 2. OPT1 -&gt; Enable, Description: DMZ_RUTEADA, Static IPv4: 44.0.XX.1/24, GW: None, IPv6: None
+# 2. OPT1 -&gt; Enable, Description: DMZ_RUTEADA, Static IPv4: 44.0.&lt;fc&gt;.1/24 (ej. 44.0.62.1/24), GW: None, IPv6: None
 # 3. OPT2 -&gt; Enable, Description: DMZ_PORTFW,  Static IPv4: 192.168.20.1/24, GW: None, IPv6: None
-# 4. WAN  -&gt; Static IPv4: 10.41.107.1XX/24, Upstream GW: 10.41.107.99, Block private networks: DESTILDADO
+# 4. WAN  -&gt; Static IPv4: 10.41.107.1&lt;fc&gt;/24 (ej. .162), Upstream GW: 10.41.107.99, Block private networks: DESTILDADO
 # 5. LAN  -&gt; Static IPv4: 192.168.10.1/24, Upstream GW: None, IPv6: None</pre>
-<p><strong>Errata de filminas sobre <code>44.0.XX.0/24</code>:</strong> las filminas 3 y 38 escriben <code>44.0.fc.1</code> (donde <code>fc</code> era un marcador sin reemplazar por el número de puesto), mientras que las filminas 6 y 45–68 usan <code>44.0.0.1/.2</code> y las filminas 7 y 28 muestran <code>44.0.XX.1/.2</code>. Elegí el prefijo de tu puesto (por defecto en esta guía <code>44.0.15.0/24</code>, o <code>44.0.0.0/24</code> si tu docente unificó con <code>0</code>) y mantenelo idéntico en pfSense, <code>vm-dmz-ruteada</code>, reglas WAN y ruta en <code>vm-wan</code>. El bloque <code>44.0.0.0/8</code> (AMPRNet) no es RFC 1918: aquí se usa exclusivamente dentro del laboratorio aislado para simular una subred pública/ruteable sin NAT<a class="ref" href="#r18">[18]</a>.</p>
+<p><strong>Aclaración sobre la convención <code>fc</code> y las filminas:</strong> <code>fc</code> <strong>no</strong> es un error tipográfico, sino la convención de la cátedra para identificar la <strong>fila y columna</strong> de tu PC en el aula (ej. <code>fc = 62</code> → pfSense WAN <code>10.41.107.162</code> y <code>DMZ_RUTEADA</code> <code>44.0.62.0/24</code>), mientras que <code>10.41.107.99</code> es el gateway fijo de salida a Internet. La inconsistencia real de las slides está en mezclar <code>44.0.fc.x</code> (filminas 3 y 38) con <code>44.0.0.1/.2</code> (filminas 6 y 45–68) o <code>10.41.105.0/24</code> (errata de ruta). Mantené tu mismo <code>fc</code> en pfSense, <code>vm-dmz-ruteada</code>, reglas WAN y ruta en <code>vm-wan</code>. El bloque <code>44.0.0.0/8</code> (AMPRNet) no es RFC 1918 y en producción/casa solo funciona simulando un prefijo ruteado si existe ruta de vuelta en el router externo<a class="ref" href="#r18">[18]</a>.</p>
   </div>
 
   
@@ -1076,7 +1091,7 @@ No asumas IPs no informadas; marcá [FALTA: dato] si algo no está especificado.
 # Services &gt; DHCPv6 Server &gt; LAN -&gt; Desmarcar Enable
 
 # 2. Dentro de vm-lan (validar Capa L2 + DHCP antes de seguir al firewall)
-ip -br a          # Esperado: enp1s0 UP 192.168.10.100..200/24
+ip -br a          # Esperado: enp1s0 UP 192.168.10.100..200/24 (primer lease típico: .100)
 ip route          # Esperado: default via 192.168.10.1 dev enp1s0
 cat /etc/resolv.conf   # Esperado: nameserver 192.168.10.1
 
@@ -1236,7 +1251,7 @@ python3 -m http.server 8000 --directory /var/www/lab &amp;
 #   - DMZ_PORTFW: Firewall &gt; NAT &gt; Port Forward -&gt; WAN TCP/8000 -&gt; 192.168.20.10:8000 + "Add associated filter rule"
 #   - DMZ_RUTEADA: Firewall &gt; Rules &gt; WAN -&gt; PASS TCP source any -&gt; dest 44.0.XX.2 port 8000
 
-# 4. En el cliente externo vm-wan (en br-wan, IP 10.41.107.y):
+# 4. En el cliente externo vm-wan (en br-wan, con IP DHCP libre del aula, ej. .50 — distinta de la salida a Internet .99):
 sudo ip route add 44.0.XX.0/24 via 10.41.107.1XX   # Usar IP WAN de TU pfSense y TU prefijo 44.0.XX.0/24!
 curl -v http://10.41.107.1XX:8000                 # Esperado: Servidor vm-portfw
 curl -v http://44.0.XX.2:8000                      # Esperado: Servidor vm-ruteada</pre>
@@ -1520,12 +1535,12 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
 
   /* Estado compartido de Puesto (XX y NIC) persistido en localStorage['infra-labo-puesto'] */
   var puestoState=(function(){
-    var st={xx:15, nic:'enp1s0'};
+    var st={xx:62, nic:'enp1s0'};
     try{
       var raw=localStorage.getItem('infra-labo-puesto');
       if(raw){
         var p=JSON.parse(raw);
-        if(p && typeof p.xx==='number' && p.xx>=5 && p.xx<=50) st.xx=p.xx;
+        if(p && typeof p.xx==='number' && p.xx>=1 && p.xx<=99) st.xx=p.xx;
         if(p && typeof p.nic==='string' && p.nic.trim()) st.nic=p.nic.trim().slice(0,24);
       }
     }catch(e){}
@@ -1578,15 +1593,15 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       syncBtns();
       var wan=pfsWan(n), rgw=rutGw(n), rvm=rutVm(n), rnet=rutNet(n);
       cards.innerHTML=
-        '<div class="wcard"><b>Host KVM (<code>br-wan</code>)</b><br>NIC: <code>'+nic+'</code> (puerto L2)<br>IP por DHCP en <code>10.41.107.0/24</code> · GW <code>.99</code></div>'+
-        '<div class="wcard ok"><b>pfSense WAN (<code>vtnet0</code>)</b><br><code>'+wan+'/24</code><br>Upstream GW: <code>10.41.107.99</code></div>'+
-        '<div class="wcard"><b>LAN (<code>vtnet1</code> · Kea)</b><br>pfSense: <code>192.168.10.1/24</code><br>Pool: <code>.100–.200</code> · Temp host: <code>.2</code></div>'+
+        '<div class="wcard"><b>Host KVM (<code>br-wan</code>)</b><br>NIC: <code>'+nic+'</code> (puerto L2)<br>IP DHCP aula en <code>10.41.107.0/24</code> · Salida GW <code>.99</code></div>'+
+        '<div class="wcard ok"><b>pfSense WAN (<code>vtnet0</code>)</b><br><code>'+wan+'/24</code> (<code>.1fc</code>)<br>Upstream GW (Internet): <code>10.41.107.99</code></div>'+
+        '<div class="wcard"><b>LAN (<code>vtnet1</code> · Kea)</b><br>pfSense: <code>192.168.10.1/24</code><br>Pool Kea: <code>.100–.200</code> (ej. <code>vm-lan = .100</code>) · Temp host: <code>.2</code></div>'+
         '<div class="wcard"><b>DMZ_PORTFW (<code>vtnet3</code>)</b><br>pfSense: <code>192.168.20.1/24</code><br><code>vm-dmz-portfw</code>: <code>192.168.20.10:8000</code></div>'+
         '<div class="wcard warn"><b>DMZ_RUTEADA (<code>vtnet2</code>)</b><br>pfSense: <code>'+rgw+'/24</code><br><code>vm-dmz-ruteada</code>: <code>'+rvm+'/24</code> (sin NAT)</div>';
 
       envEl.textContent=
-        '# Variables limpias para tu Puesto '+xx+' (sin erratas 10.41.105 ni 44.0.fc)\n'+
-        'export PUESTO_XX="'+xx+'"\n'+
+        '# Convención de cátedra: fc = fila/columna (ej. 62 -> .162 y 44.0.62.0/24); salida a Internet = .99\n'+
+        'export PUESTO_FC="'+xx+'"\n'+
         'export NIC="'+nic+'"\n'+
         'export NIC_MAC="$(cat /sys/class/net/$NIC/address)"\n'+
         'export ORIGINAL_CONN="$(nmcli -g GENERAL.CONNECTION device show "$NIC")"\n'+
@@ -1600,9 +1615,9 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         '# En vm-wan para alcanzar la DMZ ruteada sin NAT:\n'+
         'sudo ip route add "$DMZ_RUT_NET" via "$PFSENSE_WAN_IP"';
 
-      sum.innerHTML='<b class="ok">Puesto '+xx+' listo sobre '+nic+':</b> tu pfSense usará <code>'+wan+'/24</code> hacia el aula y <code>'+rgw+'/24</code> en la DMZ ruteada, evitando las erratas de las filminas (<code>44.0.fc</code> y <code>10.41.105.0/24</code>).';
+      sum.innerHTML='<b class="ok">Puesto fc='+xx+' listo sobre '+nic+':</b> por convención fila/columna tu pfSense toma <code>'+wan+'/24</code> (con salida a Internet en <code>10.41.107.99</code>) y <code>'+rgw+'/24</code> en la DMZ ruteada, evitando las erratas de las filminas (<code>10.41.105.0/24</code> y <code>44.0.0.x</code>).';
     }
-    rng.addEventListener('input',function(){ puestoState.xx=parseInt(rng.value,10)||15; savePuesto(); render(); });
+    rng.addEventListener('input',function(){ puestoState.xx=parseInt(rng.value,10)||62; savePuesto(); render(); });
     nicBtns.forEach(function(b){
       b.addEventListener('click',function(){ puestoState.nic=b.dataset.nic; savePuesto(); render(); });
     });
@@ -1767,7 +1782,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         // vm-wan conectada directo a br-wan (puerto L2 paralelo a enp1s0!)
         b+=svgBox(20,44,154,42,'var(--p1s)','var(--p1)',7,s===5?2.2:1.3);
         b+=svgTxt(97,61,'vm-wan','l','middle');
-        b+=svgTxt(97,77,'10.41.107.y (TAP)','s','middle');
+        b+=svgTxt(97,77,'DHCP aula (ej. .50)','s','middle');
         b+=svgAr('w2_',174,65,216,65,'p1',false);
 
         var vms=[
@@ -1859,7 +1874,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
          cmd:'virt-install --name vm-dmz-ruteada --network bridge=br-dmz-ruteada', ver:'ip -br a && curl http://127.0.0.1:8000',
          msg:'Conserva su IP real en ambos sentidos demostrando routing puro sin NAT en '+rnet+'.',
          learn:'<a href="#glos-router">Routing puro</a> · <a href="#glos-ip-privada">IP pública vs privada</a> · <a href="01-fundamentos-y-redes.html#capa3-cidr-ruteo">Guía 1</a>'},
-        {id:'vm-wan', lbl:'vm-wan', layer:'Cliente externo de pruebas en red física', ip:'DHCP 10.41.107.y/24 + ip route add '+rnet+' via '+wan,
+        {id:'vm-wan', lbl:'vm-wan', layer:'Cliente externo de pruebas en red física', ip:'DHCP aula (ej. 10.41.107.50/24, distinta de GW .99) + ip route add '+rnet+' via '+wan,
          cmd:'virt-install --name vm-wan --network bridge=br-wan,model=virtio', ver:'ip route get '+rvm+' && curl http://'+wan+':8000',
          msg:'Simula un usuario externo de Internet/facultad para validar Port Forward y routing hacia la DMZ.',
          learn:'<a href="#glos-wan">WAN</a> · <a href="#glos-portfw">Port-Forwarding</a> · <a href="#glos-internet">Gateway y ruta</a>'}
@@ -1921,7 +1936,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
 
       // VMs izquierda conectadas directo a cada bridge correspondiente
       var vms=[
-        ['vm-wan','vm-wan','10.41.107.y','p1',48,69,216],
+        ['vm-wan','vm-wan','DHCP (ej. .50)','p1',48,69,216],
         ['vm-lan','vm-lan','192.168.10.x','p4',144,165,216],
         ['vm-dmz-ruteada','vm-dmz-ruteada',rvm,'p3',200,221,216],
         ['vm-dmz-portfw','vm-dmz-portfw','192.168.20.10','p2',256,277,216]
@@ -1986,7 +2001,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       if(idx===0){ // 1. LAN -> WAN
         return {
           lbl:'1. LAN → WAN', status:'ok', badge:'PERMITIDO (SNAT)',
-          srcBefore:'192.168.10.105 → 8.8.8.8', srcAfter:wan+' → 8.8.8.8',
+          srcBefore:'192.168.10.100 → 8.8.8.8', srcAfter:wan+' → 8.8.8.8',
           layer:'Capas 3 y 4 sanas (Firewall LAN + Outbound NAT)',
           hops:[['vm-lan','br-lan','good'],['br-lan','vtnet1','good'],['vtnet1','vtnet0','good'],['vtnet0','vm-wan','good']],
           stopAt:null,
@@ -2037,7 +2052,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         if(f.invOrder){
           return {
             lbl:'4. DMZ_PORTFW → LAN', status:'bad', badge:'BRECHA: FUGA HACIA LAN',
-            srcBefore:'192.168.20.10 → 192.168.10.105', srcAfter:'192.168.20.10 → 192.168.10.105 (CRUZÓ!)',
+            srcBefore:'192.168.20.10 → 192.168.10.100', srcAfter:'192.168.20.10 → 192.168.10.100 (CRUZÓ!)',
             layer:'Capa 3 (Orden de reglas invertido en pestaña DMZ_PORTFW)',
             hops:[['vm-dmz-portfw','br-dmz-portfw','bad'],['br-dmz-portfw','vtnet3','bad'],['vtnet3','vtnet1','bad'],['vtnet1','br-lan','bad'],['br-lan','vm-lan','bad']],
             stopAt:{node:'vtnet3', txt:'#1 PASS capturó', col:'bad'},
@@ -2046,7 +2061,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         }
         return {
           lbl:'4. DMZ_PORTFW → LAN', status:'ok', badge:'BLOQUEADO (PRUEBA NEGATIVA OK)',
-          srcBefore:'192.168.20.10 → 192.168.10.105', srcAfter:'Descartado en ingreso vtnet3',
+          srcBefore:'192.168.20.10 → 192.168.10.100', srcAfter:'Descartado en ingreso vtnet3',
           layer:'Capa 3 (Logs de Firewall: bloqueo rojo en DMZ_PORTFW #1)',
           hops:[['vm-dmz-portfw','br-dmz-portfw','p1'],['br-dmz-portfw','vtnet3','p1']],
           stopAt:{node:'vtnet3', txt:'BLOCK #1', col:'good'},
@@ -2057,7 +2072,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         if(f.invOrder){
           return {
             lbl:'5. DMZ_RUTEADA → LAN', status:'bad', badge:'BRECHA: FUGA HACIA LAN',
-            srcBefore:rvm+' → 192.168.10.105', srcAfter:rvm+' → 192.168.10.105 (CRUZÓ!)',
+            srcBefore:rvm+' → 192.168.10.100', srcAfter:rvm+' → 192.168.10.100 (CRUZÓ!)',
             layer:'Capa 3 (Orden de reglas invertido en pestaña DMZ_RUTEADA)',
             hops:[['vm-dmz-ruteada','br-dmz-ruteada','bad'],['br-dmz-ruteada','vtnet2','bad'],['vtnet2','vtnet1','bad'],['vtnet1','br-lan','bad'],['br-lan','vm-lan','bad']],
             stopAt:{node:'vtnet2', txt:'#1 PASS capturó', col:'bad'},
@@ -2066,7 +2081,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
         }
         return {
           lbl:'5. DMZ_RUTEADA → LAN', status:'ok', badge:'BLOQUEADO (PRUEBA NEGATIVA OK)',
-          srcBefore:rvm+' → 192.168.10.105', srcAfter:'Descartado en ingreso vtnet2',
+          srcBefore:rvm+' → 192.168.10.100', srcAfter:'Descartado en ingreso vtnet2',
           layer:'Capa 3 (Logs de Firewall: bloqueo rojo en DMZ_RUTEADA #1)',
           hops:[['vm-dmz-ruteada','br-dmz-ruteada','p1'],['br-dmz-ruteada','vtnet2','p1']],
           stopAt:{node:'vtnet2', txt:'BLOCK #1', col:'good'},
@@ -2150,7 +2165,7 @@ No inventes paquetes no observados; marcá [FALTA: capa N] si alguna capa no fue
       b+=svgTxt(537,38,'pfSense (L3)','h','middle');
 
       var nodes=[
-        ['vm-wan',20,48,144,44,'vm-wan','10.41.107.y','p1'],
+        ['vm-wan',20,48,144,44,'vm-wan','DHCP (ej. .50)','p1'],
         ['vm-lan',20,120,144,44,'vm-lan','192.168.10.x','p4'],
         ['vm-dmz-ruteada',20,192,144,44,'vm-dmz-ruteada',rvm,'p3'],
         ['vm-dmz-portfw',20,264,144,44,'vm-dmz-portfw','192.168.20.10','p2'],

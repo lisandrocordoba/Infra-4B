@@ -314,16 +314,16 @@ footer.end{max-width:74rem;margin:2.5rem auto 0;padding:1.5rem clamp(1.1rem,4vw,
       </thead>
       <tbody>
         <tr>
-          <td><code>10.41.107.1XX/24</code><br>GW <code>10.41.107.99</code><br><small>(y erratas <code>10.41.105.0/24</code>, <code>.fc</code>, <code>172.30.40.134</code>)</small></td>
+          <td><code>10.41.107.1fc/24</code><br>Salida a Internet (GW): <code>10.41.107.99</code><br><small>(convención <code>fc</code> = fila/columna, ej. <code>fc=62 → .162</code>; erratas de filmina: <code>10.41.105.0/24</code>, <code>172.30.40.134</code>)</small></td>
           <td>Clases 1, 2 y 3 (WAN física del laboratorio)</td>
-          <td>Cada grupo recibe un número de puesto <code>XX</code> dentro de la red interna de la facultad que simula ser Internet ("WAN").</td>
-          <td>Al usar una red RFC 1918 como WAN, el taller <strong>destilda</strong> <em>Block private networks</em> en pfSense. En producción, la WAN tiene IP pública/enlace ISP y esa casilla suele quedar tildada.</td>
+          <td>Cada puesto recibe un identificador <strong><code>fc</code></strong> (fila/columna de la PC asignada en el aula) dentro de la red interna de la facultad; <code>.99</code> es el gateway fijo de salida a Internet.</td>
+          <td>Todo este direccionamiento está acoplado al aula: al usar una red RFC 1918 como WAN, el taller <strong>destilda</strong> <em>Block private networks</em> en pfSense. En producción (o en casa), la WAN y el gateway cambian al del ISP/router propio.</td>
         </tr>
         <tr>
-          <td><code>44.0.fc.0/24</code> / <code>44.0.0.0/24</code><br>Servidor <code>44.0.0.2</code></td>
+          <td><code>44.0.fc.0/24</code> (ej. <code>44.0.62.0/24</code>) / <code>44.0.0.0/24</code><br>Servidor <code>44.0.fc.2</code></td>
           <td>Clase 3 (<code>DMZ_RUTEADA</code>)</td>
-          <td>Prefijo fácil de distinguir visualmente de <code>192.168.x.x</code> para demostrar routing puro sin NAT ni Port Forward.</td>
-          <td>En Internet real, <code>44.0.0.0/8</code> pertenece a AMPRNet (radioaficionados). En producción se usa el prefijo público asignado por el ISP/LACNIC o una subred corporativa con ruta anunciada aguas arriba.</td>
+          <td>Prefijo fácil de distinguir de <code>192.168.x.x</code> ligado a tu fila/columna <code>fc</code> para demostrar routing puro sin NAT ni Port Forward (inconsistencia de slides: mezcla <code>44.0.fc.x</code> con <code>44.0.0.x</code>).</td>
+          <td>En Internet real, <code>44.0.0.0/8</code> pertenece a AMPRNet (radioaficionados). En producción se usa un prefijo público asignado por el ISP/LACNIC o una subred corporativa con ruta anunciada aguas arriba.</td>
         </tr>
         <tr>
           <td><code>enp1s0</code> / <code>netplan-enp1s0</code> / <code>enp195s0f0</code></td>
